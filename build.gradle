@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-apply plugin: 'java'
+apply plugin: 'groovy'
 
 defaultTasks = ['assemble']
 
@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-  compile "org.jruby:jruby:$jrubyVersion"
+  groovy "org.codehaus.groovy:groovy-all:$groovyVersion"
 
   provided "org.vert-x:vertx-core:$vertxVersion"
   provided "org.vert-x:vertx-platform:$vertxVersion"
@@ -52,7 +52,7 @@ sourceSets {
   }
   test {
     resources {
-      srcDirs "src/test/ruby_scripts", "src/test/resources"
+      srcDirs "src/test/groovy_scripts", "src/test/resources"
     }
   }
 }
@@ -90,16 +90,16 @@ task cleanTestMod(type: Delete) {
 test() {
 
   // Remove any classpath entries for the classes or resources of the jruby verticle and also remove the
-  // jruby jar from the classpath
+  // groovy jar from the classpath
   // If we don't do this then the system classloader will load them which can cause issues with loading resources
   // from inside JS verticles
   classpath = files( classpath.findAll {
-    (!( it.toString() ==~ /.+build\/(classes|resources)\/main$/ )) && !(it.toString().contains("org.jruby"))
+    (!( it.toString() ==~ /.+build\/(classes|resources)\/main$/ )) && !(it.toString().contains("org.groovy"))
   } )
 
-//  classpath.each {
-//    println "entry ${it}"
-//  }
+  classpath.each {
+    println "entry ${it}"
+  }
 
   outputs.upToDateWhen { false }
 
@@ -129,18 +129,8 @@ task collectDeps(type: Copy) {
   }
 }
 
-task yardoc(type:Exec) {
-  commandLine = [ "yardoc",
-      "--title", "Ruby API Doc",
-      "--no-private",
-      "--quiet",
-      "--markup-provider", "kramdown",
-      "--readme", "$rootDir/README.md",
-      "--output-dir","${project.buildDir}/docs/ruby/api",
-      "src/main/ruby/**/*.rb", "src/main/ruby_scripts/**/*.rb",
-      "-", "$rootDir/LICENSE.txt" ]
-
-  if( System.properties['os.name'].toLowerCase().contains('windows') ) {
-    commandLine = ['cmd', '/c'] + commandLine
-  }
+groovydoc {
+  excludes = ["**/impl/**"]
+  destinationDir = file("build/docs/groovy/api")
+  outputs.dir destinationDir
 }
