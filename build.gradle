@@ -97,9 +97,9 @@ test() {
     (!( it.toString() ==~ /.+build\/(classes|resources)\/main$/ )) && !(it.toString().contains("org.codehaus.groovy"))
   } )
 
-  classpath.each {
-    println "entry ${it}"
-  }
+//  classpath.each {
+//    println "entry ${it}"
+//  }
 
   outputs.upToDateWhen { false }
 
