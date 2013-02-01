@@ -35,11 +35,6 @@ public class GroovyVerticleFactory implements VerticleFactory {
   private VerticleManager mgr
   private ModuleClassLoader mcl
 
-
-  public GroovyVerticleFactory() {
-	  super()
-  }
-
   @Override
   public void init(VerticleManager mgr, ModuleClassLoader mcl) {
 	  this.mgr = mgr
@@ -47,6 +42,7 @@ public class GroovyVerticleFactory implements VerticleFactory {
   }
 
   public Verticle createVerticle(String main) throws Exception {
+
     URL url = mcl.getResource(main)
     if (url == null) {
       throw new IllegalStateException("Cannot find main script: " + main + " on classpath");
@@ -80,7 +76,7 @@ public class GroovyVerticleFactory implements VerticleFactory {
     // Inject vertx into the script binding
     Binding binding = new Binding()
     binding.setVariable("vertx", new Vertx((VertxInternal) VertxLocator.vertx))
-    binding.setVariable("scontainer", new Container(new org.vertx.java.deploy.Container((mgr))))
+    binding.setVariable("container", new Container(new org.vertx.java.deploy.Container((mgr))))
     verticle.setBinding(binding)
 
     return new Verticle() {

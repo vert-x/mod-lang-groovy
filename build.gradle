@@ -89,12 +89,12 @@ task cleanTestMod(type: Delete) {
 
 test() {
 
-  // Remove any classpath entries for the classes or resources of the jruby verticle and also remove the
+  // Remove any classpath entries for the classes or resources of the groovy verticle and also remove the
   // groovy jar from the classpath
   // If we don't do this then the system classloader will load them which can cause issues with loading resources
   // from inside JS verticles
   classpath = files( classpath.findAll {
-    (!( it.toString() ==~ /.+build\/(classes|resources)\/main$/ )) && !(it.toString().contains("org.groovy"))
+    (!( it.toString() ==~ /.+build\/(classes|resources)\/main$/ )) && !(it.toString().contains("org.codehaus.groovy"))
   } )
 
   classpath.each {
