@@ -17,15 +17,15 @@
 package org.vertx.groovy.core.net.impl
 
 import org.vertx.groovy.core.net.NetServer
-import org.vertx.java.core.impl.VertxInternal
+import org.vertx.java.core.Vertx
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
 class DefaultNetServer extends NetServer {
 
-  DefaultNetServer(VertxInternal vertx, Map props = null) {
-    jServer = new org.vertx.java.core.net.impl.DefaultNetServer(vertx)
+  DefaultNetServer(Vertx vertx, Map props = null) {
+    jServer = vertx.createNetServer()
     if (props != null) {
       props.each { k, v ->
         setProperty(k, v)

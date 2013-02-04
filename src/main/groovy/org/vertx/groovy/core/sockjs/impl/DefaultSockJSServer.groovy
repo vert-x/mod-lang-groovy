@@ -18,15 +18,15 @@ package org.vertx.groovy.core.sockjs.impl
 
 import org.vertx.groovy.core.http.HttpServer
 import org.vertx.groovy.core.sockjs.SockJSServer
-import org.vertx.java.core.impl.VertxInternal
+import org.vertx.java.core.Vertx
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
 class DefaultSockJSServer extends SockJSServer {
 
-  DefaultSockJSServer(VertxInternal vertx, HttpServer httpServer) {
-    jServer = new org.vertx.java.core.sockjs.impl.DefaultSockJSServer(vertx, httpServer.toJavaServer())
+  DefaultSockJSServer(Vertx vertx, HttpServer httpServer) {
+    jServer = vertx.createSockJSServer(httpServer.toJavaServer())
   }
 
 }

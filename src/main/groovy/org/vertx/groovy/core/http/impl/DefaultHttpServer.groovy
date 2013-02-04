@@ -17,15 +17,15 @@
 package org.vertx.groovy.core.http.impl
 
 import org.vertx.groovy.core.http.HttpServer
-import org.vertx.java.core.impl.VertxInternal
+import org.vertx.java.core.Vertx
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
 class DefaultHttpServer extends HttpServer {
 
-  DefaultHttpServer(VertxInternal vertx, Map props = null) {
-    jServer = new org.vertx.java.core.http.impl.DefaultHttpServer(vertx)
+  DefaultHttpServer(Vertx vertx, Map props = null) {
+    jServer = vertx.createHttpServer()
     if (props != null) {
       props.each { k, v ->
         setProperty(k, v)

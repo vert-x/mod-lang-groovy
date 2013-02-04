@@ -28,10 +28,7 @@ import org.vertx.groovy.core.net.impl.DefaultNetServer
 import org.vertx.groovy.core.sockjs.SockJSServer
 import org.vertx.groovy.core.sockjs.impl.DefaultSockJSServer
 import org.vertx.java.core.Handler
-import org.vertx.java.core.impl.DefaultVertx
-import org.vertx.java.core.impl.VertxInternal
 import org.vertx.java.core.shareddata.SharedData
-import org.vertx.java.deploy.impl.VertxLocator
 
 
 /**
@@ -47,28 +44,21 @@ import org.vertx.java.deploy.impl.VertxLocator
  */
 class Vertx {
 
-  private final VertxInternal jVertex
+  private final org.vertx.java.core.Vertx jVertex
   private final EventBus eventBus
   private final org.vertx.groovy.core.file.FileSystem fileSystem
 
-  Vertx(VertxInternal jVertex) {
+  Vertx(org.vertx.java.core.Vertx jVertex) {
     this.jVertex = jVertex
-    this.eventBus = new EventBus(jVertex.eventBus())
+    this.eventBus = new EventBus(jVertex.eventBus)
     this.fileSystem = new org.vertx.groovy.core.file.FileSystem(jVertex.fileSystem)
   }
 
   /**
    * Create a non clustered Vertx instance
    */
-  static Vertx locate() {
-    return new Vertx(VertxLocator.vertx)
-  }
-
-  /**
-   * Create a non clustered Vertx instance
-   */
   static Vertx newVertx() {
-    return new Vertx(new DefaultVertx())
+    return new Vertx(org.vertx.java.core.Vertx.newVertx())
   }
 
   /**
@@ -76,7 +66,7 @@ class Vertx {
    * @param hostname The hostname or ip address to listen for cluster connections
    */
   static Vertx newVertx(String hostname) {
-    return new Vertx(new DefaultVertx(hostname))
+    return new Vertx(org.vertx.java.core.Vertx.newVertx(hostname))
   }
 
   /**
@@ -85,7 +75,7 @@ class Vertx {
    * @param hostname The hostname or ip address to listen for cluster connections
    */
   static Vertx newVertx(int port, String hostname) {
-    return new Vertx(new DefaultVertx(port, hostname))
+    return new Vertx(org.vertx.java.core.Vertx.newVertx(port, hostname))
   }
 
   /**

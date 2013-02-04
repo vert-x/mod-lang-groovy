@@ -17,15 +17,15 @@
 package org.vertx.groovy.core.http.impl
 
 import org.vertx.groovy.core.http.HttpClient
-import org.vertx.java.core.impl.VertxInternal
+import org.vertx.java.core.Vertx
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
 class DefaultHttpClient extends HttpClient {
 
-  DefaultHttpClient(VertxInternal vertx, Map props = null) {
-    jClient = new org.vertx.java.core.http.impl.DefaultHttpClient(vertx)
+  DefaultHttpClient(Vertx vertx, Map props = null) {
+    jClient = vertx.createHttpClient()
     if (props != null) {
       props.each { k, v ->
         setProperty(k, v)

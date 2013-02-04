@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package org.vertx.groovy.deploy.impl.groovy
+package org.vertx.groovy.platform.impl
 
-import org.vertx.groovy.core.Vertx
-import org.vertx.groovy.deploy.Container
-import org.vertx.java.core.impl.VertxInternal
-import org.vertx.java.deploy.Verticle
-import org.vertx.java.deploy.impl.ModuleClassLoader
-import org.vertx.java.deploy.impl.VerticleFactory
-import org.vertx.java.deploy.impl.VerticleManager
-import org.vertx.java.deploy.impl.VertxLocator
+import org.vertx.java.core.Vertx
+import org.vertx.java.core.logging.Logger
+import org.vertx.java.platform.Container
+import org.vertx.java.platform.Verticle
+import org.vertx.java.platform.VerticleFactory
 
 import java.lang.reflect.Method
 
@@ -32,23 +29,25 @@ import java.lang.reflect.Method
  */
 public class GroovyVerticleFactory implements VerticleFactory {
 
-  private VerticleManager mgr
-  private ModuleClassLoader mcl
+  private Vertx vertx
+  private Container container
+  private ClassLoader cl
 
   @Override
-  public void init(VerticleManager mgr, ModuleClassLoader mcl) {
-	  this.mgr = mgr
-    this.mcl = mcl
+  public void init(Vertx vertx, Container container, ClassLoader cl) {
+    this.vertx = vertx
+    this.container = container
+    this.cl = cl
   }
 
   public Verticle createVerticle(String main) throws Exception {
 
-    URL url = mcl.getResource(main)
+    URL url = cl.getResource(main)
     if (url == null) {
       throw new IllegalStateException("Cannot find main script: " + main + " on classpath");
     }
     GroovyCodeSource gcs = new GroovyCodeSource(url)
-    GroovyClassLoader gcl = new GroovyClassLoader(mcl)
+    GroovyClassLoader gcl = new GroovyClassLoader(cl)
     Class clazz = gcl.parseClass(gcs)
 
     Method stop
@@ -75,8 +74,8 @@ public class GroovyVerticleFactory implements VerticleFactory {
 
     // Inject vertx into the script binding
     Binding binding = new Binding()
-    binding.setVariable("vertx", new Vertx((VertxInternal) VertxLocator.vertx))
-    binding.setVariable("container", new Container(new org.vertx.java.deploy.Container((mgr))))
+    binding.setVariable("vertx", new org.vertx.groovy.core.Vertx(vertx))
+    binding.setVariable("container", new org.vertx.groovy.platform.Container(container))
     verticle.setBinding(binding)
 
     return new Verticle() {
@@ -100,8 +99,8 @@ public class GroovyVerticleFactory implements VerticleFactory {
     }
   }
 
-  public void reportException(Throwable t) {
-    mgr.getLogger().error("Exception in Groovy verticle", t)
+  public void reportException(Logger logger, Throwable t) {
+    logger.error("Exception in Groovy verticle", t)
   }
 
   public void close() {

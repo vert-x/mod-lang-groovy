@@ -17,15 +17,15 @@
 package org.vertx.groovy.core.net.impl
 
 import org.vertx.groovy.core.net.NetClient
-import org.vertx.java.core.impl.VertxInternal
+import org.vertx.java.core.Vertx
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
 class DefaultNetClient extends NetClient {
 
-  DefaultNetClient(VertxInternal vertx, Map props = null) {
-    jClient = new org.vertx.java.core.net.impl.DefaultNetClient(vertx)
+  DefaultNetClient(Vertx vertx, Map props = null) {
+    jClient = vertx.createNetClient()
     if (props != null) {
       props.each { k, v ->
         setProperty(k, v)
