@@ -45,6 +45,7 @@ def testCopy() {
 }
 
 def testMove() {
+  println "in testmove"
   def from = fileDir + "/foo.tmp"
   def to = fileDir + "/bar.tmp"
   def content = "some-data"
@@ -58,6 +59,7 @@ def testMove() {
           tu.azzert(ares3.exception == null)
           tu.azzert(!ares.result)
           tu.testComplete()
+          println "sent testcomplete"
         })
       })
     })
@@ -140,8 +142,11 @@ def setup(doneHandler) {
 }
 
 def teardown(doneHandler) {
+  println "in client teardown, deleting"
   fs.delete(fileDir, true, {
+    println "delete complete"
     doneHandler()
+    println "called donehandler"
   })
 }
 
@@ -150,8 +155,10 @@ tu.registerTests(this)
 setup({ tu.appReady() })
 
 def vertxStop() {
+  println "in vertxstop"
   teardown{
     tu.unregisterAll()
     tu.appStopped()
+    println "sent app stopped"
   }
 }
