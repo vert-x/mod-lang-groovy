@@ -141,24 +141,12 @@ def setup(doneHandler) {
   })
 }
 
-def teardown(doneHandler) {
-  println "in client teardown, deleting"
-  fs.delete(fileDir, true, {
-    println "delete complete"
-    doneHandler()
-    println "called donehandler"
-  })
-}
-
 tu.registerTests(this)
 
 setup({ tu.appReady() })
 
 def vertxStop() {
-  println "in vertxstop"
-  teardown{
-    tu.unregisterAll()
-    tu.appStopped()
-    println "sent app stopped"
-  }
+  fs.deleteSync(fileDir, true)
+  tu.unregisterAll()
+  tu.appStopped()
 }
