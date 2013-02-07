@@ -252,7 +252,7 @@ class FileSystem {
   void readFile(String path, Closure handler) {
     jFS.readFile(path, { ar ->
       if (ar.succeeded()) {
-        handler.call(new AsyncResult<Buffer>(new Buffer(ar.result)))
+        handler.call(new AsyncResult<Buffer>().setResult(new Buffer(ar.result)))
       } else {
         handler.call(ar)
       }
@@ -309,7 +309,7 @@ class FileSystem {
   void open(String path, String perms = null, boolean read = true, boolean write = true, boolean createNew = true, boolean flush = false, Closure handler) {
     jFS.open(path, perms, read, write, createNew, flush, { result ->
       if (result.succeeded()) {
-        handler(new AsyncResult<AsyncFile>(new AsyncFile(result.result)))
+        handler(new AsyncResult<AsyncFile>().setResult(new AsyncFile(result.result)))
       } else {
         handler(result)
       }
