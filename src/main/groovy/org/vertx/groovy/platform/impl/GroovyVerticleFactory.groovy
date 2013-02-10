@@ -18,6 +18,7 @@ package org.vertx.groovy.platform.impl
 
 import org.vertx.java.core.Vertx
 import org.vertx.java.core.logging.Logger
+import org.vertx.java.core.logging.impl.LoggerFactory;
 import org.vertx.java.platform.Container
 import org.vertx.java.platform.Verticle
 import org.vertx.java.platform.VerticleFactory
@@ -29,6 +30,7 @@ import java.lang.reflect.Method
  */
 public class GroovyVerticleFactory implements VerticleFactory {
 
+  private static Logger log = LoggerFactory.getLogger(GroovyVerticleFactory.class)
   private Vertx vertx
   private Container container
   private ClassLoader cl
@@ -83,7 +85,7 @@ public class GroovyVerticleFactory implements VerticleFactory {
         try {
           mrun.invoke(verticle, (Object[])null)
         } catch (Throwable t) {
-          reportException(t)
+          reportException(log, t)
         }
       }
 
@@ -92,7 +94,7 @@ public class GroovyVerticleFactory implements VerticleFactory {
           try {
             mstop.invoke(verticle, (Object[])null)
           } catch (Throwable t) {
-            reportException(t)
+            reportException(log, t)
           }
         }
       }
