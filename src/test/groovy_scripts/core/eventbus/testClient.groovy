@@ -19,7 +19,7 @@ package core.eventbus
 import org.vertx.groovy.testframework.TestUtils
 
 tu = new TestUtils(vertx)
-tu.checkContext()
+tu.checkThread()
 
 // Most testing occurs in the Java tests
 
@@ -55,7 +55,7 @@ def testSimple() {
 
   def handled = false
   eb.registerHandler(address, myHandler = { msg ->
-    tu.checkContext()
+    tu.checkThread()
     tu.azzert(!handled)
     assertSent(msg.body)
     eb.unregisterHandler(address, myHandler)
@@ -70,7 +70,7 @@ def testEmptyMessage() {
 
   def handled = false
   eb.registerHandler(address, myHandler = { msg ->
-    tu.checkContext()
+    tu.checkThread()
     tu.azzert(!handled)
     eb.unregisterHandler(address, myHandler)
     handled = true
@@ -85,7 +85,7 @@ def testUnregister() {
 
   def handled = false
   eb.registerHandler(address, myHandler = { msg ->
-    tu.checkContext()
+    tu.checkThread()
     tu.azzert(!handled)
     assertSent(msg.body)
     eb.unregisterHandler(address, myHandler)
@@ -107,7 +107,7 @@ def testWithReply() {
 
   def handled = false
   eb.registerHandler(address, myHandler = { msg ->
-    tu.checkContext()
+    tu.checkThread()
     tu.azzert(!handled)
     assertSent(msg.body)
     eb.unregisterHandler(address, myHandler)
@@ -116,7 +116,7 @@ def testWithReply() {
   })
 
   eb.send(address, sent, { reply ->
-    tu.checkContext()
+    tu.checkThread()
     assertReply(reply.body)
     tu.testComplete()
   })
@@ -146,7 +146,7 @@ def testEmptyReply() {
 
   def handled = false
   eb.registerHandler(address, myHandler = { msg ->
-    tu.checkContext()
+    tu.checkThread()
     tu.azzert(!handled)
     assertSent(msg.body)
     eb.unregisterHandler(address, myHandler)
@@ -155,7 +155,7 @@ def testEmptyReply() {
   })
 
   eb.send(address, sent, { reply ->
-    tu.checkContext()
+    tu.checkThread()
     tu.testComplete()
   })
   eb.send(address, sent)
@@ -192,7 +192,7 @@ def testEchoNull() {
 
 def echo(msg) {
   eb.registerHandler(address, myHandler = { received ->
-    tu.checkContext()
+    tu.checkThread()
     eb.unregisterHandler(address, myHandler)
     received.reply(received.body)
   })

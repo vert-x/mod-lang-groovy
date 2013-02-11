@@ -19,13 +19,13 @@ package core.timer
 import org.vertx.groovy.testframework.TestUtils
 
 tu = new TestUtils(vertx)
-tu.checkContext()
+tu.checkThread()
 
 def testOneOff() {
   def count = 0
   def id
   id = vertx.setTimer(1, { timerID ->
-    tu.checkContext()
+    tu.checkThread()
     tu.azzert(id == timerID)
     tu.azzert(count == 0)
     count++
@@ -39,7 +39,7 @@ def testPeriodic() {
   def count = 0
   def id
   id = vertx.setPeriodic(delay, { timerID ->
-    tu.checkContext()
+    tu.checkThread()
     tu.azzert(id == timerID)
     count++
     if (count == numFires) {

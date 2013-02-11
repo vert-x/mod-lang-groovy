@@ -20,7 +20,7 @@ import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.testframework.TestUtils
 
 tu = new TestUtils(vertx)
-tu.checkContext()
+tu.checkThread()
 
 void testEcho() {
   echo(false)
@@ -44,9 +44,9 @@ void echo(boolean ssl) {
   }
 
   server.connectHandler { socket ->
-    tu.checkContext()
+    tu.checkThread()
     socket.dataHandler { buffer ->
-      tu.checkContext()
+      tu.checkThread()
       socket << buffer
     }
   }.listen(8080)
@@ -63,7 +63,7 @@ void echo(boolean ssl) {
   }
 
   client.connect(8080, "localhost", { socket ->
-    tu.checkContext()
+    tu.checkThread()
 
     sends = 10
     size = 100
@@ -72,7 +72,7 @@ void echo(boolean ssl) {
     received = new Buffer()
 
     socket.dataHandler { buffer ->
-      tu.checkContext()
+      tu.checkThread()
 
       received << buffer
 
@@ -88,15 +88,15 @@ void echo(boolean ssl) {
     }
 
     socket.endHandler {
-      tu.checkContext()
+      tu.checkThread()
     }
 
     socket.closedHandler {
-      tu.checkContext()
+      tu.checkThread()
     }
 
     socket.drainHandler {
-      tu.checkContext()
+      tu.checkThread()
     }
 
     socket.pause()

@@ -21,7 +21,7 @@ import org.vertx.groovy.core.parsetools.RecordParser
 import org.vertx.groovy.testframework.TestUtils
 
 tu = new TestUtils(vertx)
-tu.checkContext()
+tu.checkThread()
 
 def testDelimited() {
 

@@ -22,7 +22,7 @@ import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.testframework.TestUtils
 
 tu = new TestUtils(vertx)
-tu.checkContext()
+tu.checkThread()
 
 server = vertx.createHttpServer()
 client = vertx.createHttpClient(port: 8080)
@@ -39,10 +39,10 @@ def echo(binary) {
 
   server.websocketHandler { ws ->
 
-    tu.checkContext()
+    tu.checkThread()
 
     ws.dataHandler { buff ->
-      tu.checkContext()
+      tu.checkThread()
       ws << buff
     }
   }
@@ -57,12 +57,12 @@ def echo(binary) {
   }
 
   client.connectWebsocket("/someurl", { ws ->
-    tu.checkContext()
+    tu.checkThread()
 
     received = new Buffer()
 
     ws.dataHandler { buff ->
-      tu.checkContext()
+      tu.checkThread()
       received << buff
       if (received.length == buff.length) {
         tu.azzert(TestUtils.buffersEqual(buff, received))
@@ -82,16 +82,16 @@ def echo(binary) {
 def testWriteFromConnectHandler() {
 
   server.websocketHandler { ws ->
-    tu.checkContext()
+    tu.checkThread()
     ws.writeTextFrame("foo")
   }
 
   server.listen(8080)
 
   client.connectWebsocket("/someurl", { ws ->
-    tu.checkContext()
+    tu.checkThread()
     ws.dataHandler { buff ->
-      tu.checkContext()
+      tu.checkThread()
       tu.azzert("foo".equals(buff.toString()))
       tu.testComplete()
     }
@@ -102,7 +102,7 @@ def testWriteFromConnectHandler() {
 def testClose() {
 
   server.websocketHandler { ws ->
-    tu.checkContext()
+    tu.checkThread()
     ws.dataHandler { buff ->
       ws.close()
     }
@@ -111,7 +111,7 @@ def testClose() {
   server.listen(8080)
 
   client.connectWebsocket("/someurl", { ws ->
-    tu.checkContext()
+    tu.checkThread()
     ws.closedHandler {
       tu.testComplete()
     }
@@ -123,14 +123,14 @@ def testClose() {
 def testCloseFromConnectHandler() {
 
   server.websocketHandler { ws ->
-    tu.checkContext()
+    tu.checkThread()
     ws.close()
   }
 
   server.listen(8080)
 
   client.connectWebsocket("/someurl", { ws ->
-    tu.checkContext()
+    tu.checkThread()
     ws.closedHandler {
       tu.testComplete()
     }

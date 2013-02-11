@@ -20,7 +20,7 @@ import org.vertx.groovy.core.streams.Pump
 import org.vertx.groovy.testframework.TestUtils
 
 tu = new TestUtils(vertx)
-tu.checkContext()
+tu.checkThread()
 
 fs = vertx.fileSystem
 

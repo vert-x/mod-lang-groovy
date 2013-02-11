@@ -20,7 +20,7 @@ import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.testframework.TestUtils
 
 tu = new TestUtils(vertx)
-tu.checkContext()
+tu.checkThread()
 
 server = vertx.createHttpServer()
 client = vertx.createHttpClient().setPort(8080)
@@ -188,7 +188,7 @@ def httpMethod(ssl, method, chunked)  {
   uri = "http://localhost:8080" + path + "?" + query
 
   server.requestHandler { req ->
-    tu.checkContext()
+    tu.checkThread()
     tu.azzert(req.uri.equals(uri))
     tu.azzert(req.method == method)
     tu.azzert(req.path == path)
@@ -201,12 +201,12 @@ def httpMethod(ssl, method, chunked)  {
     req.response.headers['rheader2'] = 'vrheader2'
     body = new Buffer()
     req.dataHandler { data ->
-      tu.checkContext()
+      tu.checkThread()
       body << data
     }
     req.response.setChunked(chunked)
     req.endHandler {
-      tu.checkContext()
+      tu.checkThread()
       if (method != 'HEAD' && method != 'CONNECT') {
         if (!chunked) {
           req.response.headers['content-length'] = body.length
@@ -233,18 +233,18 @@ def httpMethod(ssl, method, chunked)  {
   sentBuff = TestUtils.generateRandomBuffer(1000)
 
   request = client.request(method, uri, { resp ->
-    tu.checkContext()
+    tu.checkThread()
     tu.azzert(200 == resp.statusCode)
     tu.azzert(resp.headers['rheader1'] == 'vrheader1')
     tu.azzert(resp.headers['rheader2'] == 'vrheader2')
     body = new Buffer()
     resp.dataHandler { data ->
-      tu.checkContext()
+      tu.checkThread()
       body << data
     }
 
     resp.endHandler {
-      tu.checkContext()
+      tu.checkThread()
       if (method != 'HEAD' && method != 'CONNECT') {
         tu.azzert(TestUtils.buffersEqual(sentBuff, body))
         if (chunked) {

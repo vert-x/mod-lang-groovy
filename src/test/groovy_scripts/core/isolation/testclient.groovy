@@ -5,7 +5,7 @@ import org.vertx.groovy.testframework.TestUtils
 import java.util.concurrent.atomic.AtomicInteger
 
 tu = new TestUtils(vertx)
-tu.checkContext()
+tu.checkThread()
 
 class CounterHolder {
   static final AtomicInteger counter = new AtomicInteger(0)
