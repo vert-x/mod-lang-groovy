@@ -49,6 +49,7 @@ public class GroovyVerticleFactory implements VerticleFactory {
     if (url == null) {
       throw new IllegalStateException("Cannot find main script: " + main + " on classpath");
     }
+    CompilerConfiguration.DEFAULT.getOptimizationOptions().put("indy", true)
     CompilerConfiguration configuration = new CompilerConfiguration()
     configuration.getOptimizationOptions().put("int", false);
     configuration.getOptimizationOptions().put("indy", true);
