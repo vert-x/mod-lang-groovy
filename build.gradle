@@ -44,7 +44,7 @@ repositories {
 }
 
 dependencies {
-  groovy "org.codehaus.groovy:groovy-all:$groovyVersion"
+  compile(group:'org.codehaus.groovy', name:'groovy-all', version:project.groovyVersion, classifier:'indy')
 
   provided "io.vertx:vertx-core:$vertxVersion"
   provided "io.vertx:vertx-platform:$vertxVersion"

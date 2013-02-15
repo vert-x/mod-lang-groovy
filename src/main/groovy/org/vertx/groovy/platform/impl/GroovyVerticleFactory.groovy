@@ -24,6 +24,7 @@ import org.vertx.java.platform.Verticle
 import org.vertx.java.platform.VerticleFactory
 
 import java.lang.reflect.Method
+import org.codehaus.groovy.control.CompilerConfiguration
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
@@ -48,8 +49,12 @@ public class GroovyVerticleFactory implements VerticleFactory {
     if (url == null) {
       throw new IllegalStateException("Cannot find main script: " + main + " on classpath");
     }
+    CompilerConfiguration.DEFAULT.getOptimizationOptions().put("indy", true)
+    CompilerConfiguration configuration = new CompilerConfiguration()
+    configuration.getOptimizationOptions().put("int", false);
+    configuration.getOptimizationOptions().put("indy", true);
     GroovyCodeSource gcs = new GroovyCodeSource(url)
-    GroovyClassLoader gcl = new GroovyClassLoader(cl)
+    GroovyClassLoader gcl = new GroovyClassLoader(cl, configuration)
     Class clazz = gcl.parseClass(gcs)
 
     Method stop
