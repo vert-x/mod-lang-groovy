@@ -70,8 +70,7 @@ task copyMod( type:Copy, dependsOn: 'classes' ) {
   into "build/mod/maven:$groupname:$artifact:$version"
   from compileJava
   from 'src/main/conf'
-  from 'src/main/api_shim'
-  from 'src/main/coffeescript'
+  from 'src/main/resources'
   into( 'lib' ) {
     from configurations.compile
   }
