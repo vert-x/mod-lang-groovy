@@ -44,61 +44,70 @@ public class GroovyVerticleFactory implements VerticleFactory {
 
   public Verticle createVerticle(String main) throws Exception {
 
-    URL url = cl.getResource(main)
-    if (url == null) {
-      throw new IllegalStateException("Cannot find main script: " + main + " on classpath");
-    }
-    GroovyCodeSource gcs = new GroovyCodeSource(url)
-    GroovyClassLoader gcl = new GroovyClassLoader(cl)
-    Class clazz = gcl.parseClass(gcs)
+    Verticle verticle;
 
-    Method stop
-    try {
-      stop = clazz.getMethod("vertxStop", (Class<?>[])null)
-    } catch (NoSuchMethodException e) {
-      stop = null
-    }
-    final Method mstop = stop
+    if (main.endsWith(".groovy")) {
+      URL url = cl.getResource(main)
+      if (url == null) {
+        throw new IllegalStateException("Cannot find main script: " + main + " on classpath");
+      }
+      GroovyCodeSource gcs = new GroovyCodeSource(url)
+      GroovyClassLoader gcl = new GroovyClassLoader(cl)
+      Class clazz = gcl.parseClass(gcs)
 
-    Method run
-    try {
-      run = clazz.getMethod("run", (Class<?>[])null)
-    } catch (NoSuchMethodException e) {
-      run = null
-    }
-    final Method mrun = run
+      Method stop
+      try {
+        stop = clazz.getMethod("vertxStop", (Class<?>[])null)
+      } catch (NoSuchMethodException e) {
+        stop = null
+      }
+      final Method mstop = stop
 
-    if (run == null) {
-      throw new IllegalStateException("Groovy script must have run() method [whether implicit or not]")
-    }
+      Method run
+      try {
+        run = clazz.getMethod("run", (Class<?>[])null)
+      } catch (NoSuchMethodException e) {
+        run = null
+      }
+      final Method mrun = run
 
-    final Script verticle = (Script)clazz.newInstance()
-
-    // Inject vertx into the script binding
-    Binding binding = new Binding()
-    binding.setVariable("vertx", new org.vertx.groovy.core.Vertx(vertx))
-    binding.setVariable("container", new org.vertx.groovy.platform.Container(container))
-    verticle.setBinding(binding)
-
-    return new Verticle() {
-      public void start() {
-        try {
-          mrun.invoke(verticle, (Object[])null)
-        } catch (Throwable t) {
-          reportException(log, t)
-        }
+      if (run == null) {
+        throw new IllegalStateException("Groovy script must have run() method [whether implicit or not]")
       }
 
-      public void stop() {
-        if (mstop != null) {
+      Script script = (Script)clazz.newInstance()
+
+      // Inject vertx into the script binding
+      Binding binding = new Binding()
+      binding.setVariable("vertx", new org.vertx.groovy.core.Vertx(vertx))
+      binding.setVariable("container", new org.vertx.groovy.platform.Container(container))
+      script.setBinding(binding)
+
+      verticle = new Verticle() {
+        public void start() {
           try {
-            mstop.invoke(verticle, (Object[])null)
+            mrun.invoke(script, (Object[])null)
           } catch (Throwable t) {
             reportException(log, t)
           }
         }
+
+        public void stop() {
+          if (mstop != null) {
+            try {
+              mstop.invoke(script, (Object[])null)
+            } catch (Throwable t) {
+              reportException(log, t)
+            }
+          }
+        }
       }
+    } else {
+      // Compiled Groovy - should already extend Verticle
+      Class clazz = cl.loadClass(main);
+      verticle = (Verticle)clazz.newInstance();
     }
+    return verticle;
   }
 
   public void reportException(Logger logger, Throwable t) {
