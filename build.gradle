@@ -44,6 +44,7 @@ dependencies {
 
   provided "io.vertx:vertx-core:$vertxVersion"
   provided "io.vertx:vertx-platform:$vertxVersion"
+  provided "io.vertx:testtools:$toolsVersion"
 
   provided( "io.vertx:vertx-testframework:$vertxVersion" ) {
     transitive = false
