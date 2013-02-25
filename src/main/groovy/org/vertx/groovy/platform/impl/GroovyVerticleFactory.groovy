@@ -16,12 +16,15 @@
 
 package org.vertx.groovy.platform.impl
 
-import org.vertx.java.core.Vertx
+import org.vertx.java.core.Vertx as JVertx
 import org.vertx.java.core.logging.Logger
 import org.vertx.java.core.logging.impl.LoggerFactory;
-import org.vertx.java.platform.Container
-import org.vertx.java.platform.Verticle
+import org.vertx.java.platform.Container as JContainer
+import org.vertx.java.platform.Verticle as JVerticle
 import org.vertx.java.platform.VerticleFactory
+import org.vertx.groovy.core.Vertx
+import org.vertx.groovy.platform.Container
+import org.vertx.groovy.platform.Verticle
 
 import java.lang.reflect.Method
 
@@ -31,20 +34,20 @@ import java.lang.reflect.Method
 public class GroovyVerticleFactory implements VerticleFactory {
 
   private static Logger log = LoggerFactory.getLogger(GroovyVerticleFactory.class)
-  private Vertx vertx
-  private Container container
+  private JVertx vertx
+  private JContainer container
   private ClassLoader cl
 
   @Override
-  public void init(Vertx vertx, Container container, ClassLoader cl) {
+  public void init(JVertx vertx, JContainer container, ClassLoader cl) {
     this.vertx = vertx
     this.container = container
     this.cl = cl
   }
 
-  public Verticle createVerticle(String main) throws Exception {
+  public JVerticle createVerticle(String main) throws Exception {
 
-    Verticle verticle;
+    JVerticle verticle
 
     if (main.endsWith(".groovy")) {
       URL url = cl.getResource(main)
@@ -79,11 +82,11 @@ public class GroovyVerticleFactory implements VerticleFactory {
 
       // Inject vertx into the script binding
       Binding binding = new Binding()
-      binding.setVariable("vertx", new org.vertx.groovy.core.Vertx(vertx))
-      binding.setVariable("container", new org.vertx.groovy.platform.Container(container))
+      binding.setVariable("vertx", new Vertx(vertx))
+      binding.setVariable("container", new Container(container))
       script.setBinding(binding)
 
-      verticle = new Verticle() {
+      verticle = new JVerticle() {
         public void start() {
           try {
             mrun.invoke(script, (Object[])null)
@@ -104,10 +107,16 @@ public class GroovyVerticleFactory implements VerticleFactory {
       }
     } else {
       // Compiled Groovy - should already extend Verticle
-      Class clazz = cl.loadClass(main);
-      verticle = (Verticle)clazz.newInstance();
+      Class clazz = cl.loadClass(main)
+      if (clazz instanceof Verticle) {
+        verticle = new GroovyVerticle((JVerticle) clazz.newInstance())
+      }
+      else {
+        verticle = (JVerticle) clazz.newInstance()
+      }
     }
-    return verticle;
+
+    return verticle
   }
 
   public void reportException(Logger logger, Throwable t) {
