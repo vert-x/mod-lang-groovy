@@ -37,12 +37,14 @@ public class GroovyVerticleFactory implements VerticleFactory {
   private JVertx vertx
   private JContainer container
   private ClassLoader cl
+  private GroovyClassLoader gcl
 
   @Override
   public void init(JVertx vertx, JContainer container, ClassLoader cl) {
     this.vertx = vertx
     this.container = container
     this.cl = cl
+    this.gcl = new GroovyClassLoader(cl)
   }
 
   public JVerticle createVerticle(String main) throws Exception {
@@ -50,12 +52,11 @@ public class GroovyVerticleFactory implements VerticleFactory {
     JVerticle verticle
 
     if (main.endsWith(".groovy")) {
-      URL url = cl.getResource(main)
+      URL url = gcl.getResource(main)
       if (url == null) {
         throw new IllegalStateException("Cannot find main script: " + main + " on classpath");
       }
       GroovyCodeSource gcs = new GroovyCodeSource(url)
-      GroovyClassLoader gcl = new GroovyClassLoader(cl)
       Class clazz = gcl.parseClass(gcs)
 
       Method stop
@@ -107,8 +108,8 @@ public class GroovyVerticleFactory implements VerticleFactory {
       }
     } else {
       // Compiled Groovy - should already extend Verticle
-      Class clazz = cl.loadClass(main)
-      if (clazz instanceof Verticle) {
+      Class clazz = gcl.loadClass(main)
+      if (clazz.isAssignableFrom(Verticle)) {
         verticle = new GroovyVerticle((JVerticle) clazz.newInstance())
       }
       else {
@@ -124,6 +125,7 @@ public class GroovyVerticleFactory implements VerticleFactory {
   }
 
   public void close() {
+    gcl?.close()
   }
 }
 

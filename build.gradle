@@ -17,16 +17,19 @@
 apply from: "gradle/maven.gradle"
 
 apply plugin: 'groovy'
+apply plugin: 'java'
 
 group = groupname
 archivesBaseName = artifact
-
-apply plugin: 'java'
 
 defaultTasks = ['assemble']
 
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
+
+// We don't produce a jar
+jar.enabled = false
+assert configurations.archives.artifacts.removeAll { it.file == jar.archivePath }
 
 configurations {
   provided
@@ -40,7 +43,7 @@ repositories {
 }
 
 dependencies {
-  groovy "org.codehaus.groovy:groovy-all:$groovyVersion"
+  compile "org.codehaus.groovy:groovy-all:$groovyVersion"
 
   provided "io.vertx:vertx-core:$vertxVersion"
   provided "io.vertx:vertx-platform:$vertxVersion"
@@ -123,7 +126,6 @@ test {
 
   testLogging { exceptionFormat "full" }
 }
-
 
 task collectDeps(type: Copy) {
   group = 'vert.x'
