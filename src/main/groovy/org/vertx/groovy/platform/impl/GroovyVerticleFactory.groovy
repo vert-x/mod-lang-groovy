@@ -110,7 +110,7 @@ public class GroovyVerticleFactory implements VerticleFactory {
       // Compiled Groovy - should already extend Verticle
       Class clazz = gcl.loadClass(main)
       if (clazz.isAssignableFrom(Verticle)) {
-        verticle = new GroovyVerticle((JVerticle) clazz.newInstance())
+        verticle = new GroovyVerticle((Verticle) clazz.newInstance())
       }
       else {
         verticle = (JVerticle) clazz.newInstance()
