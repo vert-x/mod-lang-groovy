@@ -13,6 +13,7 @@ out
 *.iml
 *.ipr
 *.iws
+src/test/mod-test
 test-output
 Scratch.java
 ScratchTest.java
