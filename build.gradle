@@ -19,8 +19,8 @@ apply from: "gradle/maven.gradle"
 apply plugin: 'groovy'
 apply plugin: 'java'
 
-group = groupname
-archivesBaseName = artifact
+group = modowner
+archivesBaseName = modname
 
 defaultTasks = ['assemble']
 
@@ -67,7 +67,7 @@ sourceSets {
 }
 
 task copyMod( type:Copy, dependsOn: 'classes' ) {
-  into "build/mod/maven:$groupname:$artifact:$version"
+  into "build/mod/$modowner#$modname#$version"
   from compileJava
   from 'src/main/conf'
   from 'src/main/resources'
@@ -81,7 +81,7 @@ task dist( type: Zip) {
   group = 'vert.x'
   description = "Assembles a vert.x module"
   destinationDir = project.file('build/libs')
-  archiveName = "${artifact}-${version}" + ".zip"
+  archiveName = "${modname}-${version}" + ".zip"
   from copyMod
 }
 
