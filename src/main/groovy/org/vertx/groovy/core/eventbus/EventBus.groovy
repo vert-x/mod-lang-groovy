@@ -78,7 +78,6 @@ class EventBus {
    */
   void send(String address, message, Closure replyHandler = null) {
     if (message != null) {
-      message = convertMessage(message)
       jEventBus.send(address, convertMessage(message), wrapHandler(replyHandler))
     } else {
       // Just choose an overloaded method...

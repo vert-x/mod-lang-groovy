@@ -170,7 +170,7 @@ def testEchoNumber1() {
 }
 
 def testEchoNumber2() {
-  echo(1.2345)
+  echo(1.2345f)
 }
 
 def testEchoBooleanTrue() {
