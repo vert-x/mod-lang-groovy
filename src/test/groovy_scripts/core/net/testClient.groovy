@@ -43,15 +43,6 @@ void echo(boolean ssl) {
     server.clientAuthRequired = true
   }
 
-  server.connectHandler { socket ->
-    tu.checkThread()
-    socket.dataHandler { buffer ->
-      tu.checkThread()
-      socket << buffer
-    }
-  }.listen(8080)
-
-
   client = vertx.createNetClient()
 
   if (ssl) {
@@ -62,53 +53,60 @@ void echo(boolean ssl) {
     client.trustStorePassword = "wibble"
   }
 
-  client.connect(8080, "localhost", { socket ->
+  server.connectHandler { socket ->
     tu.checkThread()
-
-    sends = 10
-    size = 100
-
-    sent = new Buffer()
-    received = new Buffer()
-
     socket.dataHandler { buffer ->
       tu.checkThread()
+      socket << buffer
+    }
+  }.listen(8080, {
+    client.connect(8080, "localhost", { socket ->
+      tu.checkThread()
 
-      received << buffer
+      sends = 10
+      size = 100
 
-      if (received.length == sends * size) {
-        tu.azzert(TestUtils.buffersEqual(sent, received))
+      sent = new Buffer()
+      received = new Buffer()
 
-        server.close {
-          client.close()
-          tu.testComplete()
+      socket.dataHandler { buffer ->
+        tu.checkThread()
+
+        received << buffer
+
+        if (received.length == sends * size) {
+          tu.azzert(TestUtils.buffersEqual(sent, received))
+
+          server.close {
+            client.close()
+            tu.testComplete()
+          }
+
         }
-
       }
-    }
 
-    socket.endHandler {
-      tu.checkThread()
-    }
+      socket.endHandler {
+        tu.checkThread()
+      }
 
-    socket.closedHandler {
-      tu.checkThread()
-    }
+      socket.closedHandler {
+        tu.checkThread()
+      }
 
-    socket.drainHandler {
-      tu.checkThread()
-    }
+      socket.drainHandler {
+        tu.checkThread()
+      }
 
-    socket.pause()
+      socket.pause()
 
-    socket.resume()
+      socket.resume()
 
-    sends.times {
-      Buffer data = TestUtils.generateRandomBuffer(size)
-      sent << data
-      socket << data
-    }
-
+      sends.times {
+        Buffer data = TestUtils.generateRandomBuffer(size)
+        sent << data
+        socket << data
+      }
+    })
   })
 }
 

@@ -47,36 +47,36 @@ def echo(binary) {
     }
   }
 
-  server.listen(8080)
-
-  if (binary) {
-    buff = TestUtils.generateRandomBuffer(1000)
-  } else {
-    str = TestUtils.randomUnicodeString(1000)
-    buff = new Buffer(str)
-  }
-
-  client.connectWebsocket("/someurl", { ws ->
-    tu.checkThread()
-
-    received = new Buffer()
-
-    ws.dataHandler { buff ->
-      tu.checkThread()
-      received << buff
-      if (received.length == buff.length) {
-        tu.azzert(TestUtils.buffersEqual(buff, received))
-        tu.testComplete()
-      }
-    }
-
+  server.listen(8080, {
     if (binary) {
-      ws.writeBinaryFrame(buff)
+      buff = TestUtils.generateRandomBuffer(1000)
     } else {
-      ws.writeTextFrame(str)
+      str = TestUtils.randomUnicodeString(1000)
+      buff = new Buffer(str)
     }
-  })
 
+    client.connectWebsocket("/someurl", { ws ->
+      tu.checkThread()
+
+      received = new Buffer()
+
+      ws.dataHandler { buff ->
+        tu.checkThread()
+        received << buff
+        if (received.length == buff.length) {
+          tu.azzert(TestUtils.buffersEqual(buff, received))
+          tu.testComplete()
+        }
+      }
+
+      if (binary) {
+        ws.writeBinaryFrame(buff)
+      } else {
+        ws.writeTextFrame(str)
+      }
+    })
+
+  })
 }
 
 def testWriteFromConnectHandler() {
@@ -86,17 +86,16 @@ def testWriteFromConnectHandler() {
     ws.writeTextFrame("foo")
   }
 
-  server.listen(8080)
-
-  client.connectWebsocket("/someurl", { ws ->
-    tu.checkThread()
-    ws.dataHandler { buff ->
+  server.listen(8080, {
+    client.connectWebsocket("/someurl", { ws ->
       tu.checkThread()
-      tu.azzert("foo".equals(buff.toString()))
-      tu.testComplete()
-    }
+      ws.dataHandler { buff ->
+        tu.checkThread()
+        tu.azzert("foo".equals(buff.toString()))
+        tu.testComplete()
+      }
+    })
   })
-
 }
 
 def testClose() {
@@ -108,14 +107,14 @@ def testClose() {
     }
   }
 
-  server.listen(8080)
-
-  client.connectWebsocket("/someurl", { ws ->
-    tu.checkThread()
-    ws.closedHandler {
-      tu.testComplete()
-    }
-    ws.writeTextFrame("foo")
+  server.listen(8080, {
+    client.connectWebsocket("/someurl", { ws ->
+      tu.checkThread()
+      ws.closedHandler {
+        tu.testComplete()
+      }
+      ws.writeTextFrame("foo")
+    })
   })
 
 }
@@ -127,15 +126,14 @@ def testCloseFromConnectHandler() {
     ws.close()
   }
 
-  server.listen(8080)
-
-  client.connectWebsocket("/someurl", { ws ->
-    tu.checkThread()
-    ws.closedHandler {
-      tu.testComplete()
-    }
+  server.listen(8080, {
+    client.connectWebsocket("/someurl", { ws ->
+      tu.checkThread()
+      ws.closedHandler {
+        tu.testComplete()
+      }
+    })
   })
-
 }
 
 tu.registerTests(this)

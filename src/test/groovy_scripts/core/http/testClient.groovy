@@ -220,7 +220,6 @@ def httpMethod(ssl, method, chunked)  {
       req.response.end()
     }
   }
-  server.listen(8080)
 
   if (ssl) {
     client.SSL = true
@@ -230,42 +229,44 @@ def httpMethod(ssl, method, chunked)  {
     client.trustStorePassword = "wibble"
   }
 
-  sentBuff = TestUtils.generateRandomBuffer(1000)
+  server.listen(8080, {
+    sentBuff = TestUtils.generateRandomBuffer(1000)
 
-  request = client.request(method, uri, { resp ->
-    tu.checkThread()
-    tu.azzert(200 == resp.statusCode)
-    tu.azzert(resp.headers['rheader1'] == 'vrheader1')
-    tu.azzert(resp.headers['rheader2'] == 'vrheader2')
-    body = new Buffer()
-    resp.dataHandler { data ->
+    request = client.request(method, uri, { resp ->
       tu.checkThread()
-      body << data
-    }
-
-    resp.endHandler {
-      tu.checkThread()
-      if (method != 'HEAD' && method != 'CONNECT') {
-        tu.azzert(TestUtils.buffersEqual(sentBuff, body))
-        if (chunked) {
-          tu.azzert(resp.trailers['trailer1'] == 'vtrailer1')
-          tu.azzert(resp.trailers['trailer2'] == 'vtrailer2')
-        }
+      tu.azzert(200 == resp.statusCode)
+      tu.azzert(resp.headers['rheader1'] == 'vrheader1')
+      tu.azzert(resp.headers['rheader2'] == 'vrheader2')
+      body = new Buffer()
+      resp.dataHandler { data ->
+        tu.checkThread()
+        body << data
       }
-      tu.testComplete()
+
+      resp.endHandler {
+        tu.checkThread()
+        if (method != 'HEAD' && method != 'CONNECT') {
+          tu.azzert(TestUtils.buffersEqual(sentBuff, body))
+          if (chunked) {
+            tu.azzert(resp.trailers['trailer1'] == 'vtrailer1')
+            tu.azzert(resp.trailers['trailer2'] == 'vtrailer2')
+          }
+        }
+        tu.testComplete()
+      }
+    })
+
+    request.chunked = true
+    request.headers['header1'] = 'vheader1'
+    request.headers['header2'] = 'vheader2'
+    if (!chunked) {
+      request.headers['content-length'] = sentBuff.length
     }
+
+    request << sentBuff
+
+    request.end()
   })
-
-  request.chunked = true
-  request.headers['header1'] = 'vheader1'
-  request.headers['header2'] = 'vheader2'
-  if (!chunked) {
-    request.headers['content-length'] = sentBuff.length
-  }
-
-  request << sentBuff
-
-  request.end()
 }
 
 tu.registerTests(this)
