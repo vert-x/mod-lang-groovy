@@ -48,24 +48,27 @@ abstract class NetServer {
   }
 
   /**
-   * Instruct the server to listen for incoming connections on the specified {@code port} and all available interfaces.
-   * @return a reference to this so multiple method calls can be chained together
+   * Instruct the server to listen for incoming connections on the specified {@code port} and {@code host}. {@code host} can
+   * be a host name or an IP address.
    */
-  NetServer listen(int port) {
-    jServer.listen(port)
+  void listen(int port, String host, Closure hndlr) {
+    jServer.listen(port, host, hndlr as Handler)
     this
   }
 
   /**
-   * Instruct the server to listen for incoming connections on the specified {@code port} and {@code host}. {@code host} can
-   * be a host name or an IP address.
-   * @return a reference to this so multiple method calls can be chained together
+   * Instruct the server to listen for incoming connections on the specified {@code port}.
    */
-  NetServer listen(int port, String host) {
-    jServer.listen(port, host)
-    this
+  void listen(int port) {
+    jServer.listen(port)
   }
-
+  /**
+   * Instruct the server to listen for incoming connections on the specified {@code port}
+   */
+  void listen(int port, Closure hndlr) {
+        jServer.listen(port, hndlr as Handler)
+        this
+    }
   /**
    * Close the server. This will close any currently open connections.
    */

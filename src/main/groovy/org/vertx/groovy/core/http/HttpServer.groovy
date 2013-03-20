@@ -80,21 +80,25 @@ abstract class HttpServer {
   /**
    * Tell the server to start listening on all available interfaces and port {@code port}
    *
-   * @return a reference to this, so methods can be chained.
    */
-  HttpServer listen(int port) {
+  void listen(int port) {
     jServer.listen(port)
-    this
+  }
+
+  /**
+   * Tell the server to start listening on all available interfaces and port {@code port}
+   *
+   */
+  void listen(int port, Closure hndlr) {
+    jServer.listen(por, hndlr as Handler)
   }
 
   /**
    * Tell the server to start listening on port {@code port} and hostname or ip address given by {@code host}.
    *
-   * @return a reference to this, so methods can be chained.
    */
-  HttpServer listen(int port, String host) {
-    jServer.listen(port, host)
-    this
+  void listen(int port, String host, Closure hndlr) {
+    jServer.listen(port, host, hndlr as Handler)
   }
 
 
