@@ -53,7 +53,6 @@ abstract class NetServer {
    */
   void listen(int port, String host, Closure hndlr) {
     jServer.listen(port, host, hndlr as Handler)
-    this
   }
 
   /**
@@ -67,7 +66,6 @@ abstract class NetServer {
    */
   void listen(int port, Closure hndlr) {
         jServer.listen(port, hndlr as Handler)
-        this
     }
   /**
    * Close the server. This will close any currently open connections.

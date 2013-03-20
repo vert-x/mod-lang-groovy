@@ -90,7 +90,7 @@ abstract class HttpServer {
    *
    */
   void listen(int port, Closure hndlr) {
-    jServer.listen(por, hndlr as Handler)
+    jServer.listen(port, hndlr as Handler)
   }
 
   /**
