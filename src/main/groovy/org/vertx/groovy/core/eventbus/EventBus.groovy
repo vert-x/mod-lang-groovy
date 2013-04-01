@@ -125,10 +125,10 @@ class EventBus {
    * @param handler The handler
    * @return A unique handler id
    */
-  String registerLocalHandler(String address, Closure handler, Closure resultHandler = null) {
+  String registerLocalHandler(String address, Closure handler) {
     def wrapped = wrapHandler(handler)
     handlerMap.put(handler, wrapped)
-    jEventBus.registerLocalHandler(address, wrapped, resultHandler as AsyncResultHandler)
+    jEventBus.registerLocalHandler(address, wrapped)
   }
 
   /**
@@ -176,10 +176,9 @@ class EventBus {
     message
   }
 
-  protected static wrapHandler(replyHandler) {
-    if (replyHandler != null) {
-      def wrapped = { replyHandler(new Message(it)) } as Handler
-      return wrapped
+  protected static Handler wrapHandler(handler) {
+    if (handler != null) {
+      return { handler(new Message(it)) } as Handler
     } else {
       return null
     }
