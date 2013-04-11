@@ -87,7 +87,7 @@ class Pump {
   private Closure dataHandler = { buffer ->
     writeStream.write(buffer)
     pumped += buffer.length()
-    if (writeStream.writeQueueFull()) {
+    if (writeStream.isWriteQueueFull()) {
       readStream.pause()
       writeStream.drainHandler(drainHandler)
     }

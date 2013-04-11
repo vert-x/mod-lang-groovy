@@ -57,7 +57,7 @@ def testSimple() {
   eb.registerHandler(address, myHandler = { msg ->
     tu.checkThread()
     tu.azzert(!handled)
-    assertSent(msg.body)
+    assertSent(msg.body())
     eb.unregisterHandler(address, myHandler)
     handled = true
     tu.testComplete()
@@ -87,7 +87,7 @@ def testUnregister() {
   eb.registerHandler(address, myHandler = { msg ->
     tu.checkThread()
     tu.azzert(!handled)
-    assertSent(msg.body)
+    assertSent(msg.body())
     eb.unregisterHandler(address, myHandler)
     // Unregister again - should do nothing
     eb.unregisterHandler(address, myHandler)
@@ -109,7 +109,7 @@ def testWithReply() {
   eb.registerHandler(address, myHandler = { msg ->
     tu.checkThread()
     tu.azzert(!handled)
-    assertSent(msg.body)
+    assertSent(msg.body())
     eb.unregisterHandler(address, myHandler)
     handled = true
     msg.reply(reply)
@@ -117,7 +117,7 @@ def testWithReply() {
 
   eb.send(address, sent, { reply ->
     tu.checkThread()
-    assertReply(reply.body)
+    assertReply(reply.body())
     tu.testComplete()
   })
 }
@@ -125,18 +125,18 @@ def testWithReply() {
 def testReplyOfReplyOfReply() {
 
   eb.registerHandler(address, myHandler = { msg ->
-    tu.azzert("message" == msg.body)
+    tu.azzert("message" == msg.body())
     msg.reply("reply", { reply ->
-      tu.azzert("reply-of-reply" == reply.body)
+      tu.azzert("reply-of-reply" == reply.body())
       reply.reply("reply-of-reply-of-reply")
       eb.unregisterHandler(address, myHandler)
     })
   })
 
   eb.send(address, "message", { reply->
-    tu.azzert("reply" == reply.body)
+    tu.azzert("reply" == reply.body())
     reply.reply("reply-of-reply", { replyReply ->
-      tu.azzert("reply-of-reply-of-reply" == replyReply.body)
+      tu.azzert("reply-of-reply-of-reply" == replyReply.body())
       tu.testComplete()
     })
   })
@@ -148,7 +148,7 @@ def testEmptyReply() {
   eb.registerHandler(address, myHandler = { msg ->
     tu.checkThread()
     tu.azzert(!handled)
-    assertSent(msg.body)
+    assertSent(msg.body())
     eb.unregisterHandler(address, myHandler)
     handled = true
     msg.reply([:])
@@ -194,18 +194,18 @@ def echo(msg) {
   eb.registerHandler(address, myHandler = { received ->
     tu.checkThread()
     eb.unregisterHandler(address, myHandler)
-    received.reply(received.body)
+    received.reply(received.body())
   })
   eb.send(address, msg, { reply ->
 
     if (msg != null) {
-      if (msg instanceof Map == false) {
-        tu.azzert(msg == reply.body)
+      if (!(msg instanceof Map)) {
+        tu.azzert(msg == reply.body())
       } else {
-        tu.azzert(msg.equals(reply.body))
+        tu.azzert(msg.equals(reply.body()))
       }
     } else {
-      tu.azzert(reply.body == null)
+      tu.azzert(reply.body() == null)
     }
 
     tu.testComplete()

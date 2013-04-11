@@ -89,5 +89,4 @@ interface NetClient extends ClientSSLSupport<NetClient>, TCPSupport<NetClient> {
    */
   void close()
 
-
 }

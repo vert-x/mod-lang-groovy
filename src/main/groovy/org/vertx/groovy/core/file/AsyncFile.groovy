@@ -103,7 +103,7 @@ class AsyncFile {
         this
       }
 
-      boolean writeQueueFull() {
+      boolean isWriteQueueFull() {
         return jWS.writeQueueFull()
       }
 

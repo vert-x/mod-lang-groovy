@@ -39,7 +39,7 @@ interface SockJSSocket extends ReadStream<SockJSSocket>, WriteStream<SockJSSocke
    * that buffer will be received by this instance in its own event loop and written to the underlying socket. This
    * allows you to write data to other sockets which are owned by different event loops.
    */
-  String writeHandlerID();
+  String getWriteHandlerID();
 
   /**
    * Close it
