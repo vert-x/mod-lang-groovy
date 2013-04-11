@@ -24,32 +24,25 @@ package org.vertx.groovy.core.streams
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-interface ReadStream  {
+interface ReadStream<T> extends ExceptionSupport<T> {
 
   /**
    * Set a data handler. As data is read, the handler will be called with the data.
    */
-  void dataHandler(Closure handler)
+  T dataHandler(Closure handler);
 
   /**
-   * Pause the {@code ReadStream}. After calling this, the ReadStream will aim to send no more data to the {@code
-   * dataHandler}
+   * Pause the {@code ReadStream}. While the stream is paused, no data will be sent to the {@code dataHandler}
    */
-  void pause()
+  T pause();
 
   /**
    * Resume reading. If the {@code ReadStream} has been paused, reading will recommence on it.
    */
-  void resume()
-
-  /**
-   * Set an exception handler.
-   */
-  void exceptionHandler(Closure handler)
+  T resume();
 
   /**
    * Set an end handler. Once the stream has ended, and there is no more data to be read, this handler will be called.
    */
-  void endHandler(Closure handler)
-
+  T endHandler(Closure endHandler);
 }

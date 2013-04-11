@@ -266,6 +266,7 @@ def httpMethod(ssl, method, chunked)  {
   request << sentBuff
 
   request.end()
+
 }
 
 tu.registerTests(this)

@@ -28,6 +28,8 @@ import org.vertx.groovy.platform.Verticle
 /**
  * @author swilliams
  *
+ * This is a Java verticle which wraps the Groovy Verticle class instance
+ *
  */
 class GroovyVerticle extends JVerticle {
 

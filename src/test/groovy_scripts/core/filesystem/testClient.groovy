@@ -34,9 +34,9 @@ def testCopy() {
   def content = "some-data"
   fs.writeFile(from, content, {
     fs.copy(from, to, { ares ->
-      tu.azzert(ares.exception == null)
+      tu.azzert(ares.cause() == null)
       fs.readFile(to, { ares2 ->
-        tu.azzert(ares2.exception == null)
+        tu.azzert(ares2.cause() == null)
         tu.azzert(ares2.result.toString() == content)
         tu.testComplete()
       })
@@ -51,12 +51,12 @@ def testMove() {
   def content = "some-data"
   fs.writeFile(from, content, {
     fs.move(from, to, { ares->
-      tu.azzert(ares.exception == null)
+      tu.azzert(ares.cause() == null)
       fs.readFile(to, { ares2 ->
-        tu.azzert(ares2.exception == null)
+        tu.azzert(ares2.cause() == null)
         tu.azzert(ares2.result.toString() == content)
         fs.exists(from, { ares3 ->
-          tu.azzert(ares3.exception == null)
+          tu.azzert(ares3.cause() == null)
           tu.azzert(!ares.result)
           tu.testComplete()
           println "sent testcomplete"
@@ -75,7 +75,7 @@ def testReadDir() {
     fs.writeFile(file2, content, {
       fs.writeFile(file3, content, {
         fs.readDir(fileDir, { ares ->
-          tu.azzert(ares.exception == null)
+          tu.azzert(ares.cause() == null)
           tu.azzert(ares.result.length == 3)
           tu.testComplete()
         })
@@ -89,7 +89,7 @@ def testProps() {
   def content = "some-data"
   fs.writeFile(file, content, {
     fs.props(file, { ares ->
-      tu.azzert(ares.exception == null)
+      tu.azzert(ares.cause() == null)
       tu.azzert(ares.result.isRegularFile)
       tu.testComplete()
     })
@@ -102,18 +102,18 @@ def testPumpFile() {
   def content = tu.generateRandomBuffer(10000)
   fs.writeFile(from, content, {
     fs.open(from, { ares1 ->
-      tu.azzert(ares1.exception == null)
+      tu.azzert(ares1.cause() == null)
       fs.open(to, { ares2 ->
-        tu.azzert(ares2.exception == null)
-        def rs = ares1.result.getReadStream()
-        def ws = ares2.result.getWriteStream()
+        tu.azzert(ares2.cause() == null)
+        def rs = ares1.result.readStream()
+        def ws = ares2.result.writeStream()
         def pump = Pump.createPump(rs, ws)
         pump.start()
         rs.endHandler {
           ares1.result.close {
             ares2.result.close {
               fs.readFile(to, { ares3 ->
-                tu.azzert(ares3.exception == null)
+                tu.azzert(ares3.cause() == null)
                 tu.azzert(tu.buffersEqual(content, ares3.result))
                 tu.testComplete()
               })

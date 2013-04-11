@@ -62,8 +62,13 @@ void echo(boolean ssl) {
     client.trustStorePassword = "wibble"
   }
 
-  client.connect(8080, "localhost", { socket ->
+  client.connect(8080, "localhost", { futureResult ->
+
     tu.checkThread()
+
+    tu.azzert futureResult.succeeded()
+
+    socket = futureResult.result()
 
     sends = 10
     size = 100

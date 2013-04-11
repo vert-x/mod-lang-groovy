@@ -25,12 +25,15 @@ import org.vertx.java.core.json.JsonObject
 */
 class Message {
 
+  private def body
+  private JMessage jMessage
+
   /**
    * The body of the message
    */
-  def body
-
-  private JMessage jMessage
+  def body() {
+    return body
+  }
 
   Message(JMessage jMessage) {
     if (jMessage.body instanceof JsonObject) {

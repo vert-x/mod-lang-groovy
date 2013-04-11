@@ -19,8 +19,6 @@ package org.vertx.groovy.core.http
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.streams.ReadStream
 import org.vertx.groovy.core.streams.WriteStream
-import org.vertx.java.core.Handler
-import org.vertx.java.core.http.WebSocket as JWebSocket
 
 /**
  * Represents an HTML 5 Websocket<p>
@@ -33,13 +31,7 @@ import org.vertx.java.core.http.WebSocket as JWebSocket
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-class WebSocket implements ReadStream, WriteStream {
-
-  private final JWebSocket jWS
-
-  protected WebSocket(JWebSocket jWS) {
-    this.jWS = jWS
-  }
+interface WebSocket extends ReadStream<WebSocket>, WriteStream<WebSocket> {
 
   /**
    * When a {@code Websocket} is created it automatically registers an event handler with the eventbus, the ID of that
@@ -48,9 +40,7 @@ class WebSocket implements ReadStream, WriteStream {
    * that buffer will be received by this instance in its own event loop and written to the underlying connection. This
    * allows you to write data to other websockets which are owned by different event loops.
    */
-  String getBinaryHandlerID() {
-    jWS.binaryHandlerID
-  }
+  String getBinaryHandlerID();
 
   /**
    * When a {@code Websocket} is created it automatically registers an event handler with the eventbus, the ID of that
@@ -59,97 +49,36 @@ class WebSocket implements ReadStream, WriteStream {
    * that buffer will be received by this instance in its own event loop and written to the underlying connection. This
    * allows you to write data to other websockets which are owned by different event loops.
    */
-  String getTextHandlerID() {
-    jWS.textHandlerID
-  }
+  String getTextHandlerID();
 
   /**
-   * Write {@code data} to the websocket as binary frame
+   * Write {@code data} to the websocket as a binary frame
    */
-  void writeBinaryFrame(Buffer data) {
-    jWS.writeBinaryFrame(data.toJavaBuffer())
-  }
+  void writeBinaryFrame(Buffer data);
 
   /**
-   * Write {@code str} to the websocket as text frame
+   * Write {@code str} to the websocket as a text frame
    */
-  void writeTextFrame(String str) {
-    jWS.writeTextFrame(str)
-  }
-
-  /**
-   * Same as {@link #writeBinaryFrame(Buffer)}
-   */
-  void leftShift(Buffer buff) {
-    writeBuffer(buff)
-    this
-  }
-
-  /**
-   * Same as {@link #writeTextFrame(String)}
-   */
-  void leftShift(String str) {
-    writeTextFrame(str)
-    this
-  }
+  void writeTextFrame(String str);
 
   /**
    * Set a closed handler on the connection
    */
-  void closedHandler(handler) {
-    jWS.closedHandler(handler as Handler)
-  }
+  WebSocket closedHandler(Closure handler);
 
   /**
    * Close the websocket
    */
-  void close() {
-    jWS.close()
-  }
+  void close();
 
-  /** {@inheritDoc} */
-  void dataHandler(Closure handler) {
-    jWS.dataHandler({handler(new Buffer(it))} as Handler)
-  }
+  /**
+   * Same as {@link #writeBinaryFrame(Buffer)}
+   */
+  WebSocket leftShift(Buffer buff)
 
-  /** {@inheritDoc} */
-  void pause() {
-    jWS.pause()
-  }
-
-  /** {@inheritDoc} */
-  void resume() {
-    jWS.resume()
-  }
-
-  /** {@inheritDoc} */
-  void exceptionHandler(Closure handler) {
-    jWS.exceptionHandler(handler as Handler)
-  }
-
-  /** {@inheritDoc} */
-  void endHandler(Closure endHandler) {
-    jWS.endHandler(endHandler as Handler)
-  }
-
-  /** {@inheritDoc} */
-  void writeBuffer(Buffer data) {
-    jWS.writeBuffer(data.toJavaBuffer())
-  }
-
-  /** {@inheritDoc} */
-  void setWriteQueueMaxSize(int maxSize) {
-    jWS.setWriteQueueMaxSize(maxSize)
-  }
-
-  /** {@inheritDoc} */
-  boolean isWriteQueueFull() {
-    jWS.writeQueueFull()
-  }
-
-  /** {@inheritDoc} */
-  void drainHandler(Closure handler) {
-    jWS.drainHandler(handler as Handler)
-  }
+  /**
+   * Same as {@link #writeTextFrame(String)}
+   */
+  WebSocket leftShift(String str)
 
 }

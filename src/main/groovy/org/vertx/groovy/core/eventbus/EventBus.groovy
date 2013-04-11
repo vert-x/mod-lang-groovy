@@ -111,10 +111,11 @@ class EventBus {
    * propagated to all nodes of the event bus, the handler will be called.
    * @return A unique handler id
    */
-  String registerHandler(String address, Closure handler, Closure resultHandler = null) {
+  EventBus registerHandler(String address, Closure handler, Closure resultHandler = null) {
     def wrapped = wrapHandler(handler)
     handlerMap.put(handler, wrapped)
     jEventBus.registerHandler(address, wrapped, resultHandler as AsyncResultHandler)
+    return this
   }
 
   /**
@@ -125,22 +126,11 @@ class EventBus {
    * @param handler The handler
    * @return A unique handler id
    */
-  String registerLocalHandler(String address, Closure handler, Closure resultHandler = null) {
+  EventBus registerLocalHandler(String address, Closure handler, Closure resultHandler = null) {
     def wrapped = wrapHandler(handler)
     handlerMap.put(handler, wrapped)
     jEventBus.registerLocalHandler(address, wrapped, resultHandler as AsyncResultHandler)
-  }
-
-  /**
-   * Registers a handler against a uniquely generated address, the address is returned as the id. When a message arrives the handler
-   * will receive an instance of {@link Message}
-   * @param handler
-   * @param resultHandler Optional result handler. If specified, then when the register has been
-   * propagated to all nodes of the event bus, the handler will be called.
-   * @return A unique handler id which is the same as the address
-   */
-  String registerSimpleHandler(handler, Closure resultHandler = null) {
-    jEventBus.registerHandler(wrapHandler(handler), resultHandler as AsyncResultHandler)
+    return this
   }
 
   /**
@@ -150,21 +140,12 @@ class EventBus {
    * @param resultHandler Optional completion handler. If specified, then when the unregister has been
    * propagated to all nodes of the event bus, the handler will be called.
    */
-  void unregisterHandler(String address, Closure handler, Closure resultHandler = null) {
+  EventBus unregisterHandler(String address, Closure handler, Closure resultHandler = null) {
     def wrapped = handlerMap.remove(handler)
     if (wrapped != null) {
       jEventBus.unregisterHandler(address, wrapped, resultHandler as AsyncResultHandler)
     }
-  }
-
-  /**
-   * Unregister a handler given the unique handler id
-   * @param id The handler id
-   * @param resultHandler Optional completion handler. If specified, then when the unregister has been
-   * propagated to all nodes of the event bus, the handler will be called.
-   */
-  void unregisterSimpleHandler(String id, Closure resultHandler = null) {
-    jEventBus.unregisterHandler(id, resultHandler as AsyncResultHandler)
+    return this
   }
 
   protected static convertMessage(message) {

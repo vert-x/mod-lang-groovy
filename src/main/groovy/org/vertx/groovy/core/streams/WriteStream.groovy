@@ -27,36 +27,30 @@ import org.vertx.groovy.core.buffer.Buffer
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-interface WriteStream {
+interface WriteStream<T> extends ExceptionSupport<T> {
 
   /**
    * Write some data to the stream. The data is put on an internal write queue, and the write actually happens
    * asynchronously. To avoid running out of memory by putting too much on the write queue,
-   * check the {@link #isWriteQueueFull} method before writing. This is done automatically if using a {@link Pump}.
+   * check the {@link #writeQueueFull} method before writing. This is done automatically if using a {@link org.vertx.java.core.streams.Pump}.
    */
-  void writeBuffer(Buffer data)
+  T write(Buffer data);
 
   /**
    * Set the maximum size of the write queue to {@code maxSize}. You will still be able to write to the stream even
    * if there is more than {@code maxSize} bytes in the write queue. This is used as an indicator by classes such as
    * {@code Pump} to provide flow control.
    */
-  void setWriteQueueMaxSize(int maxSize)
+  T setWriteQueueMaxSize(int maxSize);
 
   /**
    * This will return {@code true} if there are more bytes in the write queue than the value set using {@link #setWriteQueueMaxSize}
    */
-  boolean isWriteQueueFull()
+  boolean writeQueueFull();
 
   /**
    * Set a drain handler on the stream. If the write queue is full, then the handler will be called when the write
-   * queue has been reduced to maxSize / 2. See {@link org.vertx.groovy.core.streams.Pump} for an example of this being used.
+   * queue has been reduced to maxSize / 2. See {@link org.vertx.java.core.streams.Pump} for an example of this being used.
    */
-  void drainHandler(Closure handler)
-
-  /**
-   * Set an exception handler on the stream
-   */
-  void exceptionHandler(Closure handler)
-
+  T drainHandler(Closure handler);
 }

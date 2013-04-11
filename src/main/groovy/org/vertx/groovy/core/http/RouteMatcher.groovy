@@ -17,6 +17,7 @@
 
 package org.vertx.groovy.core.http
 
+import org.vertx.groovy.core.http.impl.DefaultHttpServerRequest
 import org.vertx.java.core.Handler
 import org.vertx.java.core.http.RouteMatcher as JRouteMatcher
 
@@ -240,7 +241,7 @@ class RouteMatcher {
   }
 
   private Handler wrapHandler(Closure handler) {
-    return {handler(new HttpServerRequest(it))} as Handler
+    return {handler(new DefaultHttpServerRequest(it))} as Handler
   }
 
 

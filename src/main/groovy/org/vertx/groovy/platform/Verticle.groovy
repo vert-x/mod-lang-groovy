@@ -28,15 +28,15 @@ abstract class Verticle {
 
   Container container
 
-  def start() throws Exception {
+  def start() {
   }
 
-  def start(VoidResult startedResult) throws Exception {
+  def start(VoidResult startedResult) {
     start()
     startedResult.setResult()
   }
 
-  def stop() throws Exception {
+  def stop() {
   }
 
 }

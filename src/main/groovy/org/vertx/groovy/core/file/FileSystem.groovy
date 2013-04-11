@@ -17,8 +17,9 @@
 package org.vertx.groovy.core.file
 
 import org.vertx.groovy.core.buffer.Buffer
-import org.vertx.java.core.AsyncResult
+import org.vertx.java.core.FutureResult
 import org.vertx.java.core.AsyncResultHandler
+import org.vertx.java.core.FutureResult
 import org.vertx.java.core.file.FileProps
 import org.vertx.java.core.file.FileSystem as JFileSystem
 import org.vertx.java.core.file.FileSystemProps
@@ -49,45 +50,51 @@ class FileSystem {
    * will be copied recursively to the destination {@code to}.<p>
    * The copy will fail if the destination if the destination already exists.<p>
    */
-  void copy(String from, String to, boolean recursive = false, Closure handler) {
+  FileSystem copy(String from, String to, boolean recursive = false, Closure handler) {
     jFS.copy(from, to, recursive, handler as AsyncResultHandler)
+    this
   }
 
   /**
    * Synchronous version of {@link #copy(String, String, boolean, Closure)}
    */
-  void copySync(String from, String to, boolean recursive = false) {
-    jFS.copySync(from, to, recursive)    
+  FileSystem copySync(String from, String to, boolean recursive = false) {
+    jFS.copySync(from, to, recursive)
+    this
   }
 
   /**
    * Move a file from the path {@code from} to path {@code to}, asynchronously.<p>
    * The move will fail if the destination already exists.<p>
    */
-  void move(String from, String to, Closure handler) {
+  FileSystem move(String from, String to, Closure handler) {
     jFS.move(from, to, handler as AsyncResultHandler)
+    this
   }
 
   /**
    * Synchronous version of {@link #move(String, String, Closure)}
    */
-  void moveSync(String from, String to) {
+  FileSystem moveSync(String from, String to) {
     jFS.moveSync(from, to)
+    this
   }
 
   /**
    * Truncate the file represented by {@code path} to length {@code len} in bytes, asynchronously.<p>
    * The operation will fail if the file does not exist or {@code len} is less than {@code zero}.
    */
-  void truncate(String path, long len, Closure handler) {
+  FileSystem truncate(String path, long len, Closure handler) {
     jFS.truncate(path, len, handler as AsyncResultHandler)
+    this
   }
 
   /**
    * Synchronous version of {@link #truncate(String, long, Closure)}
    */
-  void truncateSync(String path, long len) {
+  FileSystem truncateSync(String path, long len) {
     jFS.truncateSync(path, len)
+    this
   }
 
   /**
@@ -97,23 +104,26 @@ class FileSystem {
    * If the file is directory then all contents will also have their permissions changed recursively. Any directory permissions will
    * be set to {@code dirPerms}, whilst any normal file permissions will be set to {@code perms}.<p>
    */
-  void chmod(String path, String perms, String dirPerms = null, Closure handler) {
+  FileSystem chmod(String path, String perms, String dirPerms = null, Closure handler) {
     jFS.chmod(path, perms, dirPerms, handler as AsyncResultHandler)
+    this
   }
 
   /**
    * Synchronous version of {@link #chmod(String, String, String, Closure)}
    */
-  void chmodSync(String path, String perms, String dirPerms = null) {
+  FileSystem chmodSync(String path, String perms, String dirPerms = null) {
     jFS.chmodSync(path, perms, dirPerms)
+    this
   }
 
   /**
    * Obtain properties for the file represented by {@code path}, asynchronously.
    * If the file is a link, the link will be followed.
    */
-  void props(String path, Closure handler) {
+  FileSystem props(String path, Closure handler) {
     jFS.props(path, handler as AsyncResultHandler)
+    this
   }
 
   /**
@@ -127,8 +137,9 @@ class FileSystem {
    * Obtain properties for the link represented by {@code path}, asynchronously.
    * The link will not be followed.
    */
-  void lprops(String path, Closure handler) {
+  FileSystem lprops(String path, Closure handler) {
     jFS.lprops(path, handler as AsyncResultHandler)
+    this
   }
 
   /**
@@ -141,50 +152,57 @@ class FileSystem {
   /**
    * Create a hard link on the file system from {@code link} to {@code existing}, asynchronously.
    */
-  void link(String link, String existing, Closure handler) {
+  FileSystem link(String link, String existing, Closure handler) {
     jFS.link(link, existing, handler as AsyncResultHandler)
+    this
   }
 
   /**
    * Synchronous version of {@link #link(String, String, Closure)}
    */
-  void linkSync(String link, String existing) {
+  FileSystem linkSync(String link, String existing) {
     jFS.linkSync(link, existing)
+    this
   }
 
   /**
    * Create a symbolic link on the file system from {@code link} to {@code existing}, asynchronously.
    */
-  void symlink(String link, String existing, Closure handler) {
+  FileSystem symlink(String link, String existing, Closure handler) {
     jFS.symlink(link, existing, handler as AsyncResultHandler)
+    this
   }
 
   /**
    * Synchronous version of {@link #link(String, String, Closure)}
    */
-  void symlinkSync(String link, String existing) {
+  FileSystem symlinkSync(String link, String existing) {
     jFS.symlinkSync(link, existing)
+    this
   }
 
   /**
    * Unlinks the link on the file system represented by the path {@code link}, asynchronously.
    */
-  void unlink(String link, Closure handler) {
+  FileSystem unlink(String link, Closure handler) {
     jFS.unlink(link, handler as AsyncResultHandler)
+    this
   }
 
   /**
    * Synchronous version of {@link #unlink(String, Closure)}
    */
-  void unlinkSync(String link) {
+  FileSystem unlinkSync(String link) {
     jFS.unlinkSync(link)
+    this
   }
 
   /**
    * Returns the path representing the file that the symbolic link specified by {@code link} points to, asynchronously.
    */
-  void readSymlink(String link, Closure handler) {
+  FileSystem readSymlink(String link, Closure handler) {
     jFS.readSymlink(link, handler as AsyncResultHandler)
+    this
   }
 
   /**
@@ -199,15 +217,17 @@ class FileSystem {
    * If the path represents a directory and {@code recursive = true} then the directory and its contents will be
    * deleted recursively.
    */
-  void delete(String path, boolean recursive = false, Closure handler) {
+  FileSystem delete(String path, boolean recursive = false, Closure handler) {
     jFS.delete(path, recursive, handler as AsyncResultHandler)
+    this
   }
 
   /**
    * Synchronous version of {@link #delete(String, boolean, Closure)}
    */
-  void deleteSync(String path, boolean recursive) {
+  FileSystem deleteSync(String path, boolean recursive) {
     jFS.deleteSync(path, recursive)
+    this
   }
 
   /**
@@ -219,23 +239,26 @@ class FileSystem {
    * will also be created.<p>
    * The operation will fail if the directory already exists.<p>
    */
-  void mkdir(String path, String perms = null, boolean createParents = false, Closure handler) {
+  FileSystem mkdir(String path, String perms = null, boolean createParents = false, Closure handler) {
     jFS.mkdir(path, perms, createParents, handler as AsyncResultHandler)
+    this
   }
 
   /**
    * Synchronous version of {@link #mkdir(String, String, boolean, Closure)}
    */
-  void mkdirSync(String path, String perms = null, boolean createParents = false) {
+  FileSystem mkdirSync(String path, String perms = null, boolean createParents = false) {
     jFS.mkdirSync(path, perms, createParents)
+    this
   }
 
   /**
    * Read the contents of the directory specified by {@code path}, asynchronously.<p>
    * The result is an array of String representing the paths of the files inside the directory.
    */
-  void readDir(String path, String filter = null, Closure handler) {
+  FileSystem readDir(String path, String filter = null, Closure handler) {
     jFS.readDir(path, filter, handler as AsyncResultHandler)
+    this
   }
 
   /**
@@ -249,14 +272,15 @@ class FileSystem {
    * Reads the entire file as represented by the path {@code path} as a {@link Buffer}, asynchronously.<p>
    * Do not user this method to read very large files or you risk running out of available RAM.
    */
-  void readFile(String path, Closure handler) {
+  FileSystem readFile(String path, Closure handler) {
     jFS.readFile(path, { ar ->
       if (ar.succeeded()) {
-        handler.call(new AsyncResult<Buffer>().setResult(new Buffer(ar.result)))
+        handler.call(new FutureResult<Buffer>(new Buffer(ar.result)))
       } else {
         handler.call(ar)
       }
     } as AsyncResultHandler)
+    this
   }
 
   /**
@@ -270,30 +294,34 @@ class FileSystem {
    * Creates the file, and writes the specified {@code Buffer data} to the file represented by the path {@code path},
    * asynchronously.
    */
-  void writeFile(String path, Buffer data, Closure handler) {
+  FileSystem writeFile(String path, Buffer data, Closure handler) {
     jFS.writeFile(path, data.toJavaBuffer(), handler as AsyncResultHandler)
+    this
   }
 
   /**
    * Creates the file, and writes the specified {@code String data} to the file represented by the path {@code path},
    * asynchronously.
    */
-  void writeFile(String path, String data, Closure handler) {
+  FileSystem writeFile(String path, String data, Closure handler) {
     jFS.writeFile(path, new org.vertx.java.core.buffer.Buffer(data), handler as AsyncResultHandler)
+    this
   }
 
   /**
    * Synchronous version of {@link #writeFile(String, Buffer, Closure)}
    */
-  void writeFileSync(String path, Buffer data) {
+  FileSystem writeFileSync(String path, Buffer data) {
     jFS.writeFileSync(path, data.toJavaBuffer())
+    this
   }
 
   /**
    * Synchronous version of {@link #writeFile(String, String, Closure)}
    */
-  void writeFileSync(String path, String data) {
+  FileSystem writeFileSync(String path, String data) {
     jFS.writeFileSync(path, new org.vertx.java.core.buffer.Buffer(data))
+    this
   }
 
   /**
@@ -306,14 +334,15 @@ class FileSystem {
    * If {@code flush} is {@code true} then all writes will be automatically flushed through OS buffers to the underlying
    * storage on each write.
    */
-  void open(String path, String perms = null, boolean read = true, boolean write = true, boolean createNew = true, boolean flush = false, Closure handler) {
+  FileSystem open(String path, String perms = null, boolean read = true, boolean write = true, boolean createNew = true, boolean flush = false, Closure handler) {
     jFS.open(path, perms, read, write, createNew, flush, { result ->
       if (result.succeeded()) {
-        handler(new AsyncResult<AsyncFile>().setResult(new AsyncFile(result.result)))
+        handler(new FutureResult<AsyncFile>(new AsyncFile(result.result)))
       } else {
         handler(result)
       }
     } as AsyncResultHandler)
+    this
   }
 
   /**
@@ -326,22 +355,25 @@ class FileSystem {
   /**
    * Creates an empty file with the specified {@code path}, asynchronously.
    */
-  void createFile(String path, String perms = null, Closure handler) {
+  FileSystem createFile(String path, String perms = null, Closure handler) {
     jFS.createFile(path, perms, handler as AsyncResultHandler)
+    this
   }
 
   /**
    * Synchronous version of {@link #createFile(String, String, Closure)}
    */
-  void createFileSync(String path, String perms = null) {
+  FileSystem createFileSync(String path, String perms = null) {
     jFS.createFileSync(path, perms)
+    this
   }
 
   /**
    * Determines whether the file as specified by the path {@code path} exists, asynchronously.
    */
-  void exists(String path, Closure handler) {
+  FileSystem exists(String path, Closure handler) {
     jFS.exists(path, handler as AsyncResultHandler)
+    this
   }
 
   /**
@@ -354,8 +386,9 @@ class FileSystem {
   /**
    * Returns properties of the file-system being used by the specified {@code path}, asynchronously.
    */
-  void fsProps(String path, Closure handler) {
+  FileSystem fsProps(String path, Closure handler) {
     jFS.fsProps(path, handler as AsyncResultHandler)
+    this
   }
 
   /**

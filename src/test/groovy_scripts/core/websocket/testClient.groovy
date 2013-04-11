@@ -52,7 +52,7 @@ def echo(binary) {
   if (binary) {
     buff = TestUtils.generateRandomBuffer(1000)
   } else {
-    str = TestUtils.randomUnicodeString(1000)
+    str = org.vertx.java.testframework.TestUtils.randomUnicodeString(1000)
     buff = new Buffer(str)
   }
 

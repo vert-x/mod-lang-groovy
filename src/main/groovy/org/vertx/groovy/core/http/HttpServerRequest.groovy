@@ -1,7 +1,7 @@
 /*
  * Copyright 2011-2012 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,10 +16,10 @@
 
 package org.vertx.groovy.core.http
 
-import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.streams.ReadStream
-import org.vertx.java.core.Handler
-import org.vertx.java.core.http.HttpServerRequest as JHttpServerRequest
+
+import javax.net.ssl.SSLPeerUnverifiedException
+import javax.security.cert.X509Certificate
 
 /**
  * Represents a server-side HTTP request.<p>
@@ -35,44 +35,34 @@ import org.vertx.java.core.http.HttpServerRequest as JHttpServerRequest
  * @author Peter Ledbrook
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-class HttpServerRequest implements ReadStream {
-
-  private final JHttpServerRequest jRequest
-  private final HttpServerResponse wrappedResponse
-
-  protected HttpServerRequest(JHttpServerRequest jRequest) {
-    this.jRequest = jRequest
-    this.wrappedResponse = new HttpServerResponse(jRequest.response)
-  }
+interface HttpServerRequest extends ReadStream<HttpServerRequest> {
 
   /**
-   * @return The HTTP method for the request. One of GET, PUT, POST, DELETE, TRACE, CONNECT, OPTIONS, HEAD
+   * The HTTP method for the request. One of GET, PUT, POST, DELETE, TRACE, CONNECT, OPTIONS or HEAD
    */
-  String getMethod() {
-    jRequest.method
-  }
+  String getMethod()
 
   /**
-   * @return The uri of the request. For example
+   * The uri of the request. For example
    * http://www.somedomain.com/somepath/somemorepath/somresource.foo?someparam=32&someotherparam=x
    */
-  String getUri() {
-    jRequest.uri
-  }
+  String getUri()
 
   /**
-   * @return The path part of the uri. For example /somepath/somemorepath/somresource.foo
+   * The path part of the uri. For example /somepath/somemorepath/somresource.foo
    */
-  String getPath() {
-    jRequest.path
-  }
+  String getPath()
 
   /**
-   * @return The query part of the uri. For example someparam=32&someotherparam=x
+   * The query part of the uri. For example someparam=32&someotherparam=x
    */
-  String getQuery() {
-    jRequest.query
-  }
+  String getQuery()
+
+  /**
+   * The response. Each instance of this class has an {@link org.vertx.java.core.http.HttpServerResponse} instance attached to it. This is used
+   * to send the response back to the client.
+   */
+  HttpServerResponse getResponse()
 
   /**
    * A map of all headers in the request, If the request contains multiple headers with the same key, the values
@@ -80,26 +70,30 @@ class HttpServerRequest implements ReadStream {
    * as specified <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2">here</a>.
    * The headers will be automatically lower-cased when they reach the server
    */
-  Map<String, String> getHeaders() {
-    return jRequest.headers()
-  }
+  Map<String, String> getHeaders()
 
   /**
-   * @return A map of all query parameters in the request
+   * Returns a map of all the parameters in the request
    */
-  Map<String, String> getParams() {
-    return jRequest.params()
-  }
+  Map<String, String> getParams()
 
   /**
-   * @return The response. Each instance of this class has an {@link HttpServerResponse} instance attached to it. This is used
-   * to send the response back to the client.
+   * Return the remote (client side) address of the request
    */
-  HttpServerResponse getResponse() {
-    wrappedResponse
-  }
+  InetSocketAddress getRemoteAddress()
 
+  /**
+   * @return an array of the peer certificates.  Returns null if connection is
+   *         not SSL.
+   * @throws javax.net.ssl.SSLPeerUnverifiedException SSL peer's identity has not been verified.
+   */
+  X509Certificate[] getPeerCertificateChain() throws SSLPeerUnverifiedException
 
+  /**
+   * Get the absolute URI corresponding to the the HTTP request
+   * @return the URI
+   */
+  URI getAbsoluteURI()
 
   /**
    * Convenience method for receiving the entire request body in one piece. This saves the user having to manually
@@ -108,37 +102,6 @@ class HttpServerRequest implements ReadStream {
    *
    * @param bodyHandler This handler will be called after all the body has been received
    */
-  void bodyHandler(Closure bodyHandler) {
-    jRequest.dataHandler({bodyHandler(new Buffer(it))} as Handler)
-  }
-
-  /** {@inheritDoc} */
-  void dataHandler(Closure dataHandler) {
-    jRequest.dataHandler({dataHandler(new Buffer(it))} as Handler)
-  }
-
-  /** {@inheritDoc} */
-  void exceptionHandler(Closure handler) {
-    jRequest.exceptionHandler(handler as Handler)
-  }
-
-  /** {@inheritDoc} */
-  void pause() {
-    jRequest.pause()
-  }
-
-  /** {@inheritDoc} */
-  void resume() {
-    jRequest.resume()
-  }
-
-  /** {@inheritDoc} */
-  void endHandler(Closure handler) {
-    jRequest.endHandler(handler as Handler)
-  }
-
-  org.vertx.java.core.http.HttpServerRequest toJavaRequest() {
-    jRequest
-  }
+  void bodyHandler(Closure bodyHandler)
 
 }

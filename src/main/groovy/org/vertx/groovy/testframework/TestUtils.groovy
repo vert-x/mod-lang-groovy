@@ -19,18 +19,76 @@ import org.vertx.groovy.core.Vertx
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.java.core.Handler
 
-class TestUtils extends org.vertx.java.testframework.TestUtils {
+class TestUtils {
 
   TestUtils(Vertx vertx) {
-    super(vertx.toJavaVertx())
+    jTestUtils = new org.vertx.java.testframework.TestUtils(vertx.toJavaVertx())
+  }
+
+  private org.vertx.java.testframework.TestUtils jTestUtils
+
+  static Buffer generateRandomBuffer(int length) {
+    return new Buffer(org.vertx.java.testframework.TestUtils.generateRandomBuffer(length));
+  }
+
+  static Buffer generateRandomBuffer(int length, boolean avoid, byte avoidByte) {
+    return new Buffer(org.vertx.java.testframework.TestUtils.generateRandomBuffer(length, avoid, avoidByte));
+  }
+
+  static boolean buffersEqual(Buffer b1, Buffer b2) {
+    return org.vertx.java.testframework.TestUtils.buffersEqual(b1.toJavaBuffer(), b2.toJavaBuffer())
   }
 
   // Provide a version of register which takes a closure
-  def register(testName, handler) {
-    super.register(testName, handler as Handler)
+  void register(testName, Closure handler) {
+    jTestUtils.register(testName, handler as Handler)
   }
 
-  static Buffer generateRandomBuffer(int length) {
-    new Buffer(org.vertx.java.testframework.TestUtils.generateRandomBuffer(length, false, (byte) 0))
+  void azzert(boolean result) {
+    jTestUtils.azzert(result)
+  }
+
+  void azzert(boolean result, String message) {
+    jTestUtils.azzert(result, message)
+  }
+
+  void appReady() {
+    jTestUtils.appReady()
+  }
+
+  void appStopped() {
+    jTestUtils.appStopped()
+  }
+
+  void testComplete() {
+    jTestUtils.testComplete()
+  }
+
+  void startTest(String testName) {
+    jTestUtils.startTest(testName)
+  }
+
+  void exception(Throwable t, String message) {
+    jTestUtils.exception(t, message)
+  }
+
+  void trace(String message) {
+    jTestUtils.trace(message)
+  }
+
+  void registerTests(Object obj) {
+    jTestUtils.registerTests(obj)
+  }
+
+  void unregisterAll() {
+    jTestUtils.unregisterAll()
+  }
+
+  void sendEvent(String eventName) {
+    jTestUtils.sendEvent(eventName)
+  }
+
+  void checkThread() {
+    jTestUtils.checkThread()
   }
 }

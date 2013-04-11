@@ -258,14 +258,14 @@ class Container {
   }
 
   /**
-   * Cause the scontainer to exit
+   * Cause the container to exit
    */
   void exit() {
     jContainer.exit()
   }
 
   /**
-   * Get an umodifiable map of system, environment variables.
+   * Get an unmodifiable map of system, environment variables.
    * @return The map
    */
   Map<String, String> getEnv() {

@@ -33,7 +33,7 @@ import org.vertx.java.core.file.AsyncFile as JAsyncFile
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-class AsyncFile{
+class AsyncFile {
 
   private final JAsyncFile jFile
 
@@ -64,8 +64,9 @@ class AsyncFile{
    * there are no guarantees as to order in which those writes actually occur.<p>
    * The handler will be called when the close is complete, or an error occurs.
    */
-  void write(Buffer buffer, int position, Closure handler) {
+  AsyncFile write(Buffer buffer, int position, Closure handler) {
     jFile.write(buffer, position, handler as AsyncResultHandler)
+    this
   }
 
   /**
@@ -75,39 +76,45 @@ class AsyncFile{
    * When multiple reads are invoked on the same file there are no guarantees as to order in which those reads actually occur.<p>
    * The handler will be called when the close is complete, or if an error occurs.
    */
-  void read(Buffer buffer, int offset, int position, int length, Closure handler) {
+  AsyncFile read(Buffer buffer, int offset, int position, int length, Closure handler) {
     jFile.read(buffer, offset, position, length, handler as AsyncResultHandler)
+    this
   }
 
   /**
    * Return a {@link WriteStream} instance operating on this {@code AsyncFile}.
    */
-  WriteStream getWriteStream() {
-    def jWS = jFile.getWriteStream()
+  WriteStream writeStream() {
+    def jWS = jFile.writeStream()
 
-    return new WriteStream() {
-      void writeBuffer(Buffer data) {
-        jWS.writeBuffer(data.toJavaBuffer())
+    return new WriteStream<WriteStream>() {
+
+      WriteStream write(Buffer data) {
+        jWS.write(data.toJavaBuffer())
+        this
       }
 
       void leftShift(Buffer data) {
-        writeBuffer(data)
+        write(data)
       }
 
-      void setWriteQueueMaxSize(int maxSize) {
+      WriteStream setWriteQueueMaxSize(int maxSize) {
         jWS.setWriteQueueMaxSize(maxSize)
+        this
       }
 
-      boolean isWriteQueueFull() {
+      boolean writeQueueFull() {
         return jWS.writeQueueFull()
       }
 
-      void drainHandler(Closure handler) {
-        jWS.drainHandler(handler as Handler)        
+      WriteStream drainHandler(Closure handler) {
+        jWS.drainHandler(handler as Handler)
+        this
       }
 
-      void exceptionHandler(Closure handler) {
-        jWS.exceptionHandler(handler as Handler)        
+      WriteStream exceptionHandler(Closure handler) {
+        jWS.exceptionHandler(handler as Handler)
+        this
       }
     }
   }
@@ -115,29 +122,34 @@ class AsyncFile{
   /**
    * Return a {@link ReadStream} instance operating on this {@code AsyncFile}.
    */
-  ReadStream getReadStream() {
-    def jRS = jFile.getReadStream()
+  ReadStream readStream() {
+    def jRS = jFile.readStream()
     
-    return new ReadStream() {
+    return new ReadStream<ReadStream>() {
 
-      void dataHandler(Closure handler) {
+      ReadStream dataHandler(Closure handler) {
         jRS.dataHandler({handler(new Buffer(it))} as Handler)
+        this
       }
 
-      void pause() {
+      ReadStream pause() {
         jRS.pause()
+        this
       }
 
-      void resume() {
+      ReadStream resume() {
         jRS.resume()
+        this
       }
 
-      void exceptionHandler(Closure handler) {
+      ReadStream exceptionHandler(Closure handler) {
         jRS.exceptionHandler(handler as Handler)
+        this
       }
 
-      void endHandler(Closure handler) {
+      ReadStream endHandler(Closure handler) {
         jRS.endHandler(handler as Handler)
+        this
       }
 
     }
@@ -148,8 +160,9 @@ class AsyncFile{
    * If the file was opened with {@code flush} set to {@code true} then calling this method will have no effect.<p>
    * The actual flush will happen asynchronously.
    */
-  void flush() {
+  AsyncFile flush() {
     jFile.flush()
+    this
   }
 
   /**
@@ -157,7 +170,8 @@ class AsyncFile{
    * or an error occurs
    * @param handler
    */
-  void flush(Closure handler) {
+  AsyncFile flush(Closure handler) {
     jFile.flush(handler as AsyncResultHandler)
+    this
   }
 }
