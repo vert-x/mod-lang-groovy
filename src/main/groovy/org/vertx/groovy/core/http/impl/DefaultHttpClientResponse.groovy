@@ -55,8 +55,9 @@ class DefaultHttpClientResponse implements HttpClientResponse {
   }
 
   @Override
-  void bodyHandler(Closure handler) {
+  HttpClientResponse bodyHandler(Closure handler) {
     jResponse.bodyHandler(({handler(new Buffer(it))} as Handler))
+    this
   }
 
   @Override

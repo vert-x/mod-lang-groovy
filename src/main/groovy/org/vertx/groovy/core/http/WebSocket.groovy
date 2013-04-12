@@ -54,17 +54,17 @@ interface WebSocket extends ReadStream<WebSocket>, WriteStream<WebSocket> {
   /**
    * Write {@code data} to the websocket as a binary frame
    */
-  void writeBinaryFrame(Buffer data);
+  WebSocket writeBinaryFrame(Buffer data);
 
   /**
    * Write {@code str} to the websocket as a text frame
    */
-  void writeTextFrame(String str);
+  WebSocket writeTextFrame(String str);
 
   /**
    * Set a closed handler on the connection
    */
-  WebSocket closedHandler(Closure handler);
+  WebSocket closeHandler(Closure handler);
 
   /**
    * Close the websocket

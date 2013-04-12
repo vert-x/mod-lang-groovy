@@ -105,8 +105,8 @@ class DefaultNetSocket implements NetSocket {
   }
 
   @Override
-  void closedHandler(Closure handler) {
-    jNetSocket.closedHandler(handler as Handler)
+  void closeHandler(Closure handler) {
+    jNetSocket.closeHandler(handler as Handler)
   }
 
   @Override

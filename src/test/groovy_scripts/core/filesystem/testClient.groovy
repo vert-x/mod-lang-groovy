@@ -105,8 +105,8 @@ def testPumpFile() {
       tu.azzert(ares1.cause() == null)
       fs.open(to, { ares2 ->
         tu.azzert(ares2.cause() == null)
-        def rs = ares1.result.readStream()
-        def ws = ares2.result.writeStream()
+        def rs = ares1.result
+        def ws = ares2.result
         def pump = Pump.createPump(rs, ws)
         pump.start()
         rs.endHandler {

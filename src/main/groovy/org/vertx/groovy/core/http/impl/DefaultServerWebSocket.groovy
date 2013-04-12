@@ -1,6 +1,9 @@
 package org.vertx.groovy.core.http.impl
 
+import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.http.ServerWebSocket
+import org.vertx.groovy.core.http.WebSocket
+import org.vertx.java.core.Handler
 
 /*
  * Copyright 2013 Red Hat, Inc.
@@ -19,13 +22,108 @@ import org.vertx.groovy.core.http.ServerWebSocket
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-class DefaultServerWebSocket extends DefaultWebSocket implements ServerWebSocket {
+class DefaultServerWebSocket implements ServerWebSocket {
 
   private org.vertx.java.core.http.ServerWebSocket jServerWebSocket
 
-  DefaultServerWebSocket(jWebSocket) {
-    super(jWebSocket)
-    this.jServerWebSocket = jWebSocket
+  DefaultServerWebSocket(org.vertx.java.core.http.ServerWebSocket jServerWebSocket) {
+    this.jServerWebSocket = jServerWebSocket
+  }
+
+  @Override
+  String getBinaryHandlerID() {
+    jServerWebSocket.binaryHandlerID()
+  }
+
+  @Override
+  String getTextHandlerID() {
+    jServerWebSocket.textHandlerID()
+  }
+
+  @Override
+  ServerWebSocket writeBinaryFrame(Buffer data) {
+    jServerWebSocket.writeBinaryFrame(data.toJavaBuffer())
+    this
+  }
+
+  @Override
+  ServerWebSocket writeTextFrame(String str) {
+    jServerWebSocket.writeTextFrame(str)
+    this
+  }
+
+  @Override
+  ServerWebSocket closeHandler(Closure handler) {
+    jServerWebSocket.closeHandler(handler as Handler)
+    this
+  }
+
+  @Override
+  void close() {
+    jServerWebSocket.close()
+  }
+
+  @Override
+  ServerWebSocket leftShift(Buffer buff) {
+    return write(buff)
+  }
+
+  @Override
+  ServerWebSocket leftShift(String str) {
+    return write(new Buffer(str))
+  }
+
+  @Override
+  ServerWebSocket dataHandler(Closure handler) {
+    jServerWebSocket.dataHandler({handler(new Buffer(it))} as Handler)
+    this
+  }
+
+  @Override
+  ServerWebSocket pause() {
+    jServerWebSocket.pause()
+    this
+  }
+
+  @Override
+  ServerWebSocket resume() {
+    jServerWebSocket.resume()
+    this
+  }
+
+  @Override
+  ServerWebSocket endHandler(Closure endHandler) {
+    jServerWebSocket.endHandler(endHandler as Handler)
+    this
+  }
+
+  @Override
+  ServerWebSocket write(Buffer data) {
+    jServerWebSocket.write(data.toJavaBuffer())
+    this
+  }
+
+  @Override
+  ServerWebSocket setWriteQueueMaxSize(int maxSize) {
+    jServerWebSocket.setWriteQueueMaxSize(maxSize)
+    this
+  }
+
+  @Override
+  boolean isWriteQueueFull() {
+    jServerWebSocket.writeQueueFull()
+  }
+
+  @Override
+  ServerWebSocket drainHandler(Closure handler) {
+    jServerWebSocket.drainHandler(handler as Handler)
+    this
+  }
+
+  @Override
+  ServerWebSocket exceptionHandler(Closure handler) {
+    jServerWebSocket.exceptionHandler(handler as Handler)
+    this
   }
 
   @Override

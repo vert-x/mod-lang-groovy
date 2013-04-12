@@ -64,6 +64,6 @@ interface HttpClientResponse extends ReadStream<HttpClientResponse> {
    *
    * @param bodyHandler This handler will be called after all the body has been received
    */
-  void bodyHandler(Closure bodyHandler)
+  HttpClientResponse bodyHandler(Closure bodyHandler)
 
 }

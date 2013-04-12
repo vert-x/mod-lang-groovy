@@ -102,6 +102,6 @@ interface HttpServerRequest extends ReadStream<HttpServerRequest> {
    *
    * @param bodyHandler This handler will be called after all the body has been received
    */
-  void bodyHandler(Closure bodyHandler)
+  HttpServerRequest bodyHandler(Closure bodyHandler)
 
 }

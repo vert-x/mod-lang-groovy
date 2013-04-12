@@ -89,23 +89,27 @@ class DefaultHttpClient implements HttpClient {
   }
 
   @Override
-  void connectWebsocket(String uri, Closure wsConnect) {
+  HttpClient connectWebsocket(String uri, Closure wsConnect) {
     jClient.connectWebsocket(uri, {wsConnect(new DefaultWebSocket(it))} as Handler)
+    this
   }
 
   @Override
-  void connectWebsocket(String uri, WebSocketVersion wsVersion, Closure wsConnect) {
+  HttpClient connectWebsocket(String uri, WebSocketVersion wsVersion, Closure wsConnect) {
     jClient.connectWebsocket(uri, wsVersion, {wsConnect(new DefaultWebSocket(it))} as Handler)
+    this
   }
 
   @Override
-  void getNow(String uri, Closure responseHandler) {
+  HttpClient getNow(String uri, Closure responseHandler) {
     jClient.getNow(uri, {responseHandler(new DefaultHttpClientResponse(it))} as Handler)
+    this
   }
 
   @Override
-  void getNow(String uri, Map<String, ? extends Object> headers, Closure responseHandler) {
+  HttpClient getNow(String uri, Map<String, ? extends Object> headers, Closure responseHandler) {
     jClient.getNow(uri, headers, {responseHandler(new DefaultHttpClientResponse(it))} as Handler)
+    this
   }
 
   @Override

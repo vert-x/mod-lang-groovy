@@ -33,7 +33,7 @@ import org.vertx.java.core.file.AsyncFile as JAsyncFile
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-class AsyncFile {
+class AsyncFile implements ReadStream<AsyncFile>, WriteStream<AsyncFile> {
 
   private final JAsyncFile jFile
 
@@ -81,78 +81,52 @@ class AsyncFile {
     this
   }
 
-  /**
-   * Return a {@link WriteStream} instance operating on this {@code AsyncFile}.
-   */
-  WriteStream writeStream() {
-    def jWS = jFile.writeStream()
-
-    return new WriteStream<WriteStream>() {
-
-      WriteStream write(Buffer data) {
-        jWS.write(data.toJavaBuffer())
-        this
-      }
-
-      void leftShift(Buffer data) {
-        write(data)
-      }
-
-      WriteStream setWriteQueueMaxSize(int maxSize) {
-        jWS.setWriteQueueMaxSize(maxSize)
-        this
-      }
-
-      boolean isWriteQueueFull() {
-        return jWS.writeQueueFull()
-      }
-
-      WriteStream drainHandler(Closure handler) {
-        jWS.drainHandler(handler as Handler)
-        this
-      }
-
-      WriteStream exceptionHandler(Closure handler) {
-        jWS.exceptionHandler(handler as Handler)
-        this
-      }
-    }
+  AsyncFile write(Buffer data) {
+    jFile.write(data.toJavaBuffer())
+    this
   }
 
-  /**
-   * Return a {@link ReadStream} instance operating on this {@code AsyncFile}.
-   */
-  ReadStream readStream() {
-    def jRS = jFile.readStream()
-    
-    return new ReadStream<ReadStream>() {
+  void leftShift(Buffer data) {
+    write(data)
+  }
 
-      ReadStream dataHandler(Closure handler) {
-        jRS.dataHandler({handler(new Buffer(it))} as Handler)
-        this
-      }
+  AsyncFile setWriteQueueMaxSize(int maxSize) {
+    jFile.setWriteQueueMaxSize(maxSize)
+    this
+  }
 
-      ReadStream pause() {
-        jRS.pause()
-        this
-      }
+  boolean isWriteQueueFull() {
+    return jFile.writeQueueFull()
+  }
 
-      ReadStream resume() {
-        jRS.resume()
-        this
-      }
+  AsyncFile drainHandler(Closure handler) {
+    jFile.drainHandler(handler as Handler)
+    this
+  }
 
-      ReadStream exceptionHandler(Closure handler) {
-        jRS.exceptionHandler(handler as Handler)
-        this
-      }
+  AsyncFile dataHandler(Closure handler) {
+    jFile.dataHandler({handler(new Buffer(it))} as Handler)
+    this
+  }
 
-      ReadStream endHandler(Closure handler) {
-        jRS.endHandler(handler as Handler)
-        this
-      }
+  AsyncFile pause() {
+    jFile.pause()
+    this
+  }
 
-    }
+  AsyncFile resume() {
+    jFile.resume()
+    this
+  }
+
+  AsyncFile exceptionHandler(Closure handler) {
+    jFile.exceptionHandler(handler as Handler)
+    this
+  }
+
+  AsyncFile endHandler(Closure handler) {
+    jFile.endHandler(handler as Handler)
+    this
   }
 
   /**

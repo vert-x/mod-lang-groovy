@@ -87,8 +87,9 @@ class DefaultHttpServerRequest implements HttpServerRequest {
   }
 
   @Override
-  void bodyHandler(Closure handler) {
+  HttpServerRequest bodyHandler(Closure handler) {
     jRequest.bodyHandler(({handler(new Buffer(it))} as Handler))
+    this
   }
 
   @Override

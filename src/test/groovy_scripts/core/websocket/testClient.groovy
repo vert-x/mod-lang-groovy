@@ -112,7 +112,7 @@ def testClose() {
 
   client.connectWebsocket("/someurl", { ws ->
     tu.checkThread()
-    ws.closedHandler {
+    ws.closeHandler {
       tu.testComplete()
     }
     ws.writeTextFrame("foo")
@@ -131,7 +131,7 @@ def testCloseFromConnectHandler() {
 
   client.connectWebsocket("/someurl", { ws ->
     tu.checkThread()
-    ws.closedHandler {
+    ws.closeHandler {
       tu.testComplete()
     }
   })

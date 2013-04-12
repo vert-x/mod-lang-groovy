@@ -61,7 +61,7 @@ interface SockJSServer {
    * @param config The application configuration
    * @param sockHandler A handler that will be called when new SockJS sockets are created
    */
-  void installApp(Map config, Closure sockHandler)
+  SockJSServer installApp(Map config, Closure sockHandler)
 
   /**
    * Install an app which bridges the SockJS server to the event bus.
@@ -70,8 +70,8 @@ interface SockJSServer {
    * @param authAddress The address of an authentication/authorisation busmod
    * @param bridgeAddress The address the bridge will listen at for login and lougout.
    */
-  void bridge(Map sjsConfig, List<Map<String, Object>> inboundPermitted,
-              List<Map<String, Object>> outboundPermitted,
-              long authTimeout, String authAddress)
+  SockJSServer bridge(Map sjsConfig, List<Map<String, Object>> inboundPermitted,
+                      List<Map<String, Object>> outboundPermitted,
+                      long authTimeout, String authAddress)
 
 }

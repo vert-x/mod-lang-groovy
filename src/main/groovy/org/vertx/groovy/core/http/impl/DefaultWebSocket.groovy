@@ -23,9 +23,9 @@ import org.vertx.java.core.Handler
  */
 class DefaultWebSocket implements WebSocket {
 
-  protected org.vertx.java.core.http.impl.WebSocketBase jWebSocket
+  protected org.vertx.java.core.http.WebSocket jWebSocket
 
-  DefaultWebSocket(jWebSocket) {
+  DefaultWebSocket(org.vertx.java.core.http.WebSocket jWebSocket) {
     this.jWebSocket = jWebSocket
   }
 
@@ -40,18 +40,20 @@ class DefaultWebSocket implements WebSocket {
   }
 
   @Override
-  void writeBinaryFrame(Buffer data) {
+  WebSocket writeBinaryFrame(Buffer data) {
     jWebSocket.writeBinaryFrame(data.toJavaBuffer())
+    this
   }
 
   @Override
-  void writeTextFrame(String str) {
+  WebSocket writeTextFrame(String str) {
     jWebSocket.writeTextFrame(str)
+    this
   }
 
   @Override
-  WebSocket closedHandler(Closure handler) {
-    jWebSocket.closedHandler(handler as Handler)
+  WebSocket closeHandler(Closure handler) {
+    jWebSocket.closeHandler(handler as Handler)
     this
   }
 
@@ -67,7 +69,7 @@ class DefaultWebSocket implements WebSocket {
 
   @Override
   WebSocket leftShift(String str) {
-    return write(str)
+    return write(new Buffer(str))
   }
 
   @Override

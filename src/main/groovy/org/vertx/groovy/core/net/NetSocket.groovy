@@ -102,7 +102,7 @@ interface NetSocket extends ReadStream<NetSocket>, WriteStream<NetSocket> {
   /**
    * Set a handler that will be called when the NetSocket is closed
    */
-  void closedHandler(Closure handler)
+  void closeHandler(Closure handler)
 
   /**
    * Same as {@link #write(Buffer)}

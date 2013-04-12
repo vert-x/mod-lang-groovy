@@ -96,7 +96,7 @@ void echo(boolean ssl) {
       tu.checkThread()
     }
 
-    socket.closedHandler {
+    socket.closeHandler {
       tu.checkThread()
     }
 
