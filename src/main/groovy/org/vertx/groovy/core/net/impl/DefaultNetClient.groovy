@@ -19,8 +19,8 @@ package org.vertx.groovy.core.net.impl
 import org.vertx.groovy.core.net.NetClient
 import org.vertx.groovy.core.net.NetSocket
 import org.vertx.java.core.AsyncResultHandler
-import org.vertx.java.core.FutureResult
 import org.vertx.java.core.Vertx
+import org.vertx.java.core.impl.DefaultFutureResult
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
@@ -243,11 +243,11 @@ class DefaultNetClient implements NetClient {
   }
 
   private wrapConnectHandler(Closure hndlr) {
-    { futureResult ->
-      if (futureResult.succeeded()) {
-        hndlr(new FutureResult<NetSocket>(new DefaultNetSocket(futureResult.result())))
+    { DefaultFutureResult ->
+      if (DefaultFutureResult.succeeded()) {
+        hndlr(new DefaultFutureResult<NetSocket>(new DefaultNetSocket(DefaultFutureResult.result())))
       } else {
-        hndlr(futureResult)
+        hndlr(DefaultFutureResult)
       }
     } as AsyncResultHandler
   }

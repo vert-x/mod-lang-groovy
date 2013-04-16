@@ -17,9 +17,8 @@
 package org.vertx.groovy.core.file
 
 import org.vertx.groovy.core.buffer.Buffer
-import org.vertx.java.core.FutureResult
 import org.vertx.java.core.AsyncResultHandler
-import org.vertx.java.core.FutureResult
+import org.vertx.java.core.impl.DefaultFutureResult
 import org.vertx.java.core.file.FileProps
 import org.vertx.java.core.file.FileSystem as JFileSystem
 import org.vertx.java.core.file.FileSystemProps
@@ -275,7 +274,7 @@ class FileSystem {
   FileSystem readFile(String path, Closure handler) {
     jFS.readFile(path, { ar ->
       if (ar.succeeded()) {
-        handler.call(new FutureResult<Buffer>(new Buffer(ar.result)))
+        handler.call(new DefaultFutureResult<Buffer>(new Buffer(ar.result)))
       } else {
         handler.call(ar)
       }
@@ -337,7 +336,7 @@ class FileSystem {
   FileSystem open(String path, String perms = null, boolean read = true, boolean write = true, boolean createNew = true, boolean flush = false, Closure handler) {
     jFS.open(path, perms, read, write, createNew, flush, { result ->
       if (result.succeeded()) {
-        handler(new FutureResult<AsyncFile>(new AsyncFile(result.result)))
+        handler(new DefaultFutureResult<AsyncFile>(new AsyncFile(result.result)))
       } else {
         handler(result)
       }
