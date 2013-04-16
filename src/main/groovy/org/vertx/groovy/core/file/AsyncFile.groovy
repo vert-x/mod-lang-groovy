@@ -33,7 +33,7 @@ import org.vertx.java.core.file.AsyncFile as JAsyncFile
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-class AsyncFile{
+class AsyncFile implements ReadStream<AsyncFile>, WriteStream<AsyncFile> {
 
   private final JAsyncFile jFile
 
@@ -64,8 +64,9 @@ class AsyncFile{
    * there are no guarantees as to order in which those writes actually occur.<p>
    * The handler will be called when the close is complete, or an error occurs.
    */
-  void write(Buffer buffer, int position, Closure handler) {
+  AsyncFile write(Buffer buffer, int position, Closure handler) {
     jFile.write(buffer, position, handler as AsyncResultHandler)
+    this
   }
 
   /**
@@ -75,72 +76,57 @@ class AsyncFile{
    * When multiple reads are invoked on the same file there are no guarantees as to order in which those reads actually occur.<p>
    * The handler will be called when the close is complete, or if an error occurs.
    */
-  void read(Buffer buffer, int offset, int position, int length, Closure handler) {
+  AsyncFile read(Buffer buffer, int offset, int position, int length, Closure handler) {
     jFile.read(buffer, offset, position, length, handler as AsyncResultHandler)
+    this
   }
 
-  /**
-   * Return a {@link WriteStream} instance operating on this {@code AsyncFile}.
-   */
-  WriteStream getWriteStream() {
-    def jWS = jFile.getWriteStream()
-
-    return new WriteStream() {
-      void writeBuffer(Buffer data) {
-        jWS.writeBuffer(data.toJavaBuffer())
-      }
-
-      void leftShift(Buffer data) {
-        writeBuffer(data)
-      }
-
-      void setWriteQueueMaxSize(int maxSize) {
-        jWS.setWriteQueueMaxSize(maxSize)
-      }
-
-      boolean isWriteQueueFull() {
-        return jWS.writeQueueFull()
-      }
-
-      void drainHandler(Closure handler) {
-        jWS.drainHandler(handler as Handler)        
-      }
-
-      void exceptionHandler(Closure handler) {
-        jWS.exceptionHandler(handler as Handler)        
-      }
-    }
+  AsyncFile write(Buffer data) {
+    jFile.write(data.toJavaBuffer())
+    this
   }
 
-  /**
-   * Return a {@link ReadStream} instance operating on this {@code AsyncFile}.
-   */
-  ReadStream getReadStream() {
-    def jRS = jFile.getReadStream()
-    
-    return new ReadStream() {
+  void leftShift(Buffer data) {
+    write(data)
+  }
 
-      void dataHandler(Closure handler) {
-        jRS.dataHandler({handler(new Buffer(it))} as Handler)
-      }
+  AsyncFile setWriteQueueMaxSize(int maxSize) {
+    jFile.setWriteQueueMaxSize(maxSize)
+    this
+  }
 
-      void pause() {
-        jRS.pause()
-      }
+  boolean isWriteQueueFull() {
+    return jFile.writeQueueFull()
+  }
 
-      void resume() {
-        jRS.resume()
-      }
+  AsyncFile drainHandler(Closure handler) {
+    jFile.drainHandler(handler as Handler)
+    this
+  }
 
-      void exceptionHandler(Closure handler) {
-        jRS.exceptionHandler(handler as Handler)
-      }
+  AsyncFile dataHandler(Closure handler) {
+    jFile.dataHandler({handler(new Buffer(it))} as Handler)
+    this
+  }
 
-      void endHandler(Closure handler) {
-        jRS.endHandler(handler as Handler)
-      }
+  AsyncFile pause() {
+    jFile.pause()
+    this
+  }
 
-    }
+  AsyncFile resume() {
+    jFile.resume()
+    this
+  }
+
+  AsyncFile exceptionHandler(Closure handler) {
+    jFile.exceptionHandler(handler as Handler)
+    this
+  }
+
+  AsyncFile endHandler(Closure handler) {
+    jFile.endHandler(handler as Handler)
+    this
   }
 
   /**
@@ -148,8 +134,9 @@ class AsyncFile{
    * If the file was opened with {@code flush} set to {@code true} then calling this method will have no effect.<p>
    * The actual flush will happen asynchronously.
    */
-  void flush() {
+  AsyncFile flush() {
     jFile.flush()
+    this
   }
 
   /**
@@ -157,7 +144,8 @@ class AsyncFile{
    * or an error occurs
    * @param handler
    */
-  void flush(Closure handler) {
+  AsyncFile flush(Closure handler) {
     jFile.flush(handler as AsyncResultHandler)
+    this
   }
 }

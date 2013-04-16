@@ -16,12 +16,6 @@
 
 package org.vertx.groovy.core.streams
 
-import org.vertx.groovy.core.buffer.Buffer
-import org.vertx.java.core.Handler
-import org.vertx.java.core.streams.Pump as JPump
-import org.vertx.java.core.streams.ReadStream as JReadStream
-import org.vertx.java.core.streams.WriteStream as JWriteStream
-
 /**
  * Pumps data from a {@link ReadStream} to a {@link WriteStream} and performs flow control where necessary to
  * prevent the write stream from getting overloaded.<p>
@@ -40,88 +34,81 @@ import org.vertx.java.core.streams.WriteStream as JWriteStream
  */
 class Pump {
 
-  private JPump jPump
+  private ReadStream readStream
+  private WriteStream writeStream
+  private int pumped
 
   /**
    * Create a new {@code Pump} with the given {@code ReadStream} and {@code WriteStream}
    */
   static Pump createPump(ReadStream rs, WriteStream ws) {
-    new Pump(rs, ws)
+    return new Pump(rs, ws)
+  }
+
+  /**
+   * Create a new {@code Pump} with the given {@code ReadStream} and {@code WriteStream} and
+   * {@code writeQueueMaxSize}
+   */
+  static Pump createPump(ReadStream rs, WriteStream ws, int writeQueueMaxSize) {
+    return new Pump(rs, ws, writeQueueMaxSize)
   }
 
   /**
    * Set the write queue max size to {@code maxSize}
    */
-  void setWriteQueueMaxSize(int maxSize) {
-    jPump.setWriteQueueMaxSize(maxSize)    
+  Pump setWriteQueueMaxSize(int maxSize) {
+    this.writeStream.setWriteQueueMaxSize(maxSize)
+    this
   }
 
   /**
    * Start the Pump. The Pump can be started and stopped multiple times.
    */
-  void start() {
-    jPump.start()    
+  Pump start() {
+    readStream.dataHandler(dataHandler)
+    this
   }
 
   /**
    * Stop the Pump. The Pump can be started and stopped multiple times.
    */
-  void stop() {
-    jPump.stop()    
+  Pump stop() {
+    writeStream.drainHandler(null)
+    readStream.dataHandler(null)
+    this
   }
 
   /**
    * Return the total number of bytes pumped by this pump.
    */
   int getBytesPumped() {
-    return jPump.getBytesPumped()    
+    return pumped;
   }
-    private Pump(ReadStream rs, WriteStream ws) {
-    jPump = new JPump(new JReadStream() {
 
-      void dataHandler(Handler<org.vertx.java.core.buffer.Buffer> handler) {
-        rs.dataHandler({handler.handle(it.toJavaBuffer())})
-      }
+  private Closure drainHandler = { readStream.resume() }
 
-      void pause() {
-        rs.pause()
-      }
-
-      void resume() {
-        rs.resume()
-      }
-
-      void exceptionHandler(Handler<Exception> handler) {
-        rs.exceptionHandler({handler.handle(it)})
-      }
-
-      void endHandler(Handler<Void> endHandler) {
-        rs.endHandler({endHandler.handle(null)})
-      }
-
-    },
-    new JWriteStream() {
-
-      void writeBuffer(org.vertx.java.core.buffer.Buffer data) {
-        ws.writeBuffer(new Buffer(data))
-      }
-
-      void setWriteQueueMaxSize(int maxSize) {
-        ws.writeQueueMaxSize(maxSize)
-      }
-
-      boolean writeQueueFull() {
-        return ws.isWriteQueueFull()
-      }
-
-      void drainHandler(Handler<Void> handler) {
-        ws.drainHandler({handler.handle(null) })
-      }
-
-      void exceptionHandler(Handler<Exception> handler) {
-        ws.exceptionHandler({handler.handle(it)})
-      }
-
-    })
+  private Closure dataHandler = { buffer ->
+    writeStream.write(buffer)
+    pumped += buffer.length()
+    if (writeStream.isWriteQueueFull()) {
+      readStream.pause()
+      writeStream.drainHandler(drainHandler)
+    }
   }
+
+  /**
+   * Create a new {@code Pump} with the given {@code ReadStream} and {@code WriteStream}. Set the write queue max size
+   * of the write stream to {@code maxWriteQueueSize}
+   */
+  private Pump(ReadStream rs, WriteStream ws, int maxWriteQueueSize) {
+    this(rs, ws)
+    this.writeStream.setWriteQueueMaxSize(maxWriteQueueSize)
+  }
+
+  private Pump(ReadStream rs, WriteStream ws) {
+    this.readStream = rs
+    this.writeStream = ws
+  }
+
+
 }

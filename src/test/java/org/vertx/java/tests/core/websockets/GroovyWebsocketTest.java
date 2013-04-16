@@ -18,6 +18,8 @@ package org.vertx.java.tests.core.websockets;
 
 import org.vertx.java.testframework.TestBase;
 
+import java.lang.Throwable;
+
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */

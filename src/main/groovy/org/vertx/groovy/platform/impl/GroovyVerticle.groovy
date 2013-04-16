@@ -15,8 +15,8 @@
  */
 package org.vertx.groovy.platform.impl
 
+import org.vertx.java.core.Future
 import org.vertx.java.core.Vertx as JVertx
-import org.vertx.java.core.VoidResult
 import org.vertx.java.platform.Container as JContainer
 import org.vertx.java.platform.Verticle as JVerticle
 
@@ -27,6 +27,8 @@ import org.vertx.groovy.platform.Verticle
 
 /**
  * @author swilliams
+ *
+ * This is a Java verticle which wraps the Groovy Verticle class instance
  *
  */
 class GroovyVerticle extends JVerticle {
@@ -55,7 +57,7 @@ class GroovyVerticle extends JVerticle {
   }
 
   @Override
-  public void start(VoidResult startedResult) throws Exception {
+  public void start(Future<Void> startedResult) throws Exception {
     delegate.start(startedResult)
   }
 

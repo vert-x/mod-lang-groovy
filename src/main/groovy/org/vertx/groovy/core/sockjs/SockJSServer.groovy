@@ -54,59 +54,14 @@ import org.vertx.java.core.sockjs.SockJSServer as JSockJSServer
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-abstract class SockJSServer {
-
-  protected JSockJSServer jServer
+interface SockJSServer {
 
   /**
    * Install an application
    * @param config The application configuration
    * @param sockHandler A handler that will be called when new SockJS sockets are created
    */
-  void installApp(Map config, Closure sockHandler) {
-    jServer.installApp(new JsonObject(config), {
-      org.vertx.java.core.sockjs.SockJSSocket jSock = it
-      sockHandler(new SockJSSocket(jSock) {
-        
-        void dataHandler(Closure handler) {
-          it.dataHandler({ handler(new Buffer(it)) } as Handler)
-        }
-
-        void pause() {
-          jSock.pause()
-        }
-
-        void writeBuffer(Buffer data) {
-          jSock.writeBuffer(data.toJavaBuffer())
-        }
-
-        void resume() {
-          jSock.resume()
-        }
-
-        void exceptionHandler(Closure handler) {
-          jSock.exceptionHandler(handler as Handler)
-        }
-
-        void endHandler(Closure handler) {
-          jSock.endHandler(handler as Handler)
-        }
-
-        void setWriteQueueMaxSize(int maxSize) {
-          jSock.setWriteQueueMaxSize(maxSize)
-        }
-        
-        boolean isWriteQueueFull() {
-          jSock.writeQueueFull()
-        }
-
-        void drainHandler(Closure handler) {
-          jSock.drainHandler(handler as Handler)
-        }
-
-      })
-    } as Handler)
-  }
+  SockJSServer installApp(Map config, Closure sockHandler)
 
   /**
    * Install an app which bridges the SockJS server to the event bus.
@@ -115,11 +70,8 @@ abstract class SockJSServer {
    * @param authAddress The address of an authentication/authorisation busmod
    * @param bridgeAddress The address the bridge will listen at for login and lougout.
    */
-  void bridge(Map sjsConfig, List<Map<String, Object>> inboundPermitted = [[:]],
-              List<Map<String, Object>> outboundPermitted = [[:]],
-              long authTimeout = 5 * 60 * 1000, String authAddress = null) {
-    jServer.bridge(new JsonObject(sjsConfig), new JsonArray(inboundPermitted), new JsonArray(outboundPermitted),
-                   authTimeout, authAddress)
-  }
+  SockJSServer bridge(Map sjsConfig, List<Map<String, Object>> inboundPermitted,
+                      List<Map<String, Object>> outboundPermitted,
+                      long authTimeout, String authAddress)
 
 }

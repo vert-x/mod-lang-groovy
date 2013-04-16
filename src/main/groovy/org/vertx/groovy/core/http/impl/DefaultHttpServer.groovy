@@ -17,12 +17,16 @@
 package org.vertx.groovy.core.http.impl
 
 import org.vertx.groovy.core.http.HttpServer
+import org.vertx.java.core.AsyncResultHandler
+import org.vertx.java.core.Handler
 import org.vertx.java.core.Vertx
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-class DefaultHttpServer extends HttpServer {
+class DefaultHttpServer implements HttpServer {
+
+  private org.vertx.java.core.http.HttpServer jServer
 
   DefaultHttpServer(Vertx vertx, Map props = null) {
     jServer = vertx.createHttpServer()
@@ -31,5 +35,220 @@ class DefaultHttpServer extends HttpServer {
         setProperty(k, v)
       }
     }
+  }
+
+  @Override
+  HttpServer requestHandler(Closure requestHandler) {
+    jServer.requestHandler({requestHandler(new DefaultHttpServerRequest(it))} as Handler)
+    this
+  }
+
+  @Override
+  HttpServer websocketHandler(Closure wsHandler) {
+    jServer.websocketHandler({wsHandler(new DefaultServerWebSocket(it))} as Handler)
+    this
+  }
+
+  @Override
+  HttpServer listen(int port) {
+    jServer.listen(port)
+    this
+  }
+
+  @Override
+  HttpServer listen(int port, String host) {
+    jServer.listen(port, host)
+    this
+  }
+
+  @Override
+  HttpServer listen(int port, Closure bindHandler) {
+    jServer.listen(port, bindHandler as Handler)
+    this
+  }
+
+  @Override
+  HttpServer listen(int port, String host, Closure bindHandler) {
+    jServer.listen(port, host, bindHandler as Handler)
+    this
+  }
+
+  @Override
+  void close() {
+    jServer.close()
+  }
+
+  @Override
+  void close(Closure doneHandler) {
+    jServer.close(doneHandler as AsyncResultHandler)
+  }
+
+  @Override
+  HttpServer setClientAuthRequired(boolean required) {
+    jServer.setClientAuthRequired(required)
+    this
+  }
+
+  @Override
+  boolean isClientAuthRequired() {
+    jServer.isClientAuthRequired()
+  }
+
+  @Override
+  HttpServer setSSL(boolean ssl) {
+    jServer.setSSL(ssl)
+    this
+  }
+
+  @Override
+  boolean isSSL() {
+    jServer.isSSL()
+  }
+
+  @Override
+  HttpServer setKeyStorePath(String path) {
+    jServer.setKeyStorePath(path)
+    this
+  }
+
+  @Override
+  String getKeyStorePath() {
+    jServer.getKeyStorePath()
+  }
+
+  @Override
+  HttpServer setKeyStorePassword(String pwd) {
+    jServer.setKeyStorePassword(pwd)
+    this
+  }
+
+  @Override
+  String getKeyStorePassword() {
+    jServer.getKeyStorePassword()
+  }
+
+  @Override
+  HttpServer setTrustStorePath(String path) {
+    jServer.setTrustStorePath(path)
+    this
+  }
+
+  @Override
+  String getTrustStorePath() {
+    jServer.getTrustStorePath()
+  }
+
+  @Override
+  HttpServer setTrustStorePassword(String pwd) {
+    jServer.setTrustStorePassword(pwd)
+    this
+  }
+
+  @Override
+  String getTrustStorePassword() {
+    jServer.getTrustStorePassword()
+  }
+
+  @Override
+  HttpServer setAcceptBacklog(int backlog) {
+    jServer.setAcceptBacklog(backlog)
+    this
+  }
+
+  @Override
+  int getAcceptBacklog() {
+    jServer.getAcceptBacklog()
+  }
+
+  @Override
+  HttpServer setTCPNoDelay(boolean tcpNoDelay) {
+    jServer.setTCPNoDelay(tcpNoDelay)
+    this
+  }
+
+  @Override
+  HttpServer setSendBufferSize(int size) {
+    jServer.setSendBufferSize(size)
+    this
+  }
+
+  @Override
+  HttpServer setReceiveBufferSize(int size) {
+    jServer.setReceiveBufferSize(size)
+    this
+  }
+
+  @Override
+  HttpServer setTCPKeepAlive(boolean keepAlive) {
+    jServer.setTCPKeepAlive(keepAlive)
+    this
+  }
+
+  @Override
+  HttpServer setReuseAddress(boolean reuse) {
+    jServer.setReuseAddress(reuse)
+    this
+  }
+
+  @Override
+  HttpServer setSoLinger(int linger) {
+    jServer.setSoLinger(linger)
+    this
+  }
+
+  @Override
+  HttpServer setTrafficClass(int trafficClass) {
+    jServer.setTrafficClass(trafficClass)
+    this
+  }
+
+  @Override
+  HttpServer setUsePooledBuffers(boolean pooledBuffers) {
+    jServer.setUsePooledBuffers(pooledBuffers)
+    this
+  }
+
+  @Override
+  boolean isTCPNoDelay() {
+    jServer.isTCPNoDelay()
+  }
+
+  @Override
+  int getSendBufferSize() {
+    jServer.getSendBufferSize()
+  }
+
+  @Override
+  int getReceiveBufferSize() {
+    jServer.getReceiveBufferSize()
+  }
+
+  @Override
+  boolean isTCPKeepAlive() {
+    jServer.isTCPKeepAlive()
+  }
+
+  @Override
+  boolean isReuseAddress() {
+    jServer.isReuseAddress()
+  }
+
+  @Override
+  int getSoLinger() {
+    jServer.getSoLinger()
+  }
+
+  @Override
+  int getTrafficClass() {
+    jServer.getTrafficClass()
+  }
+
+  @Override
+  boolean isUsePooledBuffers() {
+    jServer.isUsePooledBuffers()
+  }
+
+  org.vertx.java.core.http.HttpServer toJavaServer() {
+    jServer
   }
 }

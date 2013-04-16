@@ -16,7 +16,7 @@
 package org.vertx.groovy.platform
 
 import org.vertx.groovy.core.Vertx
-import org.vertx.java.core.VoidResult
+import org.vertx.java.core.Future
 
 /**
  * @author swilliams
@@ -28,15 +28,15 @@ abstract class Verticle {
 
   Container container
 
-  def start() throws Exception {
+  def start() {
   }
 
-  def start(VoidResult startedResult) throws Exception {
+  def start(Future<Void> startedResult) {
     start()
-    startedResult.setResult()
+    startedResult.setResult(null)
   }
 
-  def stop() throws Exception {
+  def stop() {
   }
 
 }

@@ -36,13 +36,15 @@ import java.nio.ByteBuffer
  * Methods {@code putAt} and {@code getAt} are defined allowing you to use index notation to get/set bytes at a specific position in the buffer.<p>
  * Methods {@code leftShift} are defined to mean append allowing you to use the familiar Groovy << operator on buffers.<p>
  *
+ * We extend JBuffer so we can send Groovy Buffers to writeHandlers of NetSocket and SockJSSocket
+ *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-class Buffer extends org.vertx.java.core.buffer.Buffer {
+class Buffer extends JBuffer {
 
   private final JBuffer jBuffer
 
-  private Buffer(JBuffer jBuffer) {
+  Buffer(JBuffer jBuffer) {
     this.jBuffer = jBuffer
   }
 
@@ -538,8 +540,6 @@ class Buffer extends org.vertx.java.core.buffer.Buffer {
   Buffer copy() {
     new Buffer(jBuffer.copy())
   }
-
-
 
   int hashCode() {
     jBuffer.hashCode()

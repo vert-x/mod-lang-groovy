@@ -1,7 +1,7 @@
 /*
  * Copyright 2011-2012 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,8 +18,6 @@ package org.vertx.groovy.core.http
 
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.streams.WriteStream
-import org.vertx.java.core.Handler
-import org.vertx.java.core.http.HttpClientRequest as JHttpClientRequest
 
 /**
  * Represents a client-side HTTP request.<p>
@@ -57,30 +55,25 @@ import org.vertx.java.core.http.HttpClientRequest as JHttpClientRequest
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-class HttpClientRequest implements WriteStream {
-
-  private final JHttpClientRequest jRequest
-
-  protected HttpClientRequest(JHttpClientRequest jRequest) {
-    this.jRequest = jRequest
-  }
+interface HttpClientRequest extends WriteStream<HttpClientRequest> {
 
   /**
    * If chunked is true then the request will be set into HTTP chunked mode
    * @param chunked
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpClientRequest setChunked(boolean chunked) {
-    jRequest.setChunked(chunked)
-    this
-  }
+  HttpClientRequest setChunked(boolean chunked)
+
+  /**
+   *
+   * @return Is the request chunked?
+   */
+  boolean isChunked()
 
   /**
    * @return The HTTP headers
    */
-  Map<String, Object> getHeaders() {
-    return jRequest.headers()
-  }
+  Map<String, Object> getHeaders()
 
   /**
    * Put an HTTP header - fluent API
@@ -88,96 +81,52 @@ class HttpClientRequest implements WriteStream {
    * @param value The header value
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpClientRequest putHeader(String name, Object value) {
-    getHeaders().put(name, value)
-    this
-  }
-
-
-  /** {@inheritDoc} */
-  void writeBuffer(Buffer chunk) {
-    jRequest.writeBuffer(chunk.toJavaBuffer())
-  }
+  HttpClientRequest putHeader(String name, Object value)
 
   /**
-   * Write a {@link Buffer} to the request body.
+   * Write a {@link org.vertx.java.core.buffer.Buffer} to the request body.
    *
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpClientRequest write(Buffer chunk) {
-    writeBuffer(chunk)
-    this
-  }
+  HttpClientRequest write(Buffer chunk)
 
   /**
    * Write a {@link String} to the request body, encoded in UTF-8.
    *
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpClientRequest write(String chunk) {
-    jRequest.write(chunk)
-    this
-  }
+  HttpClientRequest write(String chunk)
 
   /**
    * Write a {@link String} to the request body, encoded using the encoding {@code enc}.
    *
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpClientRequest write(String chunk, String enc) {
-    jRequest.write(chunk, enc)
-    this
-  }
+  HttpClientRequest write(String chunk, String enc)
 
   /**
-   * Write a {@link Buffer} to the request body. The {@code doneHandler} is called after the buffer is actually written to the wire.
+   * Write a {@link Buffer} to the request body. The {@code doneHandler} is called after the buffer is actually written
+   * to the wire.
    *
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpClientRequest write(Buffer chunk, Closure doneHandler) {
-    jRequest.write(chunk.toJavaBuffer(), doneHandler as Handler)
-    this
-  }
+  HttpClientRequest write(Buffer chunk, Closure doneHandler)
 
   /**
-   * Write a {@link String} to the request body, encoded in UTF-8. The {@code doneHandler} is called after the buffer is actually written to the wire.
+   * Write a {@link String} to the request body, encoded in UTF-8.
+   * The {@code doneHandler} is called after the buffer is actually written to the wire.
    *
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpClientRequest write(String chunk, Closure doneHandler) {
-    jRequest.write(chunk, doneHandler as Handler)
-    this
-  }
+  HttpClientRequest write(String chunk, Closure doneHandler)
 
   /**
-   * Write a {@link String} to the request body, encoded with encoding {@code enc}. The {@code doneHandler} is called after the buffer is actually written to the wire.
+   * Write a {@link String} to the request body, encoded with encoding {@code enc}. The {@code doneHandler} is called
+   * after the buffer is actually written to the wire.
    *
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpClientRequest write(String chunk, String enc, Closure doneHandler) {
-    jRequest.write(chunk, enc, doneHandler as Handler)
-    this
-  }
-
-  /** {@inheritDoc} */
-  void setWriteQueueMaxSize(int maxSize) {
-    jRequest.setWriteQueueMaxSize(maxSize)
-  }
-
-  /** {@inheritDoc} */
-  boolean isWriteQueueFull() {
-    jRequest.writeQueueFull()
-  }
-
-  /** {@inheritDoc} */
-  void drainHandler(Closure handler) {
-    jRequest.drainHandler(handler as Handler)
-  }
-
-  /** {@inheritDoc} */
-  void exceptionHandler(Closure handler) {
-    jRequest.exceptionHandler(handler as Handler)
-  }
+  HttpClientRequest write(String chunk, String enc, Closure doneHandler)
 
   /**
    * If you send an HTTP request with the header {@code Expect} set to the value {@code 100-continue}
@@ -185,72 +134,66 @@ class HttpClientRequest implements WriteStream {
    * has been set using this method, then the {@code handler} will be called.<p>
    * You can then continue to write data to the request body and later end it. This is normally used in conjunction with
    * the {@link #sendHead()} method to force the request header to be written before the request has ended.
+   * @return A reference to this, so multiple method calls can be chained.
    */
-  void continueHandler(Closure handler) {
-    jRequest.continueHandler(handler as Handler)
-  }
+  HttpClientRequest continueHandler(Closure handler)
 
   /**
-   * Forces the head of the request to be written before {@link #end()} is called on the request. This is normally used
-   * to implement HTTP 100-continue handling, see {@link #continueHandler(Closure)} for more information.
+   * Forces the head of the request to be written before {@link #end()} is called on the request or any data is
+   * written to it. This is normally used
+   * to implement HTTP 100-continue handling, see continueHandler(org.vertx.java.core.Handler) for more information.
    *
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpClientRequest sendHead() {
-    jRequest.sendHead()
-    this
-  }
+  HttpClientRequest sendHead()
 
   /**
    * Same as {@link #end(Buffer)} but writes a String with the default encoding
    */
-  void end(String chunk) {
-    jRequest.end(chunk)
-  }
+  void end(String chunk)
 
   /**
    * Same as {@link #end(Buffer)} but writes a String with the specified encoding
    */
-  void end(String chunk, String enc) {
-    jRequest.end(chunk, enc)
-  }
+  void end(String chunk, String enc)
 
   /**
    * Same as {@link #end()} but writes some data to the request body before ending. If the request is not chunked and
    * no other data has been written then the Content-Length header will be automatically set
    */
-  void end(Buffer chunk) {
-    jRequest.end(chunk.toJavaBuffer())
-  }
+  void end(Buffer chunk)
 
   /**
    * Ends the request. If no data has been written to the request body, and {@link #sendHead()} has not been called then
    * the actual request won't get written until this method gets called.<p>
    * Once the request has ended, it cannot be used any more, and if keep alive is true the underlying connection will
-   * be returned to the {@link HttpClient} pool so it can be assigned to another request.
+   * be returned to the {@link org.vertx.java.core.http.HttpClient} pool so it can be assigned to another request.
    */
-  void end() {
-    jRequest.end()
-  }
+  void end()
+
+  /**
+   * Set's the amount of time after which if a response is not received TimeoutException()
+   * will be sent to the exception handler of this request. Calling this method more than once
+   * has the effect of canceling any existing timeout and starting the timeout from scratch.
+   *
+   * @param timeoutMs The quantity of time in milliseconds.
+   * @return A reference to this, so multiple method calls can be chained.
+   */
+  HttpClientRequest setTimeout(long timeoutMs)
+
 
   /**
    * Same as {@link #write(Buffer)}
    * @param buff The buffer to write
    * @return @return A reference to this, so multiple method calls can be chained.
    */
-  HttpClientRequest leftShift(Buffer buff) {
-    writeBuffer(buff)
-    this
-  }
+  HttpClientRequest leftShift(Buffer buff)
 
   /**
    * Same as {@link #write(String)}
    * @param buff The buffer to write
    * @return @return A reference to this, so multiple method calls can be chained.
    */
-  HttpClientRequest leftShift(String str) {
-    jRequest.write(str)
-    this
-  }
+  HttpClientRequest leftShift(String str)
 
 }

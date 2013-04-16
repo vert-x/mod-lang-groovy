@@ -1,7 +1,7 @@
 /*
  * Copyright 2011-2012 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,7 +18,6 @@ package org.vertx.groovy.core.http
 
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.streams.WriteStream
-import org.vertx.java.core.Handler
 
 /**
  * Represents a server-side HTTP response.<p>
@@ -38,49 +37,36 @@ import org.vertx.java.core.Handler
  * @author Peter Ledbrook
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-class HttpServerResponse implements WriteStream {
-
-  private final org.vertx.java.core.http.HttpServerResponse jResponse
-
-  protected HttpServerResponse(org.vertx.java.core.http.HttpServerResponse jResponse) {
-    this.jResponse = jResponse
-  }
+interface HttpServerResponse extends WriteStream<HttpServerResponse> {
 
   /**
-   * @return The HTTP status code of the response. The default is {@code 200} representing {@code OK}.
+   * The HTTP status code of the response. The default is {@code 200} representing {@code OK}.
    */
-  int getStatusCode() {
-    return jResponse.statusCode
-  }
+  int getStatusCode()
 
   /**
    * Set the status code
-   * @param code The code
+   * @return A reference to this, so multiple method calls can be chained.
    */
-  void setStatusCode(int code) {
-    jResponse.statusCode = code
-  }
+  HttpServerResponse setStatusCode(int statusCode)
 
   /**
-   * @return The HTTP status message of the response. If this is not specified a default value will be used depending on what
-   * statusCode has been set to.
+   * The HTTP status message of the response. If this is not specified a default value will be used depending on what
+   * {@link #setStatusCode} has been set to.
    */
-  String getStatusMessage() {
-    return jResponse.statusMessage
-  }
+  String getStatusMessage()
 
   /**
    * Set the status message
-   * @param msg The message
+   * @return A reference to this, so multiple method calls can be chained.
    */
-  void setStatusMessage(String msg) {
-    jResponse.statusMessage = msg
-  }
+  HttpServerResponse setStatusMessage(String statusMessage)
 
   /**
    * If {@code chunked} is {@code true}, this response will use HTTP chunked encoding, and each call to write to the body
-   * will correspond to a new HTTP chunk sent on the wire. If chunked encoding is used the HTTP header
-   * {@code Transfer-Encoding} with a value of {@code Chunked} will be automatically inserted in the response.<p>
+   * will correspond to a new HTTP chunk sent on the wire.<p>
+   * If chunked encoding is used the HTTP header {@code Transfer-Encoding} with a value of {@code Chunked} will be
+   * automatically inserted in the response.<p>
    * If {@code chunked} is {@code false}, this response will not use HTTP chunked encoding, and therefore if any data is written the
    * body of the response, the total size of that data must be set in the {@code Content-Length} header <b>before</b> any
    * data is written to the response body.<p>
@@ -88,135 +74,114 @@ class HttpServerResponse implements WriteStream {
    *
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpServerResponse setChunked(boolean chunked) {
-    jResponse.setChunked(true)
-    this
-  }
+  HttpServerResponse setChunked(boolean chunked)
 
   /**
-   * @return The headers of the response
+   * Is the response chunked?
    */
-  Map<String, Object> getHeaders() {
-    return jResponse.headers()
-  }
+  boolean isChunked()
+
+  /**
+   * @return The HTTP headers
+   */
+  Map<String, Object> getHeaders()
 
   /**
    * Put an HTTP header - fluent API
    * @param name The header name
-   * @param value The header value
+   * @param value The header value. As well as the usual types, value also accepts Iterable<?> objects
+   *              you can use this to when you have multiple headers with the same name that you wish to set
+   *              e.g. multiple Set-Cookie headers
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpServerResponse putHeader(String name, Object value) {
-    getHeaders().put(name, value)
-    this
-  }
+  HttpServerResponse putHeader(String name, Object value)
 
   /**
-   * @return The trailers of the response
+   * @return The HTTP trailers
    */
-  Map<String, Object> getTrailers() {
-    return jResponse.trailers()
-  }
+  Map<String, Object> getTrailers()
+
+  /**
+   * Put an HTTP trailer - fluent API
+   * @param name The trailer name
+   * @param value The trailer value
+   * @return A reference to this, so multiple method calls can be chained.
+   */
+  HttpServerResponse putTrailer(String name, Object value)
 
   /**
    * Set a close handler for the response. This will be called if the underlying connection closes before the response
    * is complete.
    * @param handler
    */
-  void closeHandler(Closure handler) {
-    jResponse.closeHandler(handler as Handler)
-  }
+  void closeHandler(Closure handler)
 
   /**
-   * Write a {@link Buffer} to the response body.<p>
+   * Write a {@link org.vertx.java.core.buffer.Buffer} to the response body.
    *
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpServerResponse write(Buffer chunk) {
-    jResponse.write(chunk.toJavaBuffer())
-    this
-  }
+  HttpServerResponse write(Buffer chunk)
 
   /**
-   * Write a {@link String} to the response body, encoded using the encoding {@code enc}.<p>
+   * Write a {@link String} to the response body, encoded using the encoding {@code enc}.
    *
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpServerResponse write(String chunk, String enc) {
-    jResponse.write(chunk, enc)
-    this
-  }
+  HttpServerResponse write(String chunk, String enc)
 
   /**
-   * Write a {@link String} to the response body, encoded in UTF-8.<p>
+   * Write a {@link String} to the response body, encoded in UTF-8.
    *
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpServerResponse write(String chunk) {
-    jResponse.write(chunk)
-    this
-  }
+  HttpServerResponse write(String chunk)
 
   /**
    * Write a {@link Buffer} to the response body. The {@code doneHandler} is called after the buffer is actually written to the wire.<p>
    *
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpServerResponse write(Buffer chunk, Closure doneHandler) {
-    jResponse.write(chunk, doneHandler as Handler)
-    this
-  }
+  HttpServerResponse write(Buffer chunk, Closure doneHandler)
 
   /**
-   * Write a {@link String} to the response body, encoded with encoding {@code enc}. The {@code doneHandler} is called after the buffer is actually written to the wire.<p>
+   * Write a {@link String} to the response body, encoded with encoding {@code enc}. The {@code doneHandler} is called
+   * after the buffer is actually written to the wire.
    *
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpServerResponse write(String chunk, String enc, Closure doneHandler) {
-    jResponse.write(chunk, enc, doneHandler as Handler)
-    this
-  }
+  HttpServerResponse write(String chunk, String enc, Closure doneHandler)
 
   /**
-   * Write a {@link String} to the response body, encoded in UTF-8. The {@code doneHandler} is called after the buffer is actually written to the wire.<p>
+   * Write a {@link String} to the response body, encoded in UTF-8. The {@code doneHandler} is called after the buffer
+   * is actually written to the wire.
    *
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpServerResponse write(String chunk, Closure doneHandler) {
-    jResponse.write(chunk, doneHandler as Handler)
-    this
-  }
+  HttpServerResponse write(String chunk, Closure doneHandler)
 
   /**
-   * Same as {@link #end(Buffer)} but writes a String with the default encoding
+   * Same as {@link #end(Buffer)} but writes a String with the default encoding before ending the response.
    */
-  void end(String chunk) {
-    jResponse.end(chunk)
-  }
+  void end(String chunk)
 
   /**
-   * Same as {@link #end(Buffer)} but writes a String with the specified encoding
+   * Same as {@link #end(Buffer)} but writes a String with the specified encoding before ending the response.
    */
-  void end(String chunk, String enc) {
-    jResponse.end(chunk, enc)
-  }
+  void end(String chunk, String enc)
 
   /**
    * Same as {@link #end()} but writes some data to the response body before ending. If the response is not chunked and
    * no other data has been written then the Content-Length header will be automatically set
    */
-  void end(Buffer chunk) {
-    jResponse.end(chunk.toJavaBuffer())
-  }
+  void end(Buffer chunk)
 
   /**
    * Ends the response. If no data has been written to the response body,
    * the actual response won't get written until this method gets called.<p>
    * Once the response has ended, it cannot be used any more.
    */
-  void end() {
-    jResponse.end()
-  }
+  void end()
 
   /**
    * Tell the kernel to stream a file as specified by {@code filename} directly
@@ -224,59 +189,22 @@ class HttpServerResponse implements WriteStream {
    * (where supported by the underlying operating system.
    * This is a very efficient way to serve files.<p>
    */
-  HttpServerResponse sendFile(String filename) {
-    jResponse.sendFile(filename)
-    this
-  }
+  HttpServerResponse sendFile(String filename)
 
   /**
    * Close the underlying TCP connection
    */
-  void close() {
-    jResponse.close()
-  }
+  void close()
 
   /**
    * Same as {@link #write(Buffer)}
    */
-  HttpServerResponse leftShift(Buffer buff) {
-    writeBuffer(buff)
-    this
-  }
+  HttpServerResponse leftShift(Buffer buff)
 
   /**
    * Same as {@link #write(String)}
    */
-  HttpServerResponse leftShift(String str) {
-    jResponse.write(str)
-    this
-  }
-
-  /** {@inheritDoc} */
-  void setWriteQueueMaxSize(int size) {
-    jResponse.setWriteQueueMaxSize(size)
-  }
-
-  /** {@inheritDoc} */
-  boolean isWriteQueueFull() {
-    jResponse.writeQueueFull()
-  }
-
-  /** {@inheritDoc} */
-  void drainHandler(Closure handler) {
-    jResponse.drainHandler(handler as Handler)
-  }
-
-  /** {@inheritDoc} */
-  void exceptionHandler(Closure handler) {
-    jResponse.exceptionHandler(handler as Handler)
-  }
-
-  /** {@inheritDoc} */
-  void writeBuffer(Buffer chunk) {
-    jResponse.writeBuffer(chunk.toJavaBuffer())
-  }
-
+  HttpServerResponse leftShift(String str)
 
 
 }

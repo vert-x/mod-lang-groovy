@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-
 package org.vertx.groovy.core.http
-
-import org.vertx.java.core.http.ServerWebSocket as JServerWebSocket
 
 /**
  * Represents a server side WebSocket that is passed into a the websocketHandler of an {@link HttpServer}<p>
@@ -25,21 +22,12 @@ import org.vertx.java.core.http.ServerWebSocket as JServerWebSocket
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-class ServerWebSocket extends WebSocket {
-
-  private final JServerWebSocket jSWS
-
-  protected ServerWebSocket(JServerWebSocket jSWS) {
-    super(jSWS)
-    this.jSWS = jSWS
-  }
+interface ServerWebSocket extends WebSocket {
 
   /**
    * @return The path the websocket is attempting to connect at
    */
-  String getPath() {
-    jSWS.path
-  }
+  String getPath();
 
   /**
    * Reject the WebSocket<p>
@@ -49,7 +37,5 @@ class ServerWebSocket extends WebSocket {
    * You might use this method, if for example you only want to accept websockets
    * with a particular path.
    */
-  void reject() {
-    jSWS.reject()
-  }
+  void reject();
 }

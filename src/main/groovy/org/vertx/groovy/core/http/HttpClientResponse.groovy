@@ -1,7 +1,7 @@
 /*
  * Copyright 2011-2012 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,9 +16,7 @@
 
 package org.vertx.groovy.core.http
 
-import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.streams.ReadStream
-import org.vertx.java.core.Handler
 
 /**
  * Represents a client-side HTTP response.<p>
@@ -32,76 +30,40 @@ import org.vertx.java.core.Handler
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-class HttpClientResponse implements ReadStream {
-
-  private final org.vertx.java.core.http.HttpClientResponse jResponse
-
-  protected HttpClientResponse(org.vertx.java.core.http.HttpClientResponse jResponse) {
-    this.jResponse = jResponse
-  }
+interface HttpClientResponse extends ReadStream<HttpClientResponse> {
 
   /**
-   * @return The HTTP status code of the response
+   * The HTTP status code of the response
    */
-  int getStatusCode() {
-    jResponse.statusCode
-  }
+  int getStatusCode()
 
   /**
-   * @return The HTTP status message of the response
+   * The HTTP status message of the response
    */
-  String getStatusMessage() {
-    jResponse.statusMessage
-  }
+  String getStatusMessage()
 
   /**
-   * @return The headers of the response
+   * @return The HTTP headers
    */
-  Map<String, String> getHeaders() {
-    return jResponse.headers()
-  }
+  Map<String, String> getHeaders()
 
   /**
-   * @return The trailers of the response
+   * @return The HTTP trailers
    */
-  Map<String, String> getTrailers() {
-    return jResponse.trailers()
-  }
+  Map<String, String> getTrailers()
+
+  /**
+   * @return The Set-Cookie headers (including trailers)
+   */
+  List<String> getCookies()
 
   /**
    * Convenience method for receiving the entire request body in one piece. This saves the user having to manually
-   * set a data and end handler and append the chunks of the body until the whole body received.<p>
+   * set a data and end handler and append the chunks of the body until the whole body received.
    * Don't use this if your request body is large - you could potentially run out of RAM.
    *
    * @param bodyHandler This handler will be called after all the body has been received
    */
-  void bodyHandler(Closure bodyHandler) {
-    jResponse.dataHandler({bodyHandler(new Buffer(it))} as Handler)
-  }
-
-  /** {@inheritDoc} */
-  void dataHandler(Closure dataHandler) {
-    jResponse.dataHandler({dataHandler(new Buffer(it))} as Handler)
-  }
-
-  /** {@inheritDoc} */
-  void endHandler(Closure endHandler) {
-    jResponse.endHandler(endHandler as Handler)
-  }
-
-  /** {@inheritDoc} */
-  void exceptionHandler(Closure exceptionHandler) {
-    jResponse.exceptionHandler(exceptionHandler as Handler)
-  }
-
-  /** {@inheritDoc} */
-  void pause() {
-    jResponse.pause()
-  }
-
-  /** {@inheritDoc} */
-  void resume() {
-    jResponse.resume()
-  }
+  HttpClientResponse bodyHandler(Closure bodyHandler)
 
 }

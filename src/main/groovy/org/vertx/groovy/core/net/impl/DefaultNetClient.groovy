@@ -17,19 +17,239 @@
 package org.vertx.groovy.core.net.impl
 
 import org.vertx.groovy.core.net.NetClient
+import org.vertx.groovy.core.net.NetSocket
+import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.Vertx
+import org.vertx.java.core.impl.DefaultFutureResult
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-class DefaultNetClient extends NetClient {
+class DefaultNetClient implements NetClient {
+
+  private org.vertx.java.core.net.NetClient jNetClient;
 
   DefaultNetClient(Vertx vertx, Map props = null) {
-    jClient = vertx.createNetClient()
+    jNetClient = vertx.createNetClient()
     if (props != null) {
       props.each { k, v ->
         setProperty(k, v)
       }
     }
   }
+
+  @Override
+  NetClient connect(int port, Closure hndlr) {
+    jNetClient.connect(port, wrapConnectHandler(hndlr))
+    this
+  }
+
+  @Override
+  NetClient connect(int port, String host, Closure hndlr) {
+    jNetClient.connect(port, host, wrapConnectHandler(hndlr))
+    this
+  }
+
+  @Override
+  NetClient setReconnectAttempts(int attempts) {
+    jNetClient.setReconnectAttempts(attempts)
+    this
+  }
+
+  @Override
+  int getReconnectAttempts() {
+    jNetClient.getReconnectAttempts()
+  }
+
+  @Override
+  NetClient setReconnectInterval(long interval) {
+    jNetClient.setReconnectAttempts(interval)
+    this
+  }
+
+  @Override
+  long getReconnectInterval() {
+    jNetClient.getReconnectInterval()
+  }
+
+  @Override
+  NetClient setConnectTimeout(int timeout) {
+    jNetClient.setConnectTimeout(timeout)
+    this
+  }
+
+  @Override
+  int getConnectTimeout() {
+    jNetClient.getConnectTimeout()
+  }
+
+  @Override
+  void close() {
+    jNetClient.close()
+  }
+
+  @Override
+  NetClient setTrustAll(boolean trustAll) {
+    jNetClient.setTrustAll(trustAll)
+    this
+  }
+
+  @Override
+  boolean isTrustAll() {
+    jNetClient.isTrustAll()
+  }
+
+  @Override
+  NetClient setSSL(boolean ssl) {
+    jNetClient.setSSL(ssl)
+    this
+  }
+
+  @Override
+  boolean isSSL() {
+    jNetClient.isSSL()
+  }
+
+  @Override
+  NetClient setKeyStorePath(String path) {
+    jNetClient.setKeyStorePath(path)
+    this
+  }
+
+  @Override
+  String getKeyStorePath() {
+    jNetClient.getKeyStorePath()
+  }
+
+  @Override
+  NetClient setKeyStorePassword(String pwd) {
+    jNetClient.setKeyStorePassword(pwd)
+    this
+  }
+
+  @Override
+  String getKeyStorePassword() {
+    jNetClient.getKeyStorePassword()
+  }
+
+  @Override
+  NetClient setTrustStorePath(String path) {
+    jNetClient.setTrustStorePath(path)
+    this
+  }
+
+  @Override
+  String getTrustStorePath() {
+    jNetClient.getTrustStorePath()
+  }
+
+  @Override
+  NetClient setTrustStorePassword(String pwd) {
+    jNetClient.setTrustStorePassword(pwd)
+    this
+  }
+
+  @Override
+  String getTrustStorePassword() {
+    jNetClient.getTrustStorePassword()
+  }
+
+  @Override
+  NetClient setTCPNoDelay(boolean tcpNoDelay) {
+    jNetClient.setTCPNoDelay(tcpNoDelay)
+    this
+  }
+
+  @Override
+  NetClient setSendBufferSize(int size) {
+    jNetClient.setSendBufferSize(size)
+    this
+  }
+
+  @Override
+  NetClient setReceiveBufferSize(int size) {
+    jNetClient.setReceiveBufferSize(size)
+    this
+  }
+
+  @Override
+  NetClient setTCPKeepAlive(boolean keepAlive) {
+    jNetClient.setTCPKeepAlive(keepAlive)
+    this
+  }
+
+  @Override
+  NetClient setReuseAddress(boolean reuse) {
+    jNetClient.setReuseAddress(reuse)
+    this
+  }
+
+  @Override
+  NetClient setSoLinger(int linger) {
+    jNetClient.setSoLinger(linger)
+    this
+  }
+
+  @Override
+  NetClient setTrafficClass(int trafficClass) {
+    jNetClient.setTrafficClass(trafficClass)
+    this
+  }
+
+  @Override
+  NetClient setUsePooledBuffers(boolean pooledBuffers) {
+    jNetClient.setUsePooledBuffers(pooledBuffers)
+    this
+  }
+
+  @Override
+  boolean isTCPNoDelay() {
+    jNetClient.isTCPNoDelay()
+  }
+
+  @Override
+  int getSendBufferSize() {
+    jNetClient.getSendBufferSize()
+  }
+
+  @Override
+  int getReceiveBufferSize() {
+    jNetClient.getReceiveBufferSize()
+  }
+
+  @Override
+  boolean isTCPKeepAlive() {
+    jNetClient.isTCPKeepAlive()
+  }
+
+  @Override
+  boolean isReuseAddress() {
+    jNetClient.isReuseAddress()
+  }
+
+  @Override
+  int getSoLinger() {
+    jNetClient.getSoLinger()
+  }
+
+  @Override
+  int getTrafficClass() {
+    jNetClient.getTrafficClass()
+  }
+
+  @Override
+  boolean isUsePooledBuffers() {
+    jNetClient.isUsePooledBuffers()
+  }
+
+  private wrapConnectHandler(Closure hndlr) {
+    { DefaultFutureResult ->
+      if (DefaultFutureResult.succeeded()) {
+        hndlr(new DefaultFutureResult<NetSocket>(new DefaultNetSocket(DefaultFutureResult.result())))
+      } else {
+        hndlr(DefaultFutureResult)
+      }
+    } as AsyncResultHandler
+  }
+
 }

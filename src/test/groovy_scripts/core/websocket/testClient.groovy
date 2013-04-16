@@ -48,10 +48,11 @@ def echo(binary) {
   }
 
   server.listen(8080, {
+
     if (binary) {
       buff = TestUtils.generateRandomBuffer(1000)
     } else {
-      str = TestUtils.randomUnicodeString(1000)
+      str =  org.vertx.java.testframework.TestUtils.randomUnicodeString(1000)
       buff = new Buffer(str)
     }
 
@@ -110,7 +111,7 @@ def testClose() {
   server.listen(8080, {
     client.connectWebsocket("/someurl", { ws ->
       tu.checkThread()
-      ws.closedHandler {
+      ws.closeHandler {
         tu.testComplete()
       }
       ws.writeTextFrame("foo")
@@ -129,7 +130,7 @@ def testCloseFromConnectHandler() {
   server.listen(8080, {
     client.connectWebsocket("/someurl", { ws ->
       tu.checkThread()
-      ws.closedHandler {
+      ws.closeHandler {
         tu.testComplete()
       }
     })

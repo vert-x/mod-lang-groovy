@@ -30,38 +30,7 @@ import org.vertx.groovy.core.streams.WriteStream
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-abstract class SockJSSocket implements ReadStream, WriteStream {
-
-  private final org.vertx.java.core.sockjs.SockJSSocket jSocket
-
-  protected SockJSSocket(org.vertx.java.core.sockjs.SockJSSocket jSocket) {
-    this.jSocket = jSocket
-  }
-
-  /**
-   * Close the socket
-   */
-  void close() {
-    jSocket.close()
-  }
-
-  /**
-   * Write a Buffer to the socket
-   * @return reference to this so operations can be chained
-   */
-  SockJSSocket leftShift(Buffer buff) {
-    writeBuffer(buff)
-    this
-  }
-
-  /**
-   * Write a String to the socket
-   * @return reference to this so operations can be chained
-   */
-  SockJSSocket leftShift(String str) {
-    writeBuffer(new Buffer(str))
-    this
-  }
+interface SockJSSocket extends ReadStream<SockJSSocket>, WriteStream<SockJSSocket> {
 
   /**
    * When a {@code SockJSSocket} is created it automatically registers an event handler with the event bus, the ID of that
@@ -70,9 +39,24 @@ abstract class SockJSSocket implements ReadStream, WriteStream {
    * that buffer will be received by this instance in its own event loop and written to the underlying socket. This
    * allows you to write data to other sockets which are owned by different event loops.
    */
-  String getWriteHandlerID() {
-    jSocket.writeHandlerID
-  }
+  String getWriteHandlerID();
+
+  /**
+   * Close it
+   */
+  void close();
+
+  /**
+   * Write a Buffer to the socket
+   * @return reference to this so operations can be chained
+   */
+  SockJSSocket leftShift(Buffer buff);
+
+  /**
+   * Write a String to the socket
+   * @return reference to this so operations can be chained
+   */
+  SockJSSocket leftShift(String str);
 
 }
 

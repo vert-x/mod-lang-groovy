@@ -54,14 +54,19 @@ void echo(boolean ssl) {
   }
 
   server.connectHandler { socket ->
+
     tu.checkThread()
     socket.dataHandler { buffer ->
       tu.checkThread()
       socket << buffer
     }
   }.listen(8080, {
-    client.connect(8080, "localhost", { socket ->
+    client.connect(8080, "localhost", { asyncResult ->
       tu.checkThread()
+
+      tu.azzert asyncResult.succeeded()
+
+      socket = asyncResult.result()
 
       sends = 10
       size = 100
@@ -89,7 +94,7 @@ void echo(boolean ssl) {
         tu.checkThread()
       }
 
-      socket.closedHandler {
+      socket.closeHandler {
         tu.checkThread()
       }
 
