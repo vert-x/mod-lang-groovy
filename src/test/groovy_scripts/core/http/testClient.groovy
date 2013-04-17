@@ -204,7 +204,11 @@ def httpMethod(ssl, method, chunked)  {
       tu.checkThread()
       body << data
     }
-    req.response.setChunked(chunked)
+
+    if (method != 'HEAD' && method != 'CONNECT') {
+     req.response.setChunked(chunked)
+    }
+
     req.endHandler {
       tu.checkThread()
       if (method != 'HEAD' && method != 'CONNECT') {
