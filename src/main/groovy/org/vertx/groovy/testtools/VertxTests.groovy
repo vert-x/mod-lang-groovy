@@ -20,7 +20,7 @@ package org.vertx.groovy.testtools
 class VertxTests {
   static def initTests(script) {
     org.vertx.testtools.VertxAssert.initialize(script.vertx.toJavaVertx())
-    def methodName = script.container.getConfig().get("methodName")
+    def methodName = script.container.config().get("methodName")
     script."$methodName"()
   }
 }
