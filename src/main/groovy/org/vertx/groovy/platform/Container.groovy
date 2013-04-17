@@ -246,7 +246,7 @@ class Container {
    * @return a {@link java.util.Map} representing the JSON configuration
    */
   Map<String, Object> getConfig() {
-    jContainer.getConfig().toMap()
+    jContainer.config().toMap()
   }
 
   /**
@@ -254,7 +254,7 @@ class Container {
    * @return The logger
    */
   Logger getLogger() {
-    jContainer.getLogger()
+    jContainer.logger()
   }
 
   /**
@@ -269,6 +269,6 @@ class Container {
    * @return The map
    */
   Map<String, String> getEnv() {
-    jContainer.getEnv()
+    jContainer.env()
   }
 }
