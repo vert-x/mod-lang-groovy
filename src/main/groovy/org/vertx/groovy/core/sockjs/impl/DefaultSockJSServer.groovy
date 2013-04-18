@@ -34,11 +34,6 @@ class DefaultSockJSServer implements SockJSServer {
     jServer = vertx.createSockJSServer(httpServer.toJavaServer())
   }
 
-  /**
-   * Install an application
-   * @param config The application configuration
-   * @param sockHandler A handler that will be called when new SockJS sockets are created
-   */
   SockJSServer installApp(Map config, Closure sockHandler) {
     jServer.installApp(new JsonObject(config), {
       sockHandler(new DefaultSockJSSocket(it))
@@ -46,16 +41,22 @@ class DefaultSockJSServer implements SockJSServer {
     this
   }
 
-  /**
-   * Install an app which bridges the SockJS server to the event bus.
-   * @param sjsConfig The config for the app
-   * @param permitted A list of JSON objects which define inboundPermitted matches
-   * @param authAddress The address of an authentication/authorisation busmod
-   * @param bridgeAddress The address the bridge will listen at for login and lougout.
-   */
-  SockJSServer bridge(Map sjsConfig, List<Map<String, Object>> inboundPermitted = [[:]],
-              List<Map<String, Object>> outboundPermitted = [[:]],
-              long authTimeout = 5 * 60 * 1000, String authAddress = null) {
+  SockJSServer bridge(Map sjsConfig) {
+    jServer.bridge(new JsonObject(sjsConfig), new JsonArray([[:]]), new JsonArray([[:]]),
+        5 * 60 * 1000, null)
+    this
+  }
+
+  SockJSServer bridge(Map sjsConfig, List<Map<String, Object>> inboundPermitted,
+                      List<Map<String, Object>> outboundPermitted) {
+    jServer.bridge(new JsonObject(sjsConfig), new JsonArray(inboundPermitted), new JsonArray(outboundPermitted),
+        5 * 60 * 1000, null)
+    this
+  }
+
+  SockJSServer bridge(Map sjsConfig, List<Map<String, Object>> inboundPermitted,
+                      List<Map<String, Object>> outboundPermitted,
+                      long authTimeout, String authAddress) {
     jServer.bridge(new JsonObject(sjsConfig), new JsonArray(inboundPermitted), new JsonArray(outboundPermitted),
         authTimeout, authAddress)
     this

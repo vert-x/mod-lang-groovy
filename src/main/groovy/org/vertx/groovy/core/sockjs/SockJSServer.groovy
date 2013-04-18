@@ -66,12 +66,31 @@ interface SockJSServer {
   /**
    * Install an app which bridges the SockJS server to the event bus.
    * @param sjsConfig The config for the app
-   * @param permitted A list of JSON objects which define inboundPermitted matches
+   */
+  SockJSServer bridge(Map sjsConfig)
+
+  /**
+   * Install an app which bridges the SockJS server to the event bus.
+   * @param sjsConfig The config for the app
+   * @param inboundPermitted A list of JSON objects which define inboundPermitted matches
+   * @param outboundPermitted A list of JSON objects which define outboundPermitted matches
+   */
+  SockJSServer bridge(Map sjsConfig, List<Map<String, Object>> inboundPermitted,
+                      List<Map<String, Object>> outboundPermitted)
+
+  /**
+   * Install an app which bridges the SockJS server to the event bus.
+   * @param sjsConfig The config for the app
+   * @param inboundPermitted A list of JSON objects which define inboundPermitted matches
+   * @param outboundPermitted A list of JSON objects which define outboundPermitted matches
+   * @param authTimeout Timeout for auth
    * @param authAddress The address of an authentication/authorisation busmod
-   * @param bridgeAddress The address the bridge will listen at for login and lougout.
    */
   SockJSServer bridge(Map sjsConfig, List<Map<String, Object>> inboundPermitted,
                       List<Map<String, Object>> outboundPermitted,
                       long authTimeout, String authAddress)
+
+
+
 
 }
