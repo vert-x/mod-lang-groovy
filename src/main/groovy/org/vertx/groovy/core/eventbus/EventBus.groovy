@@ -75,14 +75,16 @@ class EventBus {
    * @param address The address to send it to
    * @param message The message
    * @param replyHandler Reply handler will be called when any reply from the recipient is received
+   * @return self which allow method chaining
    */
-  void send(String address, message, Closure replyHandler = null) {
+  EventBus send(String address, message, Closure replyHandler = null) {
     if (message != null) {
       jEventBus.send(address, convertMessage(message), wrapHandler(replyHandler))
     } else {
       // Just choose an overloaded method...
       jEventBus.send(address, (String)null, wrapHandler(replyHandler))
     }
+    return this
   }
 
   /**
@@ -91,8 +93,9 @@ class EventBus {
    * byte, short, int, long, float, double or {@link org.vertx.java.core.buffer.Buffer}
    * @param address The address to publish it to
    * @param message The message
+   * @return self which allow method chaining
    */
-  void publish(String address, message) {
+  EventBus publish(String address, message) {
     if (message != null) {
       message = convertMessage(message)
       jEventBus.publish(address, convertMessage(message))
@@ -100,6 +103,7 @@ class EventBus {
       // Just choose an overloaded method...
       jEventBus.publish(address, (String)null)
     }
+    return this
   }
 
   /**
