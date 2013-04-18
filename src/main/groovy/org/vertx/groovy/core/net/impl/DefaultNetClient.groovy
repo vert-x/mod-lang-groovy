@@ -243,11 +243,11 @@ class DefaultNetClient implements NetClient {
   }
 
   private wrapConnectHandler(Closure hndlr) {
-    { DefaultFutureResult ->
-      if (DefaultFutureResult.succeeded()) {
-        hndlr(new DefaultFutureResult<NetSocket>(new DefaultNetSocket(DefaultFutureResult.result())))
+    { ar ->
+      if (ar.succeeded()) {
+        hndlr(new DefaultFutureResult<NetSocket>(new DefaultNetSocket(ar.result())))
       } else {
-        hndlr(DefaultFutureResult)
+        hndlr(ar)
       }
     } as AsyncResultHandler
   }

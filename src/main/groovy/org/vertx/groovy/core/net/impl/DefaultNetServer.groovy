@@ -17,9 +17,11 @@
 package org.vertx.groovy.core.net.impl
 
 import org.vertx.groovy.core.net.NetServer
+import org.vertx.groovy.core.net.NetSocket
 import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.Handler
 import org.vertx.java.core.Vertx
+import org.vertx.java.core.impl.DefaultFutureResult
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
@@ -57,13 +59,13 @@ class DefaultNetServer implements NetServer {
 
   @Override
   NetServer listen(int port, Closure bindHandler) {
-    jNetServer.listen(port, bindHandler as Handler)
+    jNetServer.listen(port, wrapBindHandler(bindHandler))
     this
   }
 
   @Override
   NetServer listen(int port, String host, Closure bindHandler) {
-    jNetServer.listen(port, host, bindHandler as Handler)
+    jNetServer.listen(port, host, wrapBindHandler(bindHandler))
     this
   }
 
@@ -250,5 +252,15 @@ class DefaultNetServer implements NetServer {
   @Override
   boolean isUsePooledBuffers() {
     jNetServer.isUsePooledBuffers()
+  }
+
+  private wrapBindHandler(Closure hndlr) {
+    { ar ->
+      if (ar.succeeded()) {
+        hndlr(new DefaultFutureResult<NetServer>(this))
+      } else {
+        hndlr(ar)
+      }
+    } as AsyncResultHandler
   }
 }
