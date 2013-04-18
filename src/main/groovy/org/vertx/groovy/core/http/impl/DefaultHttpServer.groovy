@@ -17,9 +17,11 @@
 package org.vertx.groovy.core.http.impl
 
 import org.vertx.groovy.core.http.HttpServer
+import org.vertx.groovy.core.net.NetServer
 import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.Handler
 import org.vertx.java.core.Vertx
+import org.vertx.java.core.impl.DefaultFutureResult
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
@@ -63,13 +65,13 @@ class DefaultHttpServer implements HttpServer {
 
   @Override
   HttpServer listen(int port, Closure bindHandler) {
-    jServer.listen(port, bindHandler as Handler)
+    jServer.listen(port, wrapBindHandler(bindHandler))
     this
   }
 
   @Override
   HttpServer listen(int port, String host, Closure bindHandler) {
-    jServer.listen(port, host, bindHandler as Handler)
+    jServer.listen(port, host, wrapBindHandler(bindHandler))
     this
   }
 
@@ -250,5 +252,15 @@ class DefaultHttpServer implements HttpServer {
 
   org.vertx.java.core.http.HttpServer toJavaServer() {
     jServer
+  }
+
+  private wrapBindHandler(Closure hndlr) {
+    { ar ->
+      if (ar.succeeded()) {
+        hndlr(new DefaultFutureResult<HttpServer>(this))
+      } else {
+        hndlr(ar)
+      }
+    } as AsyncResultHandler
   }
 }

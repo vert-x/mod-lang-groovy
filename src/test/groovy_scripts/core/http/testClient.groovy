@@ -233,7 +233,9 @@ def httpMethod(ssl, method, chunked)  {
     client.trustStorePassword = "wibble"
   }
 
-  server.listen(8080, {
+  server.listen(8080, { asyncResult ->
+    tu.azzert(asyncResult.succeeded())
+    tu.azzert(asyncResult.result() == server)
     sentBuff = TestUtils.generateRandomBuffer(1000)
 
     request = client.request(method, uri, { resp ->
