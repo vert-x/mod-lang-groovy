@@ -126,24 +126,6 @@ class DefaultHttpServerResponse implements HttpServerResponse {
   }
 
   @Override
-  HttpServerResponse write(Buffer chunk, Closure doneHandler) {
-    jResponse.write(chunk.toJavaBuffer(), doneHandler as AsyncResultHandler)
-    this
-  }
-
-  @Override
-  HttpServerResponse write(String chunk, String enc, Closure doneHandler) {
-    jResponse.write(chunk, enc, doneHandler as AsyncResultHandler)
-    this
-  }
-
-  @Override
-  HttpServerResponse write(String chunk, Closure doneHandler) {
-    jResponse.write(chunk, doneHandler as AsyncResultHandler)
-    this
-  }
-
-  @Override
   void end(String chunk) {
     jResponse.end(chunk)
   }

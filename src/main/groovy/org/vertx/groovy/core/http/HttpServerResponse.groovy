@@ -138,29 +138,6 @@ interface HttpServerResponse extends WriteStream<HttpServerResponse> {
   HttpServerResponse write(String chunk)
 
   /**
-   * Write a {@link Buffer} to the response body. The {@code doneHandler} is called after the buffer is actually written to the wire.<p>
-   *
-   * @return A reference to this, so multiple method calls can be chained.
-   */
-  HttpServerResponse write(Buffer chunk, Closure doneHandler)
-
-  /**
-   * Write a {@link String} to the response body, encoded with encoding {@code enc}. The {@code doneHandler} is called
-   * after the buffer is actually written to the wire.
-   *
-   * @return A reference to this, so multiple method calls can be chained.
-   */
-  HttpServerResponse write(String chunk, String enc, Closure doneHandler)
-
-  /**
-   * Write a {@link String} to the response body, encoded in UTF-8. The {@code doneHandler} is called after the buffer
-   * is actually written to the wire.
-   *
-   * @return A reference to this, so multiple method calls can be chained.
-   */
-  HttpServerResponse write(String chunk, Closure doneHandler)
-
-  /**
    * Same as {@link #end(Buffer)} but writes a String with the default encoding before ending the response.
    */
   void end(String chunk)

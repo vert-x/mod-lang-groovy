@@ -71,24 +71,6 @@ class DefaultNetSocket implements NetSocket {
   }
 
   @Override
-  NetSocket write(Buffer data, Closure doneHandler) {
-    jNetSocket.write(data.toJavaBuffer(), doneHandler as AsyncResultHandler)
-    this
-  }
-
-  @Override
-  NetSocket write(String str, Closure doneHandler) {
-    jNetSocket.write(str, doneHandler as AsyncResultHandler)
-    this
-  }
-
-  @Override
-  NetSocket write(String str, String enc, Closure doneHandler) {
-    jNetSocket.write(str, enc, doneHandler as AsyncResultHandler)
-    this
-  }
-
-  @Override
   NetSocket sendFile(String filename) {
     jNetSocket.sendFile(filename)
     this

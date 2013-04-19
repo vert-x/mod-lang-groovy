@@ -105,30 +105,6 @@ interface HttpClientRequest extends WriteStream<HttpClientRequest> {
   HttpClientRequest write(String chunk, String enc)
 
   /**
-   * Write a {@link Buffer} to the request body. The {@code doneHandler} is called after the buffer is actually written
-   * to the wire.
-   *
-   * @return A reference to this, so multiple method calls can be chained.
-   */
-  HttpClientRequest write(Buffer chunk, Closure doneHandler)
-
-  /**
-   * Write a {@link String} to the request body, encoded in UTF-8.
-   * The {@code doneHandler} is called after the buffer is actually written to the wire.
-   *
-   * @return A reference to this, so multiple method calls can be chained.
-   */
-  HttpClientRequest write(String chunk, Closure doneHandler)
-
-  /**
-   * Write a {@link String} to the request body, encoded with encoding {@code enc}. The {@code doneHandler} is called
-   * after the buffer is actually written to the wire.
-   *
-   * @return A reference to this, so multiple method calls can be chained.
-   */
-  HttpClientRequest write(String chunk, String enc, Closure doneHandler)
-
-  /**
    * If you send an HTTP request with the header {@code Expect} set to the value {@code 100-continue}
    * and the server responds with an interim HTTP response with a status code of {@code 100} and a continue handler
    * has been set using this method, then the {@code handler} will be called.<p>

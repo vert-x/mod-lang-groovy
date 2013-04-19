@@ -88,24 +88,6 @@ class DefaultHttpClientRequest implements HttpClientRequest {
   }
 
   @Override
-  HttpClientRequest write(Buffer chunk, Closure doneHandler) {
-    jRequest.write(chunk.toJavaBuffer(), doneHandler as AsyncResultHandler)
-    this
-  }
-
-  @Override
-  HttpClientRequest write(String chunk, Closure doneHandler) {
-    jRequest.write(chunk, doneHandler as AsyncResultHandler)
-    this
-  }
-
-  @Override
-  HttpClientRequest write(String chunk, String enc, Closure doneHandler) {
-    jRequest.write(chunk, enc, doneHandler as AsyncResultHandler)
-    this
-  }
-
-  @Override
   HttpClientRequest continueHandler(Closure handler) {
     jRequest.continueHandler(handler as Handler)
     this
