@@ -27,6 +27,7 @@ import org.vertx.groovy.core.net.impl.DefaultNetClient
 import org.vertx.groovy.core.net.impl.DefaultNetServer
 import org.vertx.groovy.core.sockjs.SockJSServer
 import org.vertx.groovy.core.sockjs.impl.DefaultSockJSServer
+import org.vertx.java.core.Context
 import org.vertx.java.core.Handler
 import org.vertx.java.core.shareddata.SharedData
 
@@ -50,8 +51,8 @@ class Vertx {
 
   private Vertx(org.vertx.java.core.Vertx jVertex) {
     this.jVertex = jVertex
-    this.eventBus = new EventBus(jVertex.eventBus)
-    this.fileSystem = new org.vertx.groovy.core.file.FileSystem(jVertex.fileSystem)
+    this.eventBus = new EventBus(jVertex.eventBus())
+    this.fileSystem = new org.vertx.groovy.core.file.FileSystem(jVertex.fileSystem())
   }
 
   /**
@@ -161,11 +162,18 @@ class Vertx {
   }
 
   /**
-   * Put the handler on the event queue for this loop so it will be run asynchronously ASAP after this event has
+   * Put the handler on the event queue for this loop (or worker) so it will be run asynchronously ASAP after this event has
    * been processed
    */
-  void runOnLoop(Closure handler) {
-    jVertex.runOnLoop(handler as Handler)
+  void runOnContext(Closure handler) {
+    jVertex.runOnContext(handler as Handler)
+  }
+
+  /**
+   * Get the current execution context
+   */
+  Context currentContext() {
+    new Context(jVertex.currentContext())
   }
 
   /**
@@ -187,5 +195,16 @@ class Vertx {
   org.vertx.java.core.Vertx toJavaVertx() {
     return jVertex
   }
+
+  private class Context {
+    org.vertx.java.core.Context jContext;
+    Context(org.vertx.java.core.Context jContext) {
+      this.jContext = jContext
+    }
+    void runOnContext(Closure handler) {
+      jContext.runOnContext(handler as Handler)
+    }
+  }
+
 
 }
