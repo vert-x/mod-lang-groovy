@@ -40,8 +40,9 @@ class DefaultHttpClient implements HttpClient {
   }
 
   @Override
-  void exceptionHandler(Closure handler) {
+  HttpClient exceptionHandler(Closure handler) {
     jClient.exceptionHandler(handler as Handler)
+    this
   }
 
   @Override
