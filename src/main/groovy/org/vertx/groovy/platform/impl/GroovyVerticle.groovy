@@ -52,17 +52,17 @@ class GroovyVerticle extends JVerticle {
   }
 
   @Override
-  public void start() throws Exception {
+  public void start() {
     delegate.start()
   }
 
   @Override
-  public void start(Future<Void> startedResult) throws Exception {
+  public void start(Future<Void> startedResult) {
     delegate.start(startedResult)
   }
 
   @Override
-  public void stop() throws Exception {
+  public void stop() {
     delegate.stop()
   }
 
