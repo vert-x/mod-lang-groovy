@@ -236,7 +236,7 @@ class RouteMatcher {
    */
   Closure asClosure() {
     return {
-      jRM.handle(it.toJavaRequest())
+      jRM.handle(it.jRequest)
     }
   }
 
