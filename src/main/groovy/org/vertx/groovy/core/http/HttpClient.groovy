@@ -19,6 +19,7 @@ package org.vertx.groovy.core.http
 import groovy.transform.CompileStatic;
 
 import org.vertx.java.core.ClientSSLSupport
+import org.vertx.java.core.MultiMap
 import org.vertx.java.core.TCPSupport
 import org.vertx.java.core.http.WebSocketVersion
 
@@ -125,7 +126,7 @@ interface HttpClient extends ClientSSLSupport<HttpClient>, TCPSupport<HttpClient
    * This method works in the same manner as getNow(String, org.vertx.java.core.Handler),
    * except that it allows you specify a set of {@code headers} that will be sent with the request.
    */
-  HttpClient getNow(String uri, Map<String, ? extends Object> headers, Closure responseHandler)
+  HttpClient getNow(String uri, MultiMap headers, Closure responseHandler)
 
   /**
    * This method returns an {@link org.vertx.java.core.http.HttpClientRequest} instance which represents an HTTP OPTIONS request with the specified {@code uri}.<p>

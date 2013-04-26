@@ -22,6 +22,7 @@ import org.vertx.groovy.core.http.HttpClient
 import org.vertx.groovy.core.http.HttpClientRequest
 
 import org.vertx.java.core.Handler
+import org.vertx.java.core.MultiMap
 import org.vertx.java.core.Vertx
 import org.vertx.java.core.http.HttpClientResponse as JHttpClientResponse
 import org.vertx.java.core.http.WebSocket as JWebSocket
@@ -113,8 +114,8 @@ class DefaultHttpClient implements HttpClient {
   }
 
   @Override
-  HttpClient getNow(String uri, Map<String, ? extends Object> headers, Closure responseHandler) {
-    jClient.getNow(uri, headers, {responseHandler(new DefaultHttpClientResponse((JHttpClientResponse) it))} as Handler)
+  HttpClient getNow(String uri, MultiMap headers, Closure responseHandler) {
+    jClient.getNow(uri, headers, {responseHandler(new DefaultHttpClientResponse(it))} as Handler)
     this
   }
 

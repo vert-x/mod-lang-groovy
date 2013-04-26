@@ -5,10 +5,10 @@ import groovy.transform.TypeCheckingMode
 
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.http.ServerWebSocket
-import org.vertx.groovy.core.http.WebSocket
 import org.vertx.java.core.Handler
 import org.vertx.java.core.buffer.Buffer as JBuffer
 import org.vertx.java.core.http.ServerWebSocket as JServerWebSocket
+import org.vertx.java.core.MultiMap
 
 /*
  * Copyright 2013 Red Hat, Inc.
@@ -136,6 +136,11 @@ class DefaultServerWebSocket implements ServerWebSocket {
   @Override
   String getPath() {
     jServerWebSocket.path()
+  }
+
+  @Override
+  MultiMap getHeaders() {
+    jServerWebSocket.headers()
   }
 
   @Override

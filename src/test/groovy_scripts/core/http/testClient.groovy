@@ -193,12 +193,22 @@ def httpMethod(ssl, method, chunked)  {
     tu.azzert(req.method == method)
     tu.azzert(req.path == path)
     tu.azzert(req.query == query)
-    tu.azzert(req.headers["header1"] == "vheader1")
-    tu.azzert(req.headers["header2"] == "vheader2")
-    tu.azzert(req.params["param1"] == "vparam1")
-    tu.azzert(req.params["param2"] == "vparam2")
-    req.response.headers['rheader1'] = 'vrheader1'
-    req.response.headers['rheader2'] = 'vrheader2'
+    tu.azzert(req.headers.get("header1") == "vheader1")
+    tu.azzert(req.headers.get("header2") == "vheader2")
+    tu.azzert(req.params.get("param1") == "vparam1")
+    tu.azzert(req.params.get("param2") == "vparam2")
+    headers = req.headers
+    tu.azzert(headers.contains('header1'))
+    tu.azzert(headers.contains('header2'))
+    tu.azzert(headers.contains('header3'))
+    tu.azzert(!headers.empty)
+
+    headers.remove('header3')
+    tu.azzert(!headers.contains('header3'))
+
+    req.response.headers.set('rheader1', 'vrheader1')
+    req.response.headers.set('rheader2', 'vrheader2')
+
     body = new Buffer()
     req.dataHandler { data ->
       tu.checkThread()
@@ -213,13 +223,13 @@ def httpMethod(ssl, method, chunked)  {
       tu.checkThread()
       if (method != 'HEAD' && method != 'CONNECT') {
         if (!chunked) {
-          req.response.headers['content-length'] = body.length
+          req.response.headers.set('content-length', Integer.toString(body.length))
         }
         req.response << body
       }
       if (chunked) {
-        req.response.trailers['trailer1'] = 'vtrailer1'
-        req.response.trailers['trailer2'] = 'vtrailer2'
+        req.response.trailers.set('trailer1', 'vtrailer1')
+        req.response.trailers.set('trailer2', 'vtrailer2')
       }
       req.response.end()
     }
@@ -241,8 +251,8 @@ def httpMethod(ssl, method, chunked)  {
     request = client.request(method, uri, { resp ->
       tu.checkThread()
       tu.azzert(200 == resp.statusCode)
-      tu.azzert(resp.headers['rheader1'] == 'vrheader1')
-      tu.azzert(resp.headers['rheader2'] == 'vrheader2')
+      tu.azzert(resp.headers.get('rheader1') == 'vrheader1')
+      tu.azzert(resp.headers.get('rheader2') == 'vrheader2')
       body = new Buffer()
       resp.dataHandler { data ->
         tu.checkThread()
@@ -254,21 +264,23 @@ def httpMethod(ssl, method, chunked)  {
         if (method != 'HEAD' && method != 'CONNECT') {
           tu.azzert(TestUtils.buffersEqual(sentBuff, body))
           if (chunked) {
-            tu.azzert(resp.trailers['trailer1'] == 'vtrailer1')
-            tu.azzert(resp.trailers['trailer2'] == 'vtrailer2')
+            tu.azzert(resp.trailers.get('trailer1') == 'vtrailer1')
+            tu.azzert(resp.trailers.get('trailer2') == 'vtrailer2')
           }
         }
+        resp.headers.clear()
+        tu.azzert(resp.headers.empty)
         tu.testComplete()
       }
     })
 
     request.chunked = true
-    request.headers['header1'] = 'vheader1'
-    request.headers['header2'] = 'vheader2'
+    request.headers.set('header1', 'vheader1')
+    request.headers.set('header2', 'vheader2')
     if (!chunked) {
-      request.headers['content-length'] = sentBuff.length
+      request.headers.set('content-length', Integer.toString(sentBuff.length))
     }
-
+    request.headers.add('header3', 'vheader3_1').add('header3', 'vheader3')
     request << sentBuff
 
     request.end()

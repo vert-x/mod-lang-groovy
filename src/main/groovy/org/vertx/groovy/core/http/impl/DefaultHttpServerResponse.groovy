@@ -4,8 +4,8 @@ import groovy.transform.CompileStatic;
 
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.http.HttpServerResponse
-import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.Handler
+import org.vertx.java.core.MultiMap
 
 /*
  * Copyright 2013 Red Hat, Inc.
@@ -67,23 +67,35 @@ class DefaultHttpServerResponse implements HttpServerResponse {
   }
 
   @Override
-  Map<String, Object> getHeaders() {
+  MultiMap getHeaders() {
     jResponse.headers()
   }
 
   @Override
-  HttpServerResponse putHeader(String name, Object value) {
+  HttpServerResponse putHeader(String name, String value) {
     jResponse.putHeader(name, value)
     this
   }
 
   @Override
-  Map<String, Object> getTrailers() {
+  HttpServerResponse putHeader(String name, Iterable<String> value) {
+    jResponse.putHeader(name, value)
+    this
+  }
+
+  @Override
+  MultiMap getTrailers() {
     jResponse.trailers()
   }
 
   @Override
-  HttpServerResponse putTrailer(String name, Object value) {
+  HttpServerResponse putTrailer(String name, String value) {
+    jResponse.putTrailer(name, value)
+    this
+  }
+
+  @Override
+  HttpServerResponse putTrailer(String name, Iterable<String> value) {
     jResponse.putTrailer(name, value)
     this
   }

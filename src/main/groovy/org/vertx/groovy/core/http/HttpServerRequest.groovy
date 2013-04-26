@@ -19,6 +19,7 @@ package org.vertx.groovy.core.http
 import groovy.transform.CompileStatic;
 
 import org.vertx.groovy.core.streams.ReadStream
+import org.vertx.java.core.MultiMap
 
 import javax.net.ssl.SSLPeerUnverifiedException
 import javax.security.cert.X509Certificate
@@ -73,12 +74,12 @@ interface HttpServerRequest extends ReadStream<HttpServerRequest> {
    * as specified <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2">here</a>.
    * The headers will be automatically lower-cased when they reach the server
    */
-  Map<String, String> getHeaders()
+  MultiMap getHeaders()
 
   /**
    * Returns a map of all the parameters in the request
    */
-  Map<String, String> getParams()
+  MultiMap getParams()
 
   /**
    * Return the remote (client side) address of the request

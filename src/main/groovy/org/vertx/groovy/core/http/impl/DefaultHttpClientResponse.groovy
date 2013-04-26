@@ -6,6 +6,7 @@ import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.http.HttpClientResponse
 import org.vertx.java.core.Handler
 import org.vertx.java.core.buffer.Buffer as JBuffer
+import org.vertx.java.core.MultiMap
 
 /*
  * Copyright 2013 Red Hat, Inc.
@@ -44,12 +45,12 @@ class DefaultHttpClientResponse implements HttpClientResponse {
   }
 
   @Override
-  Map<String, String> getHeaders() {
+  MultiMap getHeaders() {
     jResponse.headers()
   }
 
   @Override
-  Map<String, String> getTrailers() {
+  MultiMap getTrailers() {
     jResponse.trailers()
   }
 

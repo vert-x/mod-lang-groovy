@@ -20,6 +20,7 @@ import groovy.transform.CompileStatic;
 
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.streams.WriteStream
+import org.vertx.java.core.MultiMap
 
 /**
  * Represents a client-side HTTP request.<p>
@@ -76,7 +77,7 @@ interface HttpClientRequest extends WriteStream<HttpClientRequest> {
   /**
    * @return The HTTP headers
    */
-  Map<String, Object> getHeaders()
+  MultiMap getHeaders()
 
   /**
    * Put an HTTP header - fluent API
@@ -84,7 +85,15 @@ interface HttpClientRequest extends WriteStream<HttpClientRequest> {
    * @param value The header value
    * @return A reference to this, so multiple method calls can be chained.
    */
-  HttpClientRequest putHeader(String name, Object value)
+  HttpClientRequest putHeader(String name, String value)
+
+  /**
+   * Put an HTTP header - fluent API
+   * @param name The header name
+   * @param value The header value
+   * @return A reference to this, so multiple method calls can be chained.
+   */
+  HttpClientRequest putHeader(String name, Iterable<String> value)
 
   /**
    * Write a {@link org.vertx.java.core.buffer.Buffer} to the request body.
