@@ -16,6 +16,7 @@
 package org.vertx.groovy.platform.impl
 
 import groovy.transform.CompileStatic
+import groovy.transform.TypeCheckingMode
 
 import org.vertx.java.core.Future
 import org.vertx.java.core.Vertx as JVertx
@@ -43,12 +44,14 @@ class GroovyVerticle extends JVerticle {
   }
 
   @Override
+  @CompileStatic(TypeCheckingMode.SKIP)
   public void setContainer(JContainer jcontainer) {
     delegate.container = new Container(jcontainer)
     super.setContainer(jcontainer)
   }
 
   @Override
+  @CompileStatic(TypeCheckingMode.SKIP)
   public void setVertx(JVertx jvertx) {
     delegate.vertx = new Vertx(jvertx)
     super.setVertx(jvertx);
