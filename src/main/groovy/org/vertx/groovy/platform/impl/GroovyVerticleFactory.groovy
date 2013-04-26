@@ -111,12 +111,12 @@ public class GroovyVerticleFactory implements VerticleFactory {
       Class clazz = gcl.loadClass(main)
       if (Verticle.class.isAssignableFrom(clazz)) {
         verticle = new GroovyVerticle((Verticle) clazz.newInstance())
-        verticle.setVertx(vertx)
-        verticle.setContainer(container)
       }
       else {
         verticle = (JVerticle) clazz.newInstance()
       }
+      verticle.setVertx(vertx)
+      verticle.setContainer(container)
     }
 
     return verticle
