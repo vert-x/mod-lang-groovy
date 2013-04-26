@@ -17,6 +17,7 @@
 package org.vertx.groovy.core.http
 
 import groovy.transform.CompileStatic;
+import org.vertx.java.core.MultiMap
 
 /**
  * Represents a server side WebSocket that is passed into a the websocketHandler of an {@link HttpServer}<p>
@@ -31,6 +32,11 @@ interface ServerWebSocket extends WebSocket {
    * @return The path the websocket is attempting to connect at
    */
   String getPath();
+
+  /**
+   * A map of all headers in the request to upgrade to websocket
+   */
+  MultiMap getHeaders();
 
   /**
    * Reject the WebSocket<p>

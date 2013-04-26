@@ -19,6 +19,7 @@ package org.vertx.groovy.core.http
 import groovy.transform.CompileStatic;
 
 import org.vertx.groovy.core.streams.ReadStream
+import org.vertx.java.core.MultiMap
 
 /**
  * Represents a client-side HTTP response.<p>
@@ -48,12 +49,12 @@ interface HttpClientResponse extends ReadStream<HttpClientResponse> {
   /**
    * @return The HTTP headers
    */
-  Map<String, String> getHeaders()
+  MultiMap getHeaders()
 
   /**
    * @return The HTTP trailers
    */
-  Map<String, String> getTrailers()
+  MultiMap getTrailers()
 
   /**
    * @return The Set-Cookie headers (including trailers)

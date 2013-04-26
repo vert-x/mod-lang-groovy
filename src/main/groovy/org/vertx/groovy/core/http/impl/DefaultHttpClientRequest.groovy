@@ -4,9 +4,9 @@ import groovy.transform.CompileStatic;
 
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.http.HttpClientRequest
-import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.Handler
 import org.vertx.java.core.http.HttpClientRequest as JHttpClientRequest
+import org.vertx.java.core.MultiMap
 
 /*
  * Copyright 2013 Red Hat, Inc.
@@ -46,12 +46,18 @@ class DefaultHttpClientRequest implements HttpClientRequest {
   }
 
   @Override
-  Map<String, Object> getHeaders() {
+  MultiMap getHeaders() {
     jRequest.headers()
   }
 
   @Override
-  HttpClientRequest putHeader(String name, Object value) {
+  HttpClientRequest putHeader(String name, String value) {
+    jRequest.putHeader(name, value)
+    this
+  }
+
+  @Override
+  HttpClientRequest putHeader(String name, Iterable<String> value) {
     jRequest.putHeader(name, value)
     this
   }
