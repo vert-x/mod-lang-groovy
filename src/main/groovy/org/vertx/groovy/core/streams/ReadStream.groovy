@@ -16,6 +16,8 @@
 
 package org.vertx.groovy.core.streams
 
+import groovy.transform.CompileStatic;
+
 /**
  * Represents a stream of data that can be read from.<p>
  *
@@ -24,6 +26,7 @@ package org.vertx.groovy.core.streams
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 interface ReadStream<T> extends ExceptionSupport<T> {
 
   /**

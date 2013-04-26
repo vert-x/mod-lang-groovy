@@ -1,9 +1,12 @@
 package org.vertx.groovy.core.http.impl
 
+import groovy.transform.CompileStatic;
+
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.http.HttpClientRequest
 import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.Handler
+import org.vertx.java.core.http.HttpClientRequest as JHttpClientRequest
 
 /*
  * Copyright 2013 Red Hat, Inc.
@@ -22,11 +25,12 @@ import org.vertx.java.core.Handler
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class DefaultHttpClientRequest implements HttpClientRequest {
 
-  private org.vertx.java.core.http.HttpClientRequest jRequest
+  private JHttpClientRequest jRequest
 
-  DefaultHttpClientRequest(org.vertx.java.core.http.HttpClientRequest jRequest) {
+  DefaultHttpClientRequest(JHttpClientRequest jRequest) {
     this.jRequest = jRequest
   }
 

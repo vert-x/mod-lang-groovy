@@ -16,6 +16,8 @@
 
 package org.vertx.groovy.core.streams
 
+import groovy.transform.CompileStatic;
+
 import org.vertx.groovy.core.buffer.Buffer
 
 /**
@@ -27,6 +29,7 @@ import org.vertx.groovy.core.buffer.Buffer
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 interface WriteStream<T> extends ExceptionSupport<T> {
 
   /**

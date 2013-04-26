@@ -21,6 +21,9 @@ import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.Handler
 import org.vertx.java.core.eventbus.EventBus as JEventBus
 import org.vertx.java.core.json.JsonObject
+import org.vertx.java.core.eventbus.Message as JMessage
+
+import groovy.transform.CompileStatic
 
 import java.util.concurrent.ConcurrentHashMap
 
@@ -58,6 +61,7 @@ import java.util.concurrent.ConcurrentHashMap
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class EventBus {
 
   private final JEventBus jEventBus
@@ -147,7 +151,7 @@ class EventBus {
   EventBus unregisterHandler(String address, Closure handler, Closure resultHandler = null) {
     def wrapped = handlerMap.remove(handler)
     if (wrapped != null) {
-      jEventBus.unregisterHandler(address, wrapped, resultHandler as AsyncResultHandler)
+      jEventBus.unregisterHandler(address, wrapped as Handler, resultHandler as AsyncResultHandler)
     }
     return this
   }
@@ -161,9 +165,9 @@ class EventBus {
     message
   }
 
-  protected static Handler wrapHandler(handler) {
+  protected static Handler wrapHandler(Closure handler) {
     if (handler != null) {
-      return { handler(new Message(it)) } as Handler
+      return { handler(new Message((JMessage) it)) } as Handler
     } else {
       return null
     }

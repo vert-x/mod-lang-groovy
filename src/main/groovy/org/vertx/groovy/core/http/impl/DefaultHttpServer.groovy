@@ -16,24 +16,31 @@
 
 package org.vertx.groovy.core.http.impl
 
+import groovy.transform.CompileStatic
+
 import org.vertx.groovy.core.http.HttpServer
 import org.vertx.groovy.core.net.NetServer
+import org.vertx.java.core.AsyncResult
 import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.Handler
 import org.vertx.java.core.Vertx
 import org.vertx.java.core.impl.DefaultFutureResult
+import org.vertx.java.core.http.HttpServer as JHttpServer
+import org.vertx.java.core.http.HttpServerRequest as JHttpServerRequest
+import org.vertx.java.core.http.ServerWebSocket as JServerWebSocket
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class DefaultHttpServer implements HttpServer {
 
-  private org.vertx.java.core.http.HttpServer jServer
+  private JHttpServer jServer
 
   DefaultHttpServer(Vertx vertx, Map props = null) {
     jServer = vertx.createHttpServer()
     if (props != null) {
-      props.each { k, v ->
+      props.each { String k, v ->
         setProperty(k, v)
       }
     }
@@ -41,13 +48,13 @@ class DefaultHttpServer implements HttpServer {
 
   @Override
   HttpServer requestHandler(Closure requestHandler) {
-    jServer.requestHandler({requestHandler(new DefaultHttpServerRequest(it))} as Handler)
+    jServer.requestHandler({requestHandler(new DefaultHttpServerRequest((JHttpServerRequest) it))} as Handler)
     this
   }
 
   @Override
   HttpServer websocketHandler(Closure wsHandler) {
-    jServer.websocketHandler({wsHandler(new DefaultServerWebSocket(it))} as Handler)
+    jServer.websocketHandler({wsHandler(new DefaultServerWebSocket((JServerWebSocket) it))} as Handler)
     this
   }
 
@@ -254,8 +261,8 @@ class DefaultHttpServer implements HttpServer {
     jServer
   }
 
-  private wrapBindHandler(Closure hndlr) {
-    { ar ->
+  private AsyncResultHandler wrapBindHandler(Closure hndlr) {
+    { AsyncResult ar ->
       if (ar.succeeded()) {
         hndlr(new DefaultFutureResult<HttpServer>(this))
       } else {

@@ -26,6 +26,9 @@ import org.vertx.groovy.core.Vertx
 import org.vertx.groovy.platform.Container
 import org.vertx.groovy.platform.Verticle
 
+import groovy.transform.CompileStatic
+import groovy.transform.TypeCheckingMode
+
 import java.lang.reflect.Method
 
 /**

@@ -1,5 +1,7 @@
 package org.vertx.groovy.core.http.impl
 
+import groovy.transform.CompileStatic;
+
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.http.HttpServerResponse
 import org.vertx.java.core.AsyncResultHandler
@@ -22,6 +24,7 @@ import org.vertx.java.core.Handler
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class DefaultHttpServerResponse implements HttpServerResponse {
 
   private org.vertx.java.core.http.HttpServerResponse jResponse

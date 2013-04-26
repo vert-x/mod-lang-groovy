@@ -16,6 +16,8 @@
 
 package org.vertx.groovy.core.http
 
+import groovy.transform.CompileStatic;
+
 import org.vertx.java.core.ClientSSLSupport
 import org.vertx.java.core.TCPSupport
 import org.vertx.java.core.http.WebSocketVersion
@@ -33,6 +35,7 @@ import org.vertx.java.core.http.WebSocketVersion
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 interface HttpClient extends ClientSSLSupport<HttpClient>, TCPSupport<HttpClient> {
 
   /**

@@ -1,8 +1,11 @@
 package org.vertx.groovy.core.http.impl
 
+import groovy.transform.CompileStatic
+
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.http.HttpClientResponse
 import org.vertx.java.core.Handler
+import org.vertx.java.core.buffer.Buffer as JBuffer
 
 /*
  * Copyright 2013 Red Hat, Inc.
@@ -21,6 +24,7 @@ import org.vertx.java.core.Handler
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class DefaultHttpClientResponse implements HttpClientResponse {
 
   private org.vertx.java.core.http.HttpClientResponse jResponse
@@ -56,13 +60,13 @@ class DefaultHttpClientResponse implements HttpClientResponse {
 
   @Override
   HttpClientResponse bodyHandler(Closure handler) {
-    jResponse.bodyHandler(({handler(new Buffer(it))} as Handler))
+    jResponse.bodyHandler(({handler(new Buffer((JBuffer) it))} as Handler))
     this
   }
 
   @Override
   HttpClientResponse dataHandler(Closure handler) {
-    jResponse.dataHandler(({handler(new Buffer(it))} as Handler))
+    jResponse.dataHandler(({handler(new Buffer((JBuffer) it))} as Handler))
     this
   }
 

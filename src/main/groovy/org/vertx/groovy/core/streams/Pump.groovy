@@ -16,6 +16,9 @@
 
 package org.vertx.groovy.core.streams
 
+import groovy.transform.CompileStatic;
+import org.vertx.groovy.core.buffer.Buffer
+
 /**
  * Pumps data from a {@link ReadStream} to a {@link WriteStream} and performs flow control where necessary to
  * prevent the write stream from getting overloaded.<p>
@@ -32,6 +35,7 @@ package org.vertx.groovy.core.streams
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class Pump {
 
   private ReadStream readStream
@@ -87,7 +91,7 @@ class Pump {
 
   private Closure drainHandler = { readStream.resume() }
 
-  private Closure dataHandler = { buffer ->
+  private Closure dataHandler = { Buffer buffer ->
     writeStream.write(buffer)
     pumped += buffer.length()
     if (writeStream.isWriteQueueFull()) {

@@ -17,9 +17,12 @@
 
 package org.vertx.groovy.core.http
 
+import groovy.transform.CompileStatic
+
 import org.vertx.groovy.core.http.impl.DefaultHttpServerRequest
 import org.vertx.java.core.Handler
 import org.vertx.java.core.http.RouteMatcher as JRouteMatcher
+import org.vertx.java.core.http.HttpServerRequest as JHttpServerRequest
 
 /**
  * This class allows you to do route requests based on the HTTP verb and the request URI, in a manner similar
@@ -38,6 +41,7 @@ import org.vertx.java.core.http.RouteMatcher as JRouteMatcher
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class RouteMatcher {
 
   private final JRouteMatcher jRM = new JRouteMatcher()
@@ -236,14 +240,12 @@ class RouteMatcher {
    */
   Closure asClosure() {
     return {
-      jRM.handle(it.jRequest)
+      jRM.handle(((DefaultHttpServerRequest) it).toJavaRequest())
     }
   }
 
   private Handler wrapHandler(Closure handler) {
-    return {handler(new DefaultHttpServerRequest(it))} as Handler
+    return {handler(new DefaultHttpServerRequest((JHttpServerRequest) it))} as Handler
   }
-
-
 
 }

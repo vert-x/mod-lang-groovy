@@ -1,5 +1,7 @@
 package org.vertx.groovy.core.streams
 
+import groovy.transform.CompileStatic;
+
 /*
  * Copyright 2013 Red Hat, Inc.
  *
@@ -17,6 +19,8 @@ package org.vertx.groovy.core.streams
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+
+@CompileStatic
 interface ExceptionSupport<T> {
   /**
    * Set an exception handler.

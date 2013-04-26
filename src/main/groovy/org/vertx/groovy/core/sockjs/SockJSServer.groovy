@@ -16,6 +16,8 @@
 
 package org.vertx.groovy.core.sockjs
 
+import groovy.transform.CompileStatic;
+
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.java.core.Handler
 import org.vertx.java.core.json.JsonArray
@@ -54,6 +56,7 @@ import org.vertx.java.core.sockjs.SockJSServer as JSockJSServer
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 interface SockJSServer {
 
   /**

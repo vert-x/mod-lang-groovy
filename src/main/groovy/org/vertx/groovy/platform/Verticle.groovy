@@ -15,6 +15,8 @@
  */
 package org.vertx.groovy.platform
 
+import groovy.transform.CompileStatic;
+
 import org.vertx.groovy.core.Vertx
 import org.vertx.java.core.Future
 
@@ -22,6 +24,7 @@ import org.vertx.java.core.Future
  * @author swilliams
  *
  */
+@CompileStatic
 abstract class Verticle {
 
   Vertx vertx

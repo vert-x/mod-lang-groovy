@@ -15,6 +15,8 @@
  */
 package org.vertx.groovy.platform.impl
 
+import groovy.transform.CompileStatic
+
 import org.vertx.java.core.Future
 import org.vertx.java.core.Vertx as JVertx
 import org.vertx.java.platform.Container as JContainer
@@ -31,6 +33,7 @@ import org.vertx.groovy.platform.Verticle
  * This is a Java verticle which wraps the Groovy Verticle class instance
  *
  */
+@CompileStatic
 class GroovyVerticle extends JVerticle {
 
   private Verticle delegate
