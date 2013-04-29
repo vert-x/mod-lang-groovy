@@ -16,12 +16,17 @@
 
 package org.vertx.groovy.core.file
 
-import org.vertx.groovy.core.buffer.Buffer
+import groovy.transform.CompileStatic
+
+import org.vertx.java.core.AsyncResult
 import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.impl.DefaultFutureResult
+import org.vertx.java.core.buffer.Buffer as JBuffer
+import org.vertx.java.core.file.AsyncFile as JAsyncFile
 import org.vertx.java.core.file.FileProps
 import org.vertx.java.core.file.FileSystem as JFileSystem
 import org.vertx.java.core.file.FileSystemProps
+import org.vertx.groovy.core.buffer.Buffer
 
 /**
  * Contains a broad set of operations for manipulating files.<p>
@@ -33,13 +38,14 @@ import org.vertx.java.core.file.FileSystemProps
  * will not block for a significant period of time<p>
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class FileSystem {
 
-  static FileSystem instance = new FileSystem()
+  // static FileSystem instance = new FileSystem() // Eh?
 
   private final JFileSystem jFS
 
-  private FileSystem(JFileSystem jFS) {
+  public FileSystem(JFileSystem jFS) {
     this.jFS = jFS
   }
 
@@ -272,9 +278,9 @@ class FileSystem {
    * Do not user this method to read very large files or you risk running out of available RAM.
    */
   FileSystem readFile(String path, Closure handler) {
-    jFS.readFile(path, { ar ->
+    jFS.readFile(path, { AsyncResult ar ->
       if (ar.succeeded()) {
-        handler.call(new DefaultFutureResult<Buffer>(new Buffer(ar.result)))
+        handler.call(new DefaultFutureResult<Buffer>(new Buffer((JBuffer) ar.result())))
       } else {
         handler.call(ar)
       }
@@ -334,9 +340,9 @@ class FileSystem {
    * storage on each write.
    */
   FileSystem open(String path, String perms = null, boolean read = true, boolean write = true, boolean createNew = true, boolean flush = false, Closure handler) {
-    jFS.open(path, perms, read, write, createNew, flush, { result ->
+    jFS.open(path, perms, read, write, createNew, flush, { AsyncResult result ->
       if (result.succeeded()) {
-        handler(new DefaultFutureResult<AsyncFile>(new AsyncFile(result.result)))
+        handler(new DefaultFutureResult<AsyncFile>(new AsyncFile((JAsyncFile) result.result())))
       } else {
         handler(result)
       }

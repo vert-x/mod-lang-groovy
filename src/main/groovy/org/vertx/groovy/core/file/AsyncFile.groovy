@@ -16,11 +16,15 @@
 
 package org.vertx.groovy.core.file
 
+import groovy.transform.CompileStatic;
+import groovy.transform.TypeCheckingMode;
+
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.streams.ReadStream
 import org.vertx.groovy.core.streams.WriteStream
 import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.Handler
+import org.vertx.java.core.buffer.Buffer as JBuffer
 import org.vertx.java.core.file.AsyncFile as JAsyncFile
 
 /**
@@ -33,6 +37,7 @@ import org.vertx.java.core.file.AsyncFile as JAsyncFile
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class AsyncFile implements ReadStream<AsyncFile>, WriteStream<AsyncFile> {
 
   private final JAsyncFile jFile
@@ -105,7 +110,7 @@ class AsyncFile implements ReadStream<AsyncFile>, WriteStream<AsyncFile> {
   }
 
   AsyncFile dataHandler(Closure handler) {
-    jFile.dataHandler({handler(new Buffer(it))} as Handler)
+    jFile.dataHandler({handler(new Buffer((JBuffer) it))} as Handler)
     this
   }
 
@@ -119,6 +124,7 @@ class AsyncFile implements ReadStream<AsyncFile>, WriteStream<AsyncFile> {
     this
   }
 
+  @CompileStatic(TypeCheckingMode.SKIP)
   AsyncFile exceptionHandler(Closure handler) {
     jFile.exceptionHandler(handler as Handler)
     this

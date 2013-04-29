@@ -16,16 +16,20 @@
 
 package org.vertx.groovy.core.sockjs.impl
 
+import groovy.transform.CompileStatic
+
 import org.vertx.groovy.core.http.HttpServer
 import org.vertx.groovy.core.sockjs.SockJSServer
 import org.vertx.java.core.Handler
 import org.vertx.java.core.Vertx
 import org.vertx.java.core.json.JsonArray
 import org.vertx.java.core.json.JsonObject
+import org.vertx.java.core.buffer.Buffer as JBuffer
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class DefaultSockJSServer implements SockJSServer {
 
   protected org.vertx.java.core.sockjs.SockJSServer jServer

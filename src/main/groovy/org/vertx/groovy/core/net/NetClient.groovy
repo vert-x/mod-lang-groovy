@@ -15,6 +15,8 @@
  */
 package org.vertx.groovy.core.net
 
+import groovy.transform.CompileStatic;
+
 import org.vertx.java.core.ClientSSLSupport
 import org.vertx.java.core.TCPSupport
 
@@ -33,6 +35,7 @@ import org.vertx.java.core.TCPSupport
  * @author Peter Ledbrook
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 interface NetClient extends ClientSSLSupport<NetClient>, TCPSupport<NetClient> {
 
   /**

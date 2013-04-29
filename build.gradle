@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+apply from: "gradle/setup.gradle"
 apply from: "gradle/maven.gradle"
 
 apply plugin: 'groovy'

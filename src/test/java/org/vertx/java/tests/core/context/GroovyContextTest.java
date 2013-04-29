@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.vertx.java.tests.core.http;
+package org.vertx.java.tests.core.context;
 
 import org.vertx.java.testframework.TestBase;
 

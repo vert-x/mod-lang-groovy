@@ -1,13 +1,3 @@
-package org.vertx.groovy.core.http.impl
-
-import org.vertx.groovy.core.buffer.Buffer
-import org.vertx.groovy.core.http.HttpServerRequest
-import org.vertx.groovy.core.http.HttpServerResponse
-import org.vertx.java.core.Handler
-
-import javax.net.ssl.SSLPeerUnverifiedException
-import javax.security.cert.X509Certificate
-
 /*
  * Copyright 2013 Red Hat, Inc.
  *
@@ -23,15 +13,35 @@ import javax.security.cert.X509Certificate
  * License for the specific language governing permissions and limitations
  * under the License.
  *
- * @author <a href="http://tfox.org">Tim Fox</a>
  */
+package org.vertx.groovy.core.http.impl
+
+import groovy.transform.CompileStatic
+
+import org.vertx.groovy.core.buffer.Buffer
+import org.vertx.groovy.core.http.HttpServerRequest
+import org.vertx.groovy.core.http.HttpServerResponse
+import org.vertx.java.core.Handler
+import org.vertx.java.core.buffer.Buffer as JBuffer
+import org.vertx.java.core.http.HttpServerRequest as JHttpServerRequest
+
+import javax.net.ssl.SSLPeerUnverifiedException
+import javax.security.cert.X509Certificate
+
+
+/**
+ * 
+ * @author <a href="http://tfox.org">Tim Fox</a>
+ *
+ */
+@CompileStatic
 class DefaultHttpServerRequest implements HttpServerRequest {
 
   private org.vertx.java.core.http.HttpServerRequest jRequest
 
   private HttpServerResponse response
 
-  DefaultHttpServerRequest(org.vertx.java.core.http.HttpServerRequest jRequest) {
+  DefaultHttpServerRequest(JHttpServerRequest jRequest) {
     this.jRequest = jRequest
     this.response = new DefaultHttpServerResponse(jRequest.response())
   }
@@ -88,13 +98,13 @@ class DefaultHttpServerRequest implements HttpServerRequest {
 
   @Override
   HttpServerRequest bodyHandler(Closure handler) {
-    jRequest.bodyHandler(({handler(new Buffer(it))} as Handler))
+    jRequest.bodyHandler(({handler(new Buffer((JBuffer) it))} as Handler))
     this
   }
 
   @Override
   HttpServerRequest dataHandler(Closure handler) {
-    jRequest.dataHandler(({handler(new Buffer(it))} as Handler))
+    jRequest.dataHandler(({handler(new Buffer((JBuffer) it))} as Handler))
     this
   }
 
@@ -120,6 +130,10 @@ class DefaultHttpServerRequest implements HttpServerRequest {
   HttpServerRequest exceptionHandler(Closure handler) {
     jRequest.exceptionHandler(handler as Handler)
     this
+  }
+
+  JHttpServerRequest toJavaRequest() {
+    jRequest
   }
 
 }

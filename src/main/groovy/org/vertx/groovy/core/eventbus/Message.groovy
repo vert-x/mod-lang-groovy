@@ -16,13 +16,16 @@
 
 package org.vertx.groovy.core.eventbus
 
+import groovy.transform.CompileStatic;
+
 import org.vertx.java.core.eventbus.Message as JMessage
 import org.vertx.java.core.json.JsonObject
 
-/*
-* Represents a message delivered to a handler
-* @author <a href="http://tfox.org">Tim Fox</a>
-*/
+/**
+ * Represents a message delivered to a handler
+ * @author <a href="http://tfox.org">Tim Fox</a>
+ */
+@CompileStatic
 class Message {
 
   private def body
@@ -36,10 +39,10 @@ class Message {
   }
 
   Message(JMessage jMessage) {
-    if (jMessage.body instanceof JsonObject) {
-      this.body = jMessage.body.toMap()
+    if (jMessage.body() instanceof JsonObject) {
+      this.body = jMessage.body().toMap()
     } else {
-      this.body = jMessage.body
+      this.body = jMessage.body()
     }
     this.jMessage = jMessage
   }

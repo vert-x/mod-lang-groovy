@@ -16,23 +16,29 @@
 
 package org.vertx.groovy.core.net.impl
 
+import groovy.transform.CompileStatic;
+
 import org.vertx.groovy.core.net.NetClient
 import org.vertx.groovy.core.net.NetSocket
+import org.vertx.java.core.AsyncResult
 import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.Vertx
 import org.vertx.java.core.impl.DefaultFutureResult
+import org.vertx.java.core.net.NetClient as JNetClient
+import org.vertx.java.core.net.NetSocket as JNetSocket
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class DefaultNetClient implements NetClient {
 
-  private org.vertx.java.core.net.NetClient jNetClient;
+  private JNetClient jNetClient
 
   DefaultNetClient(Vertx vertx, Map props = null) {
     jNetClient = vertx.createNetClient()
     if (props != null) {
-      props.each { k, v ->
+      props.each { String k, v ->
         setProperty(k, v)
       }
     }
@@ -63,7 +69,7 @@ class DefaultNetClient implements NetClient {
 
   @Override
   NetClient setReconnectInterval(long interval) {
-    jNetClient.setReconnectAttempts(interval)
+    jNetClient.setReconnectInterval(interval)
     this
   }
 
@@ -243,9 +249,9 @@ class DefaultNetClient implements NetClient {
   }
 
   private wrapConnectHandler(Closure hndlr) {
-    { ar ->
+    { AsyncResult ar ->
       if (ar.succeeded()) {
-        hndlr(new DefaultFutureResult<NetSocket>(new DefaultNetSocket(ar.result())))
+        hndlr(new DefaultFutureResult<NetSocket>(new DefaultNetSocket((JNetSocket) ar.result())))
       } else {
         hndlr(ar)
       }

@@ -16,7 +16,10 @@
 
 package org.vertx.groovy.core
 
+import groovy.transform.CompileStatic
+
 import org.vertx.groovy.core.eventbus.EventBus
+import org.vertx.groovy.core.file.FileSystem
 import org.vertx.groovy.core.http.HttpClient
 import org.vertx.groovy.core.http.HttpServer
 import org.vertx.groovy.core.http.impl.DefaultHttpClient
@@ -27,6 +30,8 @@ import org.vertx.groovy.core.net.impl.DefaultNetClient
 import org.vertx.groovy.core.net.impl.DefaultNetServer
 import org.vertx.groovy.core.sockjs.SockJSServer
 import org.vertx.groovy.core.sockjs.impl.DefaultSockJSServer
+import org.vertx.java.core.Vertx as JVertx
+import org.vertx.java.core.VertxFactory
 import org.vertx.java.core.Context
 import org.vertx.java.core.Handler
 import org.vertx.java.core.shareddata.SharedData
@@ -43,23 +48,24 @@ import org.vertx.java.core.shareddata.SharedData
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class Vertx {
 
-  private final org.vertx.java.core.Vertx jVertex
+  private final JVertx jVertex
   private final EventBus eventBus
-  private final org.vertx.groovy.core.file.FileSystem fileSystem
+  private final FileSystem fileSystem
 
   Vertx(org.vertx.java.core.Vertx jVertex) {
     this.jVertex = jVertex
     this.eventBus = new EventBus(jVertex.eventBus())
-    this.fileSystem = new org.vertx.groovy.core.file.FileSystem(jVertex.fileSystem())
+    this.fileSystem = new FileSystem(jVertex.fileSystem())
   }
 
   /**
    * Create a non clustered Vertx instance
    */
   static Vertx newVertx() {
-    return new Vertx(org.vertx.java.core.Vertx.newVertx())
+    return new Vertx(VertxFactory.newVertx())
   }
 
   /**
@@ -67,7 +73,7 @@ class Vertx {
    * @param hostname The hostname or ip address to listen for cluster connections
    */
   static Vertx newVertx(String hostname) {
-    return new Vertx(org.vertx.java.core.Vertx.newVertx(hostname))
+    return new Vertx(VertxFactory.newVertx(hostname))
   }
 
   /**
@@ -76,7 +82,7 @@ class Vertx {
    * @param hostname The hostname or ip address to listen for cluster connections
    */
   static Vertx newVertx(int port, String hostname) {
-    return new Vertx(org.vertx.java.core.Vertx.newVertx(port, hostname))
+    return new Vertx(VertxFactory.newVertx(port, hostname))
   }
 
   /**
@@ -93,7 +99,7 @@ class Vertx {
     return new DefaultNetClient(jVertex, props)
   }
 
-  /*
+  /**
    * Create an HTTP/HTTPS server
    */
   HttpServer createHttpServer(Map props = null) {
@@ -117,7 +123,7 @@ class Vertx {
   /**
    * The File system object
    */
-  org.vertx.groovy.core.file.FileSystem getFileSystem() {
+  FileSystem getFileSystem() {
     return fileSystem
   }
 
@@ -132,7 +138,7 @@ class Vertx {
    * The shared data object
    */
   SharedData getSharedData() {
-    return jVertex.sharedData
+    return jVertex.sharedData()
   }
 
   /**
@@ -192,7 +198,7 @@ class Vertx {
     jVertex.isWorker()
   }
 
-  org.vertx.java.core.Vertx toJavaVertx() {
+  JVertx toJavaVertx() {
     return jVertex
   }
 

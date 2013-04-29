@@ -16,6 +16,8 @@
 
 package org.vertx.groovy.core.http
 
+import groovy.transform.CompileStatic;
+
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.streams.ReadStream
 import org.vertx.groovy.core.streams.WriteStream
@@ -31,6 +33,7 @@ import org.vertx.groovy.core.streams.WriteStream
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 interface WebSocket extends ReadStream<WebSocket>, WriteStream<WebSocket> {
 
   /**

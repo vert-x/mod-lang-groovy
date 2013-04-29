@@ -15,6 +15,9 @@
  */
 package org.vertx.groovy.platform.impl
 
+import groovy.transform.CompileStatic
+import groovy.transform.TypeCheckingMode
+
 import org.vertx.java.core.Future
 import org.vertx.java.core.Vertx as JVertx
 import org.vertx.java.platform.Container as JContainer
@@ -31,6 +34,7 @@ import org.vertx.groovy.platform.Verticle
  * This is a Java verticle which wraps the Groovy Verticle class instance
  *
  */
+@CompileStatic
 class GroovyVerticle extends JVerticle {
 
   private Verticle delegate
@@ -40,29 +44,31 @@ class GroovyVerticle extends JVerticle {
   }
 
   @Override
+  @CompileStatic(TypeCheckingMode.SKIP)
   public void setContainer(JContainer jcontainer) {
     delegate.container = new Container(jcontainer)
     super.setContainer(jcontainer)
   }
 
   @Override
+  @CompileStatic(TypeCheckingMode.SKIP)
   public void setVertx(JVertx jvertx) {
     delegate.vertx = new Vertx(jvertx)
     super.setVertx(jvertx);
   }
 
   @Override
-  public void start() throws Exception {
+  public void start() {
     delegate.start()
   }
 
   @Override
-  public void start(Future<Void> startedResult) throws Exception {
+  public void start(Future<Void> startedResult) {
     delegate.start(startedResult)
   }
 
   @Override
-  public void stop() throws Exception {
+  public void stop() {
     delegate.stop()
   }
 

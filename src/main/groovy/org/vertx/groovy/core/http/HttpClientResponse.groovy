@@ -16,6 +16,8 @@
 
 package org.vertx.groovy.core.http
 
+import groovy.transform.CompileStatic;
+
 import org.vertx.groovy.core.streams.ReadStream
 
 /**
@@ -30,6 +32,7 @@ import org.vertx.groovy.core.streams.ReadStream
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 interface HttpClientResponse extends ReadStream<HttpClientResponse> {
 
   /**

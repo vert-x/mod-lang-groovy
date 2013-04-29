@@ -18,6 +18,8 @@ package org.vertx.groovy.core.buffer
 
 import org.vertx.java.core.buffer.Buffer as JBuffer
 
+import groovy.transform.CompileStatic;
+
 import java.nio.ByteBuffer
 
 /**
@@ -40,6 +42,7 @@ import java.nio.ByteBuffer
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class Buffer extends JBuffer {
 
   private final JBuffer jBuffer

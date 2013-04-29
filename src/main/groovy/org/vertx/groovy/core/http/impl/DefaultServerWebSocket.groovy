@@ -1,9 +1,14 @@
 package org.vertx.groovy.core.http.impl
 
+import groovy.transform.CompileStatic
+import groovy.transform.TypeCheckingMode
+
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.http.ServerWebSocket
 import org.vertx.groovy.core.http.WebSocket
 import org.vertx.java.core.Handler
+import org.vertx.java.core.buffer.Buffer as JBuffer
+import org.vertx.java.core.http.ServerWebSocket as JServerWebSocket
 
 /*
  * Copyright 2013 Red Hat, Inc.
@@ -22,11 +27,12 @@ import org.vertx.java.core.Handler
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class DefaultServerWebSocket implements ServerWebSocket {
 
-  private org.vertx.java.core.http.ServerWebSocket jServerWebSocket
+  private JServerWebSocket jServerWebSocket
 
-  DefaultServerWebSocket(org.vertx.java.core.http.ServerWebSocket jServerWebSocket) {
+  DefaultServerWebSocket(JServerWebSocket jServerWebSocket) {
     this.jServerWebSocket = jServerWebSocket
   }
 
@@ -75,7 +81,7 @@ class DefaultServerWebSocket implements ServerWebSocket {
 
   @Override
   ServerWebSocket dataHandler(Closure handler) {
-    jServerWebSocket.dataHandler({handler(new Buffer(it))} as Handler)
+    jServerWebSocket.dataHandler({handler(new Buffer((JBuffer) it))} as Handler)
     this
   }
 
@@ -121,6 +127,7 @@ class DefaultServerWebSocket implements ServerWebSocket {
   }
 
   @Override
+  @CompileStatic(TypeCheckingMode.SKIP)
   ServerWebSocket exceptionHandler(Closure handler) {
     jServerWebSocket.exceptionHandler(handler as Handler)
     this

@@ -1,9 +1,14 @@
 package org.vertx.groovy.core.net.impl
 
+import groovy.transform.CompileStatic
+import groovy.transform.TypeCheckingMode
+
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.net.NetSocket
 import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.Handler
+import org.vertx.java.core.buffer.Buffer as JBuffer
+import org.vertx.java.core.net.NetSocket as JNetSocket
 
 /*
  * Copyright 2013 Red Hat, Inc.
@@ -22,11 +27,12 @@ import org.vertx.java.core.Handler
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class DefaultNetSocket implements NetSocket {
 
-  private org.vertx.java.core.net.NetSocket jNetSocket;
+  private JNetSocket jNetSocket
 
-  DefaultNetSocket(org.vertx.java.core.net.NetSocket jNetSocket) {
+  DefaultNetSocket(JNetSocket jNetSocket) {
     this.jNetSocket = jNetSocket
   }
 
@@ -104,7 +110,7 @@ class DefaultNetSocket implements NetSocket {
   @Override
   NetSocket dataHandler(Closure handler) {
     jNetSocket.dataHandler({
-      handler(new Buffer(it))
+      handler(new Buffer((JBuffer) it))
     } as Handler)
     return null
   }
@@ -128,6 +134,7 @@ class DefaultNetSocket implements NetSocket {
   }
 
   @Override
+  @CompileStatic(TypeCheckingMode.SKIP)
   NetSocket exceptionHandler(Closure handler) {
     jNetSocket.exceptionHandler(handler as Handler)
     this

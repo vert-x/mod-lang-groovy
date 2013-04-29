@@ -1,8 +1,12 @@
 package org.vertx.groovy.core.sockjs.impl
 
+import groovy.transform.CompileStatic
+import groovy.transform.TypeCheckingMode
+
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.sockjs.SockJSSocket
 import org.vertx.java.core.Handler
+import org.vertx.java.core.buffer.Buffer as JBuffer
 
 /*
  * Copyright 2013 Red Hat, Inc.
@@ -21,6 +25,7 @@ import org.vertx.java.core.Handler
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class DefaultSockJSSocket implements SockJSSocket {
 
   private final org.vertx.java.core.sockjs.SockJSSocket jSocket
@@ -51,7 +56,7 @@ class DefaultSockJSSocket implements SockJSSocket {
 
   @Override
   SockJSSocket dataHandler(Closure handler) {
-    jSocket.dataHandler({handler(new Buffer(it))} as Handler)
+    jSocket.dataHandler({handler(new Buffer((JBuffer) it))} as Handler)
     this
   }
 
@@ -97,8 +102,10 @@ class DefaultSockJSSocket implements SockJSSocket {
   }
 
   @Override
+  @CompileStatic(TypeCheckingMode.SKIP)
   SockJSSocket exceptionHandler(Closure handler) {
     jSocket.exceptionHandler(handler as Handler)
     this
   }
+
 }

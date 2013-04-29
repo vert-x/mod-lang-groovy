@@ -16,8 +16,11 @@
 
 package org.vertx.groovy.core.parsetools
 
+import groovy.transform.CompileStatic
+
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.java.core.Handler
+import org.vertx.java.core.buffer.Buffer as JBuffer
 import org.vertx.java.core.parsetools.RecordParser as JRecordParser
 
 /**
@@ -46,6 +49,7 @@ import org.vertx.java.core.parsetools.RecordParser as JRecordParser
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class RecordParser {
 
   private final JRecordParser jParser
@@ -71,7 +75,7 @@ class RecordParser {
    * {@code output} Will receive whole records which have been parsed.
    */
   static RecordParser newDelimited(String delim, Closure output) {
-    return new RecordParser(JRecordParser.newDelimited(delim, {output(new Buffer(it))} as Handler))
+    return new RecordParser(JRecordParser.newDelimited(delim, {output(new Buffer((JBuffer) it))} as Handler))
   }
 
   /**
@@ -80,7 +84,7 @@ class RecordParser {
    * {@code output} Will receive whole records which have been parsed.
    */
   static RecordParser newDelimited(byte[] delim, Closure output) {
-    return new RecordParser(JRecordParser.newDelimited(delim, {output(new Buffer(it))} as Handler))
+    return new RecordParser(JRecordParser.newDelimited(delim, {output(new Buffer((JBuffer) it))} as Handler))
   }
 
   /**
@@ -89,7 +93,7 @@ class RecordParser {
    * {@code output} Will receive whole records which have been parsed.
    */
   static RecordParser newFixed(int size, Closure output) {
-    return new RecordParser(JRecordParser.newFixed(size, {output(new Buffer(it))} as Handler))
+    return new RecordParser(JRecordParser.newFixed(size, {output(new Buffer((JBuffer) it))} as Handler))
   }
 
   /**
@@ -123,11 +127,11 @@ class RecordParser {
    * @return a Closure
    */
   Closure toClosure() {
-    return {jParser.handle(it.toJavaBuffer())}
+    return {jParser.handle(((Buffer) it).toJavaBuffer())}
   }
 
   void setOutput(Closure output) {
-    jParser.setOutput({output(new Buffer(it))} as Handler)
+    jParser.setOutput({output(new Buffer((JBuffer) it))} as Handler)
   }
 
   void handle(Buffer data) {

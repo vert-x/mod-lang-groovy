@@ -16,24 +16,30 @@
 
 package org.vertx.groovy.core.net.impl
 
+import groovy.transform.CompileStatic;
+
 import org.vertx.groovy.core.net.NetServer
 import org.vertx.groovy.core.net.NetSocket
+import org.vertx.java.core.AsyncResult
 import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.Handler
 import org.vertx.java.core.Vertx
 import org.vertx.java.core.impl.DefaultFutureResult
+import org.vertx.java.core.net.NetSocket as JNetSocket
+import org.vertx.java.core.net.NetServer as JNetServer
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 class DefaultNetServer implements NetServer {
 
-  private org.vertx.java.core.net.NetServer jNetServer;
+  private JNetServer jNetServer
 
   DefaultNetServer(Vertx vertx, Map props = null) {
     jNetServer = vertx.createNetServer()
     if (props != null) {
-      props.each { k, v ->
+      props.each { String k, v ->
         setProperty(k, v)
       }
     }
@@ -41,7 +47,7 @@ class DefaultNetServer implements NetServer {
 
   @Override
   NetServer connectHandler(Closure hndlr) {
-    jNetServer.connectHandler({hndlr(new DefaultNetSocket(it))} as Handler)
+    jNetServer.connectHandler({hndlr(new DefaultNetSocket((JNetSocket) it))} as Handler)
     this
   }
 
@@ -254,8 +260,8 @@ class DefaultNetServer implements NetServer {
     jNetServer.isUsePooledBuffers()
   }
 
-  private wrapBindHandler(Closure hndlr) {
-    { ar ->
+  private AsyncResultHandler wrapBindHandler(Closure hndlr) {
+    { AsyncResult ar ->
       if (ar.succeeded()) {
         hndlr(new DefaultFutureResult<NetServer>(this))
       } else {

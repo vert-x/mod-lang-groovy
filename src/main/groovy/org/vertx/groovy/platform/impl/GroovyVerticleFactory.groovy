@@ -26,6 +26,9 @@ import org.vertx.groovy.core.Vertx
 import org.vertx.groovy.platform.Container
 import org.vertx.groovy.platform.Verticle
 
+import groovy.transform.CompileStatic
+import groovy.transform.TypeCheckingMode
+
 import java.lang.reflect.Method
 
 /**
@@ -36,14 +39,12 @@ public class GroovyVerticleFactory implements VerticleFactory {
   private static Logger log = LoggerFactory.getLogger(GroovyVerticleFactory.class)
   private JVertx vertx
   private JContainer container
-  private ClassLoader cl
   private GroovyClassLoader gcl
 
   @Override
   public void init(JVertx vertx, JContainer container, ClassLoader cl) {
     this.vertx = vertx
     this.container = container
-    this.cl = cl
     this.gcl = new GroovyClassLoader(cl)
   }
 
@@ -51,46 +52,38 @@ public class GroovyVerticleFactory implements VerticleFactory {
 
     JVerticle verticle
 
-    if (main.endsWith(".groovy")) {
+    if (main.endsWith('.groovy')) {
       URL url = gcl.getResource(main)
       if (url == null) {
-        throw new IllegalStateException("Cannot find main script: " + main + " on classpath");
+        throw new IllegalStateException("Cannot find main script: '${main}' on classpath");
       }
       GroovyCodeSource gcs = new GroovyCodeSource(url)
       Class clazz = gcl.parseClass(gcs)
 
       Method stop
       try {
-        stop = clazz.getMethod("vertxStop", (Class<?>[])null)
+        stop = clazz.getMethod('vertxStop', (Class<?>[])null)
       } catch (NoSuchMethodException e) {
         stop = null
       }
       final Method mstop = stop
 
-      Method run
+      Method mrun
       try {
-        run = clazz.getMethod("run", (Class<?>[])null)
+        mrun = clazz.getMethod('run', (Class<?>[])null)
       } catch (NoSuchMethodException e) {
-        run = null
+        throw new IllegalStateException('Groovy script must have run() method [whether implicit or not]')
       }
-      final Method mrun = run
-
-      if (run == null) {
-        throw new IllegalStateException("Groovy script must have run() method [whether implicit or not]")
-      }
-
-      Script script = (Script)clazz.newInstance()
 
       // Inject vertx into the script binding
-      Binding binding = new Binding()
-      binding.setProperty("vertx", new Vertx(vertx))
-      binding.setProperty("container", new Container(container))
-      script.setBinding(binding)
+
+      Script script = (Script) clazz.newInstance()
+      script.setBinding(createBinding())
 
       verticle = new JVerticle() {
         public void start() {
           try {
-            mrun.invoke(script, (Object[])null)
+            mrun.invoke(script, (Object[]) null)
           } catch (Throwable t) {
             reportException(log, t)
           }
@@ -99,7 +92,7 @@ public class GroovyVerticleFactory implements VerticleFactory {
         public void stop() {
           if (mstop != null) {
             try {
-              mstop.invoke(script, (Object[])null)
+              mstop.invoke(script, (Object[]) null)
             } catch (Throwable t) {
               reportException(log, t)
             }
@@ -121,11 +114,24 @@ public class GroovyVerticleFactory implements VerticleFactory {
   }
 
   public void reportException(Logger logger, Throwable t) {
-    logger.error("Exception in Groovy verticle", t)
+    logger.error('Exception in Groovy verticle', t)
   }
 
   public void close() {
     gcl?.close()
   }
+
+  /*
+   * Inject vertx into the script binding
+   */
+  @CompileStatic(TypeCheckingMode.SKIP)
+  private Binding createBinding() {
+
+    def binding = new Binding()
+    binding.setVariable('vertx', new Vertx(vertx))
+    binding.setVariable('container', new Container(container))
+    binding
+  }
+
 }
 

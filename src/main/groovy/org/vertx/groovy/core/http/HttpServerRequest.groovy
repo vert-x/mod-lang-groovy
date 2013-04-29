@@ -16,6 +16,8 @@
 
 package org.vertx.groovy.core.http
 
+import groovy.transform.CompileStatic;
+
 import org.vertx.groovy.core.streams.ReadStream
 
 import javax.net.ssl.SSLPeerUnverifiedException
@@ -35,6 +37,7 @@ import javax.security.cert.X509Certificate
  * @author Peter Ledbrook
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
+@CompileStatic
 interface HttpServerRequest extends ReadStream<HttpServerRequest> {
 
   /**
