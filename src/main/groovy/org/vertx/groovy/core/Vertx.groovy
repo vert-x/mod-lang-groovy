@@ -49,7 +49,7 @@ class Vertx {
   private final EventBus eventBus
   private final org.vertx.groovy.core.file.FileSystem fileSystem
 
-  private Vertx(org.vertx.java.core.Vertx jVertex) {
+  Vertx(org.vertx.java.core.Vertx jVertex) {
     this.jVertex = jVertex
     this.eventBus = new EventBus(jVertex.eventBus())
     this.fileSystem = new org.vertx.groovy.core.file.FileSystem(jVertex.fileSystem())

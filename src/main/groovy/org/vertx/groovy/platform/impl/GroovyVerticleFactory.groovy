@@ -83,8 +83,8 @@ public class GroovyVerticleFactory implements VerticleFactory {
 
       // Inject vertx into the script binding
       Binding binding = new Binding()
-      binding.setVariable("vertx", new Vertx(vertx))
-      binding.setVariable("container", new Container(container))
+      binding.setProperty("vertx", new Vertx(vertx))
+      binding.setProperty("container", new Container(container))
       script.setBinding(binding)
 
       verticle = new JVerticle() {

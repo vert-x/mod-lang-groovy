@@ -18,9 +18,18 @@ package org.vertx.groovy.testtools
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
 class VertxTests {
-  static def initTests(script) {
+
+  static def initialize(script) {
     org.vertx.testtools.VertxAssert.initialize(script.vertx.toJavaVertx())
+  }
+
+  static def startTests(script) {
     def methodName = script.container.getConfig().get("methodName")
-    script."$methodName"()
+    try {
+      script."$methodName"()
+    } catch (Throwable t) {
+      // Problem with invoking
+      org.vertx.testtools.VertxAssert.handleThrowable(t);
+    }
   }
 }
