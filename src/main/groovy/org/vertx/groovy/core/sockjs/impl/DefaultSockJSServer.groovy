@@ -25,6 +25,9 @@ import org.vertx.java.core.Vertx
 import org.vertx.java.core.json.JsonArray
 import org.vertx.java.core.json.JsonObject
 import org.vertx.java.core.buffer.Buffer as JBuffer
+import org.vertx.java.core.sockjs.SockJSServer as JSockJSServer
+import org.vertx.java.core.sockjs.SockJSSocket as JSockJSSocket
+
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
@@ -32,7 +35,7 @@ import org.vertx.java.core.buffer.Buffer as JBuffer
 @CompileStatic
 class DefaultSockJSServer implements SockJSServer {
 
-  protected org.vertx.java.core.sockjs.SockJSServer jServer
+  protected JSockJSServer jServer
 
   DefaultSockJSServer(Vertx vertx, HttpServer httpServer) {
     jServer = vertx.createSockJSServer(httpServer.toJavaServer())
@@ -40,7 +43,7 @@ class DefaultSockJSServer implements SockJSServer {
 
   SockJSServer installApp(Map config, Closure sockHandler) {
     jServer.installApp(new JsonObject(config), {
-      sockHandler(new DefaultSockJSSocket(it))
+      sockHandler(new DefaultSockJSSocket((JSockJSSocket) it))
     } as Handler)
     this
   }
