@@ -108,6 +108,8 @@ public class GroovyVerticleFactory implements VerticleFactory {
       else {
         verticle = (JVerticle) clazz.newInstance()
       }
+      verticle?.setVertx(vertx)
+      verticle?.setContainer(container)
     }
 
     return verticle

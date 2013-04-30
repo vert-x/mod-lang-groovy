@@ -24,7 +24,7 @@ import org.vertx.java.core.logging.Logger
 import org.vertx.java.platform.Container as JContainer
 
 /**
- * This class represents the scontainer in which a verticle runs.<p>
+ * This class represents the container in which a verticle runs.<p>
  * An instance of this class will be created by the system and made available to
  * a running Verticle.
  * It contains methods to programmatically deploy other verticles, undeploy
