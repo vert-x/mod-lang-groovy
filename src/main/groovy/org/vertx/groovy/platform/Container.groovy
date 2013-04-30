@@ -42,6 +42,17 @@ class Container {
     this.jContainer = jContainer
   }
 
+  
+  /**
+   * Deploy a worker verticle programmatically
+   * @param main The main of the verticle
+   * @param config JSON config to provide to the verticle
+   * @param instances The number of instances to deploy (defaults to 1)
+   * @param doneHandler The handler will be called passing in the unique deployment id when deployment is complete
+   */
+  void deployWorkerVerticle(String main, Map<String, Object> config = [:], int instances = 1, boolean multithreaded = false) {
+    jContainer.deployWorkerVerticle(main, new JsonObject(config), instances, multithreaded, null)
+  }
 
   /**
    * Deploy a worker verticle programmatically
@@ -50,7 +61,7 @@ class Container {
    * @param instances The number of instances to deploy (defaults to 1)
    * @param doneHandler The handler will be called passing in the unique deployment id when deployment is complete
    */
-  void deployWorkerVerticle(String main, Map<String, Object> config = [:], int instances = 1, boolean multithreaded = false, Closure doneHandler = {}) {
+  void deployWorkerVerticle(String main, Map<String, Object> config = [:], int instances = 1, boolean multithreaded = false, Closure doneHandler) {
     jContainer.deployWorkerVerticle(main, new JsonObject(config), instances, multithreaded, doneHandler as Handler)
   }
 
@@ -61,7 +72,18 @@ class Container {
    * @param instances The number of instances to deploy (defaults to 1)
    * @param doneHandler The handler will be called passing in the unique deployment id when deployment is complete
    */
-  void deployVerticle(String main, Map<String, Object> config = [:], int instances = 1, Closure doneHandler = {}) {
+  void deployVerticle(String main, Map<String, Object> config = [:], int instances = 1) {
+    jContainer.deployVerticle(main, new JsonObject(config), instances, null)
+  }
+
+  /**
+   * Deploy a verticle programmatically
+   * @param main The main of the verticle
+   * @param config JSON config to provide to the verticle
+   * @param instances The number of instances to deploy (defaults to 1)
+   * @param doneHandler The handler will be called passing in the unique deployment id when deployment is complete
+   */
+  void deployVerticle(String main, Map<String, Object> config = [:], int instances = 1, Closure doneHandler) {
     jContainer.deployVerticle(main, new JsonObject(config), instances, doneHandler as Handler)
   }
 
@@ -72,7 +94,18 @@ class Container {
    * @param instances The number of instances to deploy (defaults to 1)
    * @param doneHandler The handler will be called passing in the unique deployment id when deployment is complete
    */
-  void deployModule(String moduleName, Map<String, Object> config = [:], int instances = 1, Closure doneHandler = {}) {
+  void deployModule(String moduleName, Map<String, Object> config = [:], int instances = 1) {
+    jContainer.deployModule(moduleName, new JsonObject(config), instances, null)
+  }
+
+  /**
+   * Deploy a module programmatically
+   * @param moduleName The main of the module
+   * @param config JSON config to provide to the module
+   * @param instances The number of instances to deploy (defaults to 1)
+   * @param doneHandler The handler will be called passing in the unique deployment id when deployment is complete
+   */
+  void deployModule(String moduleName, Map<String, Object> config = [:], int instances = 1, Closure doneHandler) {
     jContainer.deployModule(moduleName, new JsonObject(config), instances, doneHandler as Handler)
   }
 
@@ -81,7 +114,7 @@ class Container {
    * @param deploymentID The deployment ID
    * @param doneHandler The handler will be called when undeployment is complete
    */
-  void undeployVerticle(String deploymentID, Closure doneHandler = {}) {
+  void undeployVerticle(String deploymentID, Closure doneHandler = {...args-> }) {
     jContainer.undeployVerticle(deploymentID, doneHandler as Handler)
   }
 
@@ -90,7 +123,7 @@ class Container {
    * @param deploymentID The deployment ID
    * @param doneHandler The handler will be called when undeployment is complete
    */
-  void undeployModule(String deploymentID, Closure doneHandler = {}) {
+  void undeployModule(String deploymentID, Closure doneHandler = {...args-> }) {
     jContainer.undeployModule(deploymentID, doneHandler as Handler)
   }
 
