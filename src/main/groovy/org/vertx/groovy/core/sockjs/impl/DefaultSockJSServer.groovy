@@ -56,7 +56,7 @@ class DefaultSockJSServer implements SockJSServer {
 
   SockJSServer bridge(Map sjsConfig, List<Map<String, Object>> inboundPermitted,
                       List<Map<String, Object>> outboundPermitted) {
-    jServer.bridge(new JsonObject(sjsConfig), new JsonArray(inboundPermitted), new JsonArray(outboundPermitted),
+    jServer.bridge(new JsonObject(sjsConfig), new JsonArray((List<Object>)inboundPermitted), new JsonArray((List<Object>)outboundPermitted),
         5 * 60 * 1000, null)
     this
   }
@@ -64,7 +64,7 @@ class DefaultSockJSServer implements SockJSServer {
   SockJSServer bridge(Map sjsConfig, List<Map<String, Object>> inboundPermitted,
                       List<Map<String, Object>> outboundPermitted,
                       long authTimeout, String authAddress) {
-    jServer.bridge(new JsonObject(sjsConfig), new JsonArray(inboundPermitted), new JsonArray(outboundPermitted),
+    jServer.bridge(new JsonObject(sjsConfig), new JsonArray((List<Object>)inboundPermitted), new JsonArray((List<Object>)outboundPermitted),
         authTimeout, authAddress)
     this
   }
