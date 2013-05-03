@@ -25,6 +25,7 @@ import org.vertx.java.core.Handler
 import org.vertx.java.core.buffer.Buffer as JBuffer
 import org.vertx.java.core.http.HttpServerRequest as JHttpServerRequest
 import org.vertx.java.core.MultiMap
+import org.vertx.java.core.http.HttpVersion
 
 import javax.net.ssl.SSLPeerUnverifiedException
 import javax.security.cert.X509Certificate
@@ -45,6 +46,11 @@ class DefaultHttpServerRequest implements HttpServerRequest {
   DefaultHttpServerRequest(JHttpServerRequest jRequest) {
     this.jRequest = jRequest
     this.response = new DefaultHttpServerResponse(jRequest.response())
+  }
+
+  @Override
+  HttpVersion getVersion() {
+    jRequest.version()
   }
 
   @Override

@@ -20,6 +20,7 @@ import groovy.transform.CompileStatic;
 
 import org.vertx.groovy.core.streams.ReadStream
 import org.vertx.java.core.MultiMap
+import org.vertx.java.core.http.HttpVersion
 
 import javax.net.ssl.SSLPeerUnverifiedException
 import javax.security.cert.X509Certificate
@@ -40,6 +41,11 @@ import javax.security.cert.X509Certificate
  */
 @CompileStatic
 interface HttpServerRequest extends ReadStream<HttpServerRequest> {
+
+  /**
+   * The HTTP version
+   */
+  HttpVersion getVersion()
 
   /**
    * The HTTP method for the request. One of GET, PUT, POST, DELETE, TRACE, CONNECT, OPTIONS or HEAD
