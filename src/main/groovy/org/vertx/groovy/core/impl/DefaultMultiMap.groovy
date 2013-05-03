@@ -144,6 +144,7 @@ class DefaultMultiMap implements MultiMap {
      }
   }
 
+  @CompileStatic
   private static class JMultiMapWrapper implements org.vertx.java.core.MultiMap {
     private MultiMap map
 
