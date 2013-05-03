@@ -16,8 +16,8 @@
 
 package org.vertx.groovy.core.http
 
-import groovy.transform.CompileStatic;
-import org.vertx.java.core.MultiMap
+import groovy.transform.CompileStatic
+import org.vertx.groovy.core.MultiMap;
 
 /**
  * Represents a server side WebSocket that is passed into a the websocketHandler of an {@link HttpServer}<p>

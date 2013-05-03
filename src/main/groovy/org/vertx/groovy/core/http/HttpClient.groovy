@@ -16,10 +16,9 @@
 
 package org.vertx.groovy.core.http
 
-import groovy.transform.CompileStatic;
-
+import groovy.transform.CompileStatic
+import org.vertx.groovy.core.MultiMap;
 import org.vertx.java.core.ClientSSLSupport
-import org.vertx.java.core.MultiMap
 import org.vertx.java.core.TCPSupport
 import org.vertx.java.core.http.WebSocketVersion
 

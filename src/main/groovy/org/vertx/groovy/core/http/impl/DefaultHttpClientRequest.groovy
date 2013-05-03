@@ -1,12 +1,12 @@
 package org.vertx.groovy.core.http.impl
 
-import groovy.transform.CompileStatic;
-
+import groovy.transform.CompileStatic
+import org.vertx.groovy.core.MultiMap;
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.http.HttpClientRequest
+import org.vertx.groovy.core.impl.DefaultMultiMap
 import org.vertx.java.core.Handler
 import org.vertx.java.core.http.HttpClientRequest as JHttpClientRequest
-import org.vertx.java.core.MultiMap
 
 /*
  * Copyright 2013 Red Hat, Inc.
@@ -29,7 +29,7 @@ import org.vertx.java.core.MultiMap
 class DefaultHttpClientRequest implements HttpClientRequest {
 
   private JHttpClientRequest jRequest
-
+  private MultiMap headers
   DefaultHttpClientRequest(JHttpClientRequest jRequest) {
     this.jRequest = jRequest
   }
@@ -47,7 +47,10 @@ class DefaultHttpClientRequest implements HttpClientRequest {
 
   @Override
   MultiMap getHeaders() {
-    jRequest.headers()
+    if (headers == null) {
+      headers = new DefaultMultiMap(jRequest.headers())
+    }
+    headers
   }
 
   @Override

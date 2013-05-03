@@ -17,14 +17,14 @@
 package org.vertx.groovy.core.http.impl
 
 import groovy.transform.CompileStatic
-
+import org.vertx.groovy.core.MultiMap
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.http.HttpServerRequest
 import org.vertx.groovy.core.http.HttpServerResponse
+import org.vertx.groovy.core.impl.DefaultMultiMap
 import org.vertx.java.core.Handler
 import org.vertx.java.core.buffer.Buffer as JBuffer
 import org.vertx.java.core.http.HttpServerRequest as JHttpServerRequest
-import org.vertx.java.core.MultiMap
 import org.vertx.java.core.http.HttpVersion
 
 import javax.net.ssl.SSLPeerUnverifiedException
@@ -40,7 +40,8 @@ import javax.security.cert.X509Certificate
 class DefaultHttpServerRequest implements HttpServerRequest {
 
   private org.vertx.java.core.http.HttpServerRequest jRequest
-
+  private MultiMap headers;
+  private MultiMap params;
   private HttpServerResponse response
 
   DefaultHttpServerRequest(JHttpServerRequest jRequest) {
@@ -80,12 +81,18 @@ class DefaultHttpServerRequest implements HttpServerRequest {
 
   @Override
   MultiMap getHeaders() {
-    jRequest.headers()
+    if (headers == null) {
+      headers = new DefaultMultiMap(jRequest.headers());
+    }
+    headers
   }
 
   @Override
   MultiMap getParams() {
-    jRequest.params()
+    if (params == null) {
+      params = new DefaultMultiMap(jRequest.params());
+    }
+    params
   }
 
   @Override

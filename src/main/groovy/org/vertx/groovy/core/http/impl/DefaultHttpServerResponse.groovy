@@ -1,11 +1,11 @@
 package org.vertx.groovy.core.http.impl
 
-import groovy.transform.CompileStatic;
-
+import groovy.transform.CompileStatic
+import org.vertx.groovy.core.MultiMap;
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.http.HttpServerResponse
+import org.vertx.groovy.core.impl.DefaultMultiMap
 import org.vertx.java.core.Handler
-import org.vertx.java.core.MultiMap
 
 /*
  * Copyright 2013 Red Hat, Inc.
@@ -28,6 +28,8 @@ import org.vertx.java.core.MultiMap
 class DefaultHttpServerResponse implements HttpServerResponse {
 
   private org.vertx.java.core.http.HttpServerResponse jResponse
+  private MultiMap headers
+  private MultiMap trailers
 
   DefaultHttpServerResponse(org.vertx.java.core.http.HttpServerResponse jResponse) {
     this.jResponse = jResponse
@@ -68,7 +70,10 @@ class DefaultHttpServerResponse implements HttpServerResponse {
 
   @Override
   MultiMap getHeaders() {
-    jResponse.headers()
+    if (headers == null) {
+      headers = new DefaultMultiMap(jResponse.headers())
+    }
+    headers
   }
 
   @Override
@@ -85,7 +90,10 @@ class DefaultHttpServerResponse implements HttpServerResponse {
 
   @Override
   MultiMap getTrailers() {
-    jResponse.trailers()
+    if (trailers == null) {
+      trailers = new DefaultMultiMap(jResponse.trailers())
+    }
+    trailers
   }
 
   @Override

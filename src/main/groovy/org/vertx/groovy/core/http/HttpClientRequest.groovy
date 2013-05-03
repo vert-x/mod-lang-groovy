@@ -16,11 +16,10 @@
 
 package org.vertx.groovy.core.http
 
-import groovy.transform.CompileStatic;
-
+import groovy.transform.CompileStatic
+import org.vertx.groovy.core.MultiMap;
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.streams.WriteStream
-import org.vertx.java.core.MultiMap
 
 /**
  * Represents a client-side HTTP request.<p>

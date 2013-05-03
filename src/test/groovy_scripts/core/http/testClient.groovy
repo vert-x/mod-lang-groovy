@@ -20,6 +20,8 @@ import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.testframework.TestUtils
 import org.vertx.java.core.http.HttpVersion
 
+import java.util.Map.Entry
+
 tu = new TestUtils(vertx)
 tu.checkThread()
 
@@ -283,6 +285,13 @@ def httpMethod(ssl, method, chunked)  {
       request.headers.set('content-length', Integer.toString(sentBuff.length))
     }
     request.headers.add('header3', 'vheader3_1').add('header3', 'vheader3')
+
+    headers = request.headers
+    size = headers.size
+    names = headers.names
+    tu.azzert(size == names.size())
+    headers.each { Entry e -> tu.azzert(headers.getAll(e.key).contains(e.value)) }
+
     request << sentBuff
 
     request.end()
