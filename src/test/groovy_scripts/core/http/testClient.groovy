@@ -18,6 +18,7 @@ package core.http
 
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.testframework.TestUtils
+import org.vertx.java.core.http.HttpVersion
 
 tu = new TestUtils(vertx)
 tu.checkThread()
@@ -189,6 +190,7 @@ def httpMethod(ssl, method, chunked)  {
 
   server.requestHandler { req ->
     tu.checkThread()
+    tu.azzert(req.version == HttpVersion.HTTP_1_1)
     tu.azzert(req.uri.equals(uri))
     tu.azzert(req.method == method)
     tu.azzert(req.path == path)
