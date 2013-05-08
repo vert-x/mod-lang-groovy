@@ -78,6 +78,11 @@ interface NetSocket extends ReadStream<NetSocket>, WriteStream<NetSocket> {
   InetSocketAddress getRemoteAddress()
 
   /**
+   * Return the local address for this socket
+   */
+  InetSocketAddress getLocalAddress()
+
+  /**
    * Close the NetSocket
    */
   void close()

@@ -88,6 +88,11 @@ class DefaultNetSocket implements NetSocket {
   }
 
   @Override
+  InetSocketAddress getLocalAddress() {
+    jNetSocket.localAddress()
+  }
+
+  @Override
   void close() {
     jNetSocket.close()
   }
