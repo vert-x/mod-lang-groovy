@@ -18,9 +18,19 @@ package core.http
 
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.testframework.TestUtils
+import org.vertx.java.core.AsyncResult
+import org.vertx.java.core.AsyncResultHandler
+import org.vertx.java.core.Handler
+import org.vertx.java.core.VoidHandler
+import org.vertx.java.core.http.HttpClientRequest
+import org.vertx.java.core.http.HttpClientResponse
+import org.vertx.java.core.http.HttpServer
+import org.vertx.java.core.http.HttpServerFileUpload
+import org.vertx.java.core.http.HttpServerRequest
 import org.vertx.java.core.http.HttpVersion
 
 import java.util.Map.Entry
+import java.util.concurrent.atomic.AtomicInteger
 
 tu = new TestUtils(vertx)
 tu.checkThread()
@@ -172,6 +182,89 @@ def testPATCHChunked() {
 
 def testPATCHSSLChunked() {
   httpMethod(true, "PATCH", true)
+}
+
+def testFormFileUpload() {
+  content = "Vert.x rocks!";
+  server.requestHandler { req ->
+    if (req.uri.startsWith("/form")) {
+      req.response.chunked = true;
+      req.uploadHandler { event ->
+        event.dataHandler { buffer ->
+          tu.azzert(content == buffer.toString());
+        }
+      }
+      req.endHandler {
+        attrs = req.formAttributes;
+        tu.azzert(attrs.remove("name") == "file");
+        tu.azzert(attrs.remove("filename") == "tmp-0.txt");
+        tu.azzert(attrs.remove("Content-Type") == "image/gif");
+        req.response.end();
+      }
+    }
+  }
+  server.listen(8080, "0.0.0.0", { ar ->
+    tu.azzert(ar.succeeded());
+    client.port = 8080;
+    req = client.post("/form", { resp ->
+      // assert the response
+      tu.azzert(200 == resp.statusCode);
+      resp.bodyHandler { body ->
+        tu.azzert(0 == body.length());
+      }
+      tu.testComplete();
+    })
+    boundary = "dLV9Wyq26L_-JQxk6ferf-RT153LhOO";
+    buffer = new Buffer();
+    b =
+      "--" + boundary + "\r\n" +
+              "Content-Disposition: form-data; name=\"file\"; filename=\"tmp-0.txt\"\r\n" +
+              "Content-Type: image/gif\r\n" +
+              "\r\n" +
+              content + "\r\n" +
+              "--" + boundary + "--\r\n";
+
+    buffer.appendString(b);
+    req.headers.set("content-length", String.valueOf(buffer.length()));
+    req.headers.set("content-type", "multipart/form-data; boundary=" + boundary);
+    req.write(buffer).end();
+  });
+}
+
+def testFormUploadAttributes() {
+  server.requestHandler { req ->
+    if (req.uri.startsWith("/form")) {
+      req.response.chunked = true;
+      req.uploadHandler { event ->
+        event.dataHandler { buffer ->
+          tu.azzert(false);
+        }
+      }
+      req.endHandler {
+        attrs = req.formAttributes;
+        tu.azzert(attrs.remove("framework") == "vertx");
+        tu.azzert(attrs.remove("runson") == "jvm");
+        req.response.end();
+      }
+    }
+  }
+  server.listen(8080, "0.0.0.0", { ar ->
+    tu.azzert(ar.succeeded());
+    client.port = 8080;
+    req = client.post("/form", { resp ->
+      // assert the response
+      tu.azzert(200 == resp.statusCode);
+      resp.bodyHandler { body ->
+        tu.azzert(0 == body.length());
+      }
+      tu.testComplete();
+    })
+    buffer = new Buffer();
+    buffer.appendString("framework=vertx&runson=jvm");
+    req.headers.set("content-length", String.valueOf(buffer.length()));
+    req.headers.set("content-type", "application/x-www-form-urlencoded");
+    req.write(buffer).end();
+  });
 }
 
 

@@ -179,4 +179,8 @@ public class GroovyHttpTest extends TestBase {
   public void testPATCHSSLChunked() {
     startTest(getMethodName());
   }
+
+  public void testFormFileUpload() {
+    startTest(getMethodName());
+  }
 }

@@ -19,7 +19,6 @@ package org.vertx.groovy.core.http.impl
 import groovy.transform.CompileStatic
 
 import org.vertx.groovy.core.http.HttpServer
-import org.vertx.groovy.core.net.NetServer
 import org.vertx.java.core.AsyncResult
 import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.Handler

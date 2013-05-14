@@ -24,6 +24,7 @@ import org.vertx.groovy.core.http.HttpServerResponse
 import org.vertx.groovy.core.impl.DefaultMultiMap
 import org.vertx.java.core.Handler
 import org.vertx.java.core.buffer.Buffer as JBuffer
+import org.vertx.java.core.http.HttpServerFileUpload
 import org.vertx.java.core.http.HttpServerRequest as JHttpServerRequest
 import org.vertx.java.core.http.HttpVersion
 
@@ -144,6 +145,17 @@ class DefaultHttpServerRequest implements HttpServerRequest {
   HttpServerRequest exceptionHandler(Closure handler) {
     jRequest.exceptionHandler(handler as Handler)
     this
+  }
+
+  @Override
+  HttpServerRequest uploadHandler(Closure handler) {
+    jRequest.uploadHandler(({handler(new DefaultHttpServerFileUpload((HttpServerFileUpload) it))} as Handler))
+    this
+  }
+
+  @Override
+  Map<String, String> getFormAttributes() {
+    jRequest.formAttributes()
   }
 
   JHttpServerRequest toJavaRequest() {
