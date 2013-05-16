@@ -33,6 +33,8 @@ targetCompatibility = '1.7'
 jar.enabled = true
 //assert configurations.archives.artifacts.removeAll { it.file == jar.archivePath }
 
+
+
 configurations {
   provided
   testCompile.extendsFrom provided
@@ -56,7 +58,7 @@ dependencies {
   provided "io.vertx:vertx-platform:$vertxVersion"
   provided "io.vertx:testtools:$toolsVersion"
 
-  provided( "io.vertx:vertx-testframework:$vertxVersion" ) {
+  provided( "io.vertx:vertx-testframework:$testFrameworkVersion" ) {
     transitive = false
   }
   testCompile  "junit:junit:$junitVersion"
@@ -92,9 +94,27 @@ task dist( type: Zip) {
   from copyMod
 }
 
-artifacts {
-  archives dist
+
+task sourceJar(type: Jar) {
+  description = 'Builds a source jar artifact suitable for maven deployment.'
+  classifier = 'sources'
+  from sourceSets.main.java
 }
+
+task javadocJar(type: Jar) {
+  description = 'Builds a javadoc jar artifact suitable for maven deployment.'
+  classifier = 'javadoc'
+  from javadoc.destinationDir
+}
+javadocJar.dependsOn javadoc
+
+build.dependsOn sourceJar, javadocJar
+
+artifacts {
+  archives sourceJar, javadocJar
+  dist
+}
+
 
 task cleanTestTmpModules(type: Delete) {
   delete { file("src/test/mod-test").listFiles().find {

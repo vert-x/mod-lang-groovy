@@ -33,6 +33,7 @@ def loadProperties(String sourceFileName) {
 // a shared Maven local and using Gradle wrapper concurrently
 loadProperties("${System.getProperty('user.home')}/.gradle/gradle.properties")
 
+
 if (!hasProperty('sonatypeUsername')) {
 	ext.sonatypeUsername = ''
 }
@@ -82,6 +83,7 @@ uploadArchives {
 
 def configurePom(def pom) {
 	pom.project {
+    name rootProject.name
 		description 'Vert.x module that provides Groovy support'
 		inceptionYear '2013'
 		packaging 'jar'
