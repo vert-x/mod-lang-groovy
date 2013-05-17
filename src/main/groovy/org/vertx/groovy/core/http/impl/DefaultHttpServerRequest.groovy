@@ -43,6 +43,7 @@ class DefaultHttpServerRequest implements HttpServerRequest {
   private org.vertx.java.core.http.HttpServerRequest jRequest
   private MultiMap headers;
   private MultiMap params;
+  private MultiMap attrs;
   private HttpServerResponse response
 
   DefaultHttpServerRequest(JHttpServerRequest jRequest) {
@@ -154,8 +155,11 @@ class DefaultHttpServerRequest implements HttpServerRequest {
   }
 
   @Override
-  Map<String, String> getFormAttributes() {
-    jRequest.formAttributes()
+  MultiMap getFormAttributes() {
+    if (attrs == null) {
+      attrs = new DefaultMultiMap(jRequest.formAttributes());
+    }
+    attrs
   }
 
   JHttpServerRequest toJavaRequest() {

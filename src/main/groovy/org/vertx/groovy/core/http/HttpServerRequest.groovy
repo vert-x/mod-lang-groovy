@@ -96,7 +96,7 @@ interface HttpServerRequest extends ReadStream<HttpServerRequest> {
    * Returns a map of all form attributes which was found in the request. Be aware that this message should only get
    * called after the endHandler was notified as the map will be filled on-the-fly.
    */
-  Map<String, String> getFormAttributes()
+  MultiMap getFormAttributes()
 
   /**
    * Return the remote (client side) address of the request
