@@ -196,9 +196,9 @@ def testFormFileUpload() {
       }
       req.endHandler {
         attrs = req.formAttributes;
-        tu.azzert(attrs.remove("name") == "file");
-        tu.azzert(attrs.remove("filename") == "tmp-0.txt");
-        tu.azzert(attrs.remove("Content-Type") == "image/gif");
+        tu.azzert(attrs.get("name") == "file");
+        tu.azzert(attrs.get("filename") == "tmp-0.txt");
+        tu.azzert(attrs.get("Content-Type") == "image/gif");
         req.response.end();
       }
     }
@@ -242,8 +242,8 @@ def testFormUploadAttributes() {
       }
       req.endHandler {
         attrs = req.formAttributes;
-        tu.azzert(attrs.remove("framework") == "vertx");
-        tu.azzert(attrs.remove("runson") == "jvm");
+        tu.azzert(attrs.get("framework") == "vertx");
+        tu.azzert(attrs.get("runson") == "jvm");
         req.response.end();
       }
     }
