@@ -33,8 +33,6 @@ targetCompatibility = '1.7'
 jar.enabled = true
 //assert configurations.archives.artifacts.removeAll { it.file == jar.archivePath }
 
-
-
 configurations {
   provided
   testCompile.extendsFrom provided
@@ -111,10 +109,8 @@ javadocJar.dependsOn javadoc
 build.dependsOn sourceJar, javadocJar
 
 artifacts {
-  archives sourceJar, javadocJar
-  dist
+  archives sourceJar, javadocJar, dist
 }
-
 
 task cleanTestTmpModules(type: Delete) {
   delete { file("src/test/mod-test").listFiles().find {

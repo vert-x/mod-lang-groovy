@@ -25,11 +25,6 @@ class VertxTests {
 
   static def startTests(script) {
     def methodName = script.container.getConfig().get("methodName")
-    try {
-      script."$methodName"()
-    } catch (Throwable t) {
-      // Problem with invoking
-      org.vertx.testtools.VertxAssert.handleThrowable(t);
-    }
+    script."$methodName"()
   }
 }

@@ -82,19 +82,29 @@ public class GroovyVerticleFactory implements VerticleFactory {
 
       verticle = new JVerticle() {
         public void start() {
+          // The throwables need to be thrown up to the PlatformManager so the deployment can fail
           try {
             mrun.invoke(script, (Object[]) null)
-          } catch (Throwable t) {
-            reportException(log, t)
+          } catch (RuntimeException e) {
+            throw e;
+          } catch (Exception e) {
+            throw new RuntimeException(e);
+          } catch (Error e) {
+            throw e;
           }
         }
 
         public void stop() {
           if (mstop != null) {
+            // The throwables need to be thrown up to the PlatformManager so the stop can fail
             try {
               mstop.invoke(script, (Object[]) null)
-            } catch (Throwable t) {
-              reportException(log, t)
+            } catch (RuntimeException e) {
+              throw e;
+            } catch (Exception e) {
+              throw new RuntimeException(e);
+            } catch (Error e) {
+              throw e;
             }
           }
         }

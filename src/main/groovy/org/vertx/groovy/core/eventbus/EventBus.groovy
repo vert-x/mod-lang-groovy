@@ -156,6 +156,10 @@ class EventBus {
     return this
   }
 
+  JEventBus javaEventBus() {
+    jEventBus
+  }
+
   protected static convertMessage(message) {
     if (message instanceof Map) {
       message = new JsonObject(message)
