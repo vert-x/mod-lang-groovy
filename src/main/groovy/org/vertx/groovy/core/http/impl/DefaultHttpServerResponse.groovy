@@ -175,6 +175,12 @@ class DefaultHttpServerResponse implements HttpServerResponse {
   }
 
   @Override
+  HttpServerResponse sendFile(String filename, String notFoundFile) {
+    jResponse.sendFile(filename, notFoundFile)
+    this
+  }
+
+  @Override
   void close() {
     jResponse.close()
   }
