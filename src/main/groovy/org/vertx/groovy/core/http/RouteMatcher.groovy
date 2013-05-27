@@ -50,171 +50,209 @@ class RouteMatcher {
    * Specify a handler that will be called for a matching HTTP GET
    * @param pattern The simple pattern
    * @param handler The handler to call
+   * @return this
    */
-  void get(String pattern, Closure handler) {
+  RouteMatcher get(String pattern, Closure handler) {
     jRM.get(pattern, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for a matching HTTP PUT
    * @param pattern The simple pattern
    * @param handler The handler to call
+   * @return this
    */
-  void put(String pattern, Closure handler) {
+  RouteMatcher put(String pattern, Closure handler) {
     jRM.put(pattern, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for a matching HTTP POST
    * @param pattern The simple pattern
    * @param handler The handler to call
+   * @return this
    */
-  void post(String pattern, Closure handler) {
+  RouteMatcher post(String pattern, Closure handler) {
     jRM.post(pattern, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for a matching HTTP DELETE
    * @param pattern The simple pattern
    * @param handler The handler to call
+   * @return this
    */
-  void delete(String pattern, Closure handler) {
+  RouteMatcher delete(String pattern, Closure handler) {
     jRM.delete(pattern, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for a matching HTTP OPTIONS
    * @param pattern The simple pattern
    * @param handler The handler to call
+   * @return this
    */
-  void options(String pattern, Closure handler) {
+  RouteMatcher options(String pattern, Closure handler) {
     jRM.options(pattern, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for a matching HTTP HEAD
    * @param pattern The simple pattern
    * @param handler The handler to call
+   * @return this
    */
-  void head(String pattern, Closure handler) {
+  RouteMatcher head(String pattern, Closure handler) {
     jRM.head(pattern, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for a matching HTTP TRACE
    * @param pattern The simple pattern
    * @param handler The handler to call
+   * @return this
    */
-  void trace(String pattern, Closure handler) {
+  RouteMatcher trace(String pattern, Closure handler) {
     jRM.trace(pattern, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for a matching HTTP CONNECT
    * @param pattern The simple pattern
    * @param handler The handler to call
+   * @return this
    */
-  void connect(String pattern, Closure handler) {
+  RouteMatcher connect(String pattern, Closure handler) {
     jRM.connect(pattern, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for a matching HTTP PATCH
    * @param pattern The simple pattern
    * @param handler The handler to call
+   * @return this
    */
-  void patch(String pattern, Closure handler) {
+  RouteMatcher patch(String pattern, Closure handler) {
     jRM.patch(pattern, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for all HTTP methods
    * @param pattern The simple pattern
    * @param handler The handler to call
+   * @return this
    */
-  void all(String pattern, Closure handler) {
+  RouteMatcher all(String pattern, Closure handler) {
     jRM.all(pattern, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for a matching HTTP GET
    * @param regex A regular expression
    * @param handler The handler to call
+   * @return this
    */
-  void getWithRegEx(String regex, Closure handler) {
+  RouteMatcher getWithRegEx(String regex, Closure handler) {
     jRM.getWithRegEx(regex, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for a matching HTTP PUT
    * @param regex A regular expression
    * @param handler The handler to call
+   * @return this
    */
-  void putWithRegEx(String regex, Closure handler) {
+  RouteMatcher putWithRegEx(String regex, Closure handler) {
     jRM.putWithRegEx(regex, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for a matching HTTP POST
    * @param regex A regular expression
    * @param handler The handler to call
+   * @return this
    */
-  void postWithRegEx(String regex, Closure handler) {
+  RouteMatcher postWithRegEx(String regex, Closure handler) {
     jRM.postWithRegEx(regex, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for a matching HTTP DELETE
    * @param regex A regular expression
    * @param handler The handler to call
+   * @return this
    */
-  void deleteWithRegEx(String regex, Closure handler) {
+  RouteMatcher deleteWithRegEx(String regex, Closure handler) {
     jRM.deleteWithRegEx(regex, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for a matching HTTP OPTIONS
    * @param regex A regular expression
    * @param handler The handler to call
+   * @return this
    */
-  void optionsWithRegEx(String regex, Closure handler) {
+  RouteMatcher optionsWithRegEx(String regex, Closure handler) {
     jRM.optionsWithRegEx(regex, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for a matching HTTP HEAD
    * @param regex A regular expression
    * @param handler The handler to call
+   * @return this
    */
-  void headWithRegEx(String regex, Closure handler) {
+  RouteMatcher headWithRegEx(String regex, Closure handler) {
     jRM.headWithRegEx(regex, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for a matching HTTP TRACE
    * @param regex A regular expression
    * @param handler The handler to call
+   * @return this
    */
-  void traceWithRegEx(String regex, Closure handler) {
+  RouteMatcher traceWithRegEx(String regex, Closure handler) {
     jRM.traceWithRegEx(regex, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for a matching HTTP CONNECT
    * @param regex A regular expression
    * @param handler The handler to call
+   * @return this
    */
-  void connectWithRegEx(String regex, Closure handler) {
+  RouteMatcher connectWithRegEx(String regex, Closure handler) {
     jRM.connectWithRegEx(regex, wrapHandler(handler))
+    this
   }
 
   /**
    * Specify a handler that will be called for a matching HTTP PATCH
    * @param regex A regular expression
    * @param handler The handler to call
+   * @return this
    */
-  void patchWithRegEx(String regex, Closure handler) {
+  RouteMatcher patchWithRegEx(String regex, Closure handler) {
     jRM.patchWithRegEx(regex, wrapHandler(handler))
+    this
   }
 
   /**
@@ -222,8 +260,9 @@ class RouteMatcher {
    * @param regex A regular expression
    * @param handler The handler to call
    */
-  void allWithRegEx(String regex, Closure handler) {
+  RouteMatcher allWithRegEx(String regex, Closure handler) {
     jRM.allWithRegEx(regex, wrapHandler(handler))
+    this
   }
 
   /**
@@ -231,8 +270,9 @@ class RouteMatcher {
    * If this handler is not specified default behaviour is to return a 404
    * @param handler
    */
-  void noMatch(Closure handler) {
-    jRM.noMatch(wrapHandler(handler))    
+  RouteMatcher noMatch(Closure handler) {
+    jRM.noMatch(wrapHandler(handler))
+    this
   }
 
   /**
