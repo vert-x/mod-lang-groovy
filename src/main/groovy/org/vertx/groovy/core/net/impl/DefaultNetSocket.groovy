@@ -5,7 +5,6 @@ import groovy.transform.TypeCheckingMode
 
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.net.NetSocket
-import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.Handler
 import org.vertx.java.core.buffer.Buffer as JBuffer
 import org.vertx.java.core.net.NetSocket as JNetSocket

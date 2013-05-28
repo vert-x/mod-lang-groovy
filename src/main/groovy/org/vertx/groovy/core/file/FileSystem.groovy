@@ -17,15 +17,12 @@
 package org.vertx.groovy.core.file
 
 import groovy.transform.CompileStatic
-
-import org.vertx.java.core.AsyncResult
-import org.vertx.java.core.AsyncResultHandler
-import org.vertx.java.core.impl.DefaultFutureResult
+import org.vertx.groovy.core.impl.ClosureUtil
 import org.vertx.java.core.buffer.Buffer as JBuffer
 import org.vertx.java.core.file.AsyncFile as JAsyncFile
 import org.vertx.java.core.file.FileProps
 import org.vertx.java.core.file.FileSystem as JFileSystem
-import org.vertx.java.core.file.FileSystemProps
+import org.vertx.java.core.file.FileSystemProps as JFileSystemProps
 import org.vertx.groovy.core.buffer.Buffer
 
 /**
@@ -56,7 +53,7 @@ class FileSystem {
    * The copy will fail if the destination if the destination already exists.<p>
    */
   FileSystem copy(String from, String to, boolean recursive = false, Closure handler) {
-    jFS.copy(from, to, recursive, handler as AsyncResultHandler)
+    jFS.copy(from, to, recursive, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -73,7 +70,7 @@ class FileSystem {
    * The move will fail if the destination already exists.<p>
    */
   FileSystem move(String from, String to, Closure handler) {
-    jFS.move(from, to, handler as AsyncResultHandler)
+    jFS.move(from, to, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -90,7 +87,7 @@ class FileSystem {
    * The operation will fail if the file does not exist or {@code len} is less than {@code zero}.
    */
   FileSystem truncate(String path, long len, Closure handler) {
-    jFS.truncate(path, len, handler as AsyncResultHandler)
+    jFS.truncate(path, len, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -110,7 +107,7 @@ class FileSystem {
    * be set to {@code dirPerms}, whilst any normal file permissions will be set to {@code perms}.<p>
    */
   FileSystem chmod(String path, String perms, String dirPerms = null, Closure handler) {
-    jFS.chmod(path, perms, dirPerms, handler as AsyncResultHandler)
+    jFS.chmod(path, perms, dirPerms, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -127,7 +124,7 @@ class FileSystem {
    * If the file is a link, the link will be followed.
    */
   FileSystem props(String path, Closure handler) {
-    jFS.props(path, handler as AsyncResultHandler)
+    jFS.props(path, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -143,7 +140,7 @@ class FileSystem {
    * The link will not be followed.
    */
   FileSystem lprops(String path, Closure handler) {
-    jFS.lprops(path, handler as AsyncResultHandler)
+    jFS.lprops(path, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -158,7 +155,7 @@ class FileSystem {
    * Create a hard link on the file system from {@code link} to {@code existing}, asynchronously.
    */
   FileSystem link(String link, String existing, Closure handler) {
-    jFS.link(link, existing, handler as AsyncResultHandler)
+    jFS.link(link, existing, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -174,7 +171,7 @@ class FileSystem {
    * Create a symbolic link on the file system from {@code link} to {@code existing}, asynchronously.
    */
   FileSystem symlink(String link, String existing, Closure handler) {
-    jFS.symlink(link, existing, handler as AsyncResultHandler)
+    jFS.symlink(link, existing, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -190,7 +187,7 @@ class FileSystem {
    * Unlinks the link on the file system represented by the path {@code link}, asynchronously.
    */
   FileSystem unlink(String link, Closure handler) {
-    jFS.unlink(link, handler as AsyncResultHandler)
+    jFS.unlink(link, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -206,7 +203,7 @@ class FileSystem {
    * Returns the path representing the file that the symbolic link specified by {@code link} points to, asynchronously.
    */
   FileSystem readSymlink(String link, Closure handler) {
-    jFS.readSymlink(link, handler as AsyncResultHandler)
+    jFS.readSymlink(link, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -223,7 +220,7 @@ class FileSystem {
    * deleted recursively.
    */
   FileSystem delete(String path, boolean recursive = false, Closure handler) {
-    jFS.delete(path, recursive, handler as AsyncResultHandler)
+    jFS.delete(path, recursive, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -245,7 +242,7 @@ class FileSystem {
    * The operation will fail if the directory already exists.<p>
    */
   FileSystem mkdir(String path, String perms = null, boolean createParents = false, Closure handler) {
-    jFS.mkdir(path, perms, createParents, handler as AsyncResultHandler)
+    jFS.mkdir(path, perms, createParents, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -262,7 +259,7 @@ class FileSystem {
    * The result is an array of String representing the paths of the files inside the directory.
    */
   FileSystem readDir(String path, String filter = null, Closure handler) {
-    jFS.readDir(path, filter, handler as AsyncResultHandler)
+    jFS.readDir(path, filter, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -278,13 +275,9 @@ class FileSystem {
    * Do not user this method to read very large files or you risk running out of available RAM.
    */
   FileSystem readFile(String path, Closure handler) {
-    jFS.readFile(path, { AsyncResult ar ->
-      if (ar.succeeded()) {
-        handler.call(new DefaultFutureResult<Buffer>(new Buffer((JBuffer) ar.result())))
-      } else {
-        handler.call(ar)
-      }
-    } as AsyncResultHandler)
+    jFS.readFile(path, ClosureUtil.wrapAsyncResultHandler(handler, { JBuffer buffer ->
+      new Buffer(buffer)
+    }))
     this
   }
 
@@ -300,7 +293,7 @@ class FileSystem {
    * asynchronously.
    */
   FileSystem writeFile(String path, Buffer data, Closure handler) {
-    jFS.writeFile(path, data.toJavaBuffer(), handler as AsyncResultHandler)
+    jFS.writeFile(path, data.toJavaBuffer(), ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -309,7 +302,7 @@ class FileSystem {
    * asynchronously.
    */
   FileSystem writeFile(String path, String data, Closure handler) {
-    jFS.writeFile(path, new org.vertx.java.core.buffer.Buffer(data), handler as AsyncResultHandler)
+    jFS.writeFile(path, new org.vertx.java.core.buffer.Buffer(data), ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -340,13 +333,9 @@ class FileSystem {
    * storage on each write.
    */
   FileSystem open(String path, String perms = null, boolean read = true, boolean write = true, boolean createNew = true, boolean flush = false, Closure handler) {
-    jFS.open(path, perms, read, write, createNew, flush, { AsyncResult result ->
-      if (result.succeeded()) {
-        handler(new DefaultFutureResult<AsyncFile>(new AsyncFile((JAsyncFile) result.result())))
-      } else {
-        handler(result)
-      }
-    } as AsyncResultHandler)
+    jFS.open(path, perms, read, write, createNew, flush, ClosureUtil.wrapAsyncResultHandler(handler, { JAsyncFile file ->
+      new AsyncFile(file)
+    }))
     this
   }
 
@@ -361,7 +350,7 @@ class FileSystem {
    * Creates an empty file with the specified {@code path}, asynchronously.
    */
   FileSystem createFile(String path, String perms = null, Closure handler) {
-    jFS.createFile(path, perms, handler as AsyncResultHandler)
+    jFS.createFile(path, perms, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -377,7 +366,7 @@ class FileSystem {
    * Determines whether the file as specified by the path {@code path} exists, asynchronously.
    */
   FileSystem exists(String path, Closure handler) {
-    jFS.exists(path, handler as AsyncResultHandler)
+    jFS.exists(path, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -392,7 +381,9 @@ class FileSystem {
    * Returns properties of the file-system being used by the specified {@code path}, asynchronously.
    */
   FileSystem fsProps(String path, Closure handler) {
-    jFS.fsProps(path, handler as AsyncResultHandler)
+    jFS.fsProps(path, ClosureUtil.wrapAsyncResultHandler(handler, { JFileSystemProps props ->
+      new FileSystemProps(props)
+    }))
     this
   }
 
@@ -400,6 +391,6 @@ class FileSystem {
    * Synchronous version of {@link #fsProps(String, Closure)}
    */
   FileSystemProps fsPropsSync(String path) {
-    return jFS.fsPropsSync(path)
+    new FileSystemProps(jFS.fsPropsSync(path))
   }
 }

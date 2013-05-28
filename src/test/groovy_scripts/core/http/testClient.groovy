@@ -204,7 +204,7 @@ def testFormFileUpload() {
     }
   }
   server.listen(8080, "0.0.0.0", { ar ->
-    tu.azzert(ar.succeeded());
+    tu.azzert(ar.succeeded);
     client.port = 8080;
     req = client.post("/form", { resp ->
       // assert the response
@@ -249,7 +249,7 @@ def testFormUploadAttributes() {
     }
   }
   server.listen(8080, "0.0.0.0", { ar ->
-    tu.azzert(ar.succeeded());
+    tu.azzert(ar.succeeded);
     client.port = 8080;
     req = client.post("/form", { resp ->
       // assert the response
@@ -341,8 +341,8 @@ def httpMethod(ssl, method, chunked)  {
   }
 
   server.listen(8080, { asyncResult ->
-    tu.azzert(asyncResult.succeeded())
-    tu.azzert(asyncResult.result() == server)
+    tu.azzert(asyncResult.succeeded)
+    tu.azzert(asyncResult.result == server)
     sentBuff = TestUtils.generateRandomBuffer(1000)
 
     request = client.request(method, uri, { resp ->

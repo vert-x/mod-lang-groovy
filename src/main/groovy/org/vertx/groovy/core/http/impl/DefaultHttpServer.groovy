@@ -19,11 +19,9 @@ package org.vertx.groovy.core.http.impl
 import groovy.transform.CompileStatic
 
 import org.vertx.groovy.core.http.HttpServer
-import org.vertx.java.core.AsyncResult
-import org.vertx.java.core.AsyncResultHandler
+import org.vertx.groovy.core.impl.ClosureUtil
 import org.vertx.java.core.Handler
 import org.vertx.java.core.Vertx
-import org.vertx.java.core.impl.DefaultFutureResult
 import org.vertx.java.core.http.HttpServer as JHttpServer
 import org.vertx.java.core.http.HttpServerRequest as JHttpServerRequest
 import org.vertx.java.core.http.ServerWebSocket as JServerWebSocket
@@ -71,13 +69,17 @@ class DefaultHttpServer implements HttpServer {
 
   @Override
   HttpServer listen(int port, Closure bindHandler) {
-    jServer.listen(port, wrapBindHandler(bindHandler))
+    jServer.listen(port, ClosureUtil.wrapAsyncResultHandler(bindHandler, {
+      this
+    }))
     this
   }
 
   @Override
   HttpServer listen(int port, String host, Closure bindHandler) {
-    jServer.listen(port, host, wrapBindHandler(bindHandler))
+    jServer.listen(port, host, ClosureUtil.wrapAsyncResultHandler(bindHandler, {
+      this
+    }))
     this
   }
 
@@ -88,8 +90,8 @@ class DefaultHttpServer implements HttpServer {
 
   @Override
   void close(Closure doneHandler) {
-    jServer.close(doneHandler as AsyncResultHandler)
-  }
+    jServer.close(ClosureUtil.wrapAsyncResultHandler(doneHandler))
+}
 
   @Override
   HttpServer setClientAuthRequired(boolean required) {
@@ -258,15 +260,5 @@ class DefaultHttpServer implements HttpServer {
 
   org.vertx.java.core.http.HttpServer toJavaServer() {
     jServer
-  }
-
-  private AsyncResultHandler wrapBindHandler(Closure hndlr) {
-    { AsyncResult ar ->
-      if (ar.succeeded()) {
-        hndlr(new DefaultFutureResult<HttpServer>(this))
-      } else {
-        hndlr(ar)
-      }
-    } as AsyncResultHandler
   }
 }

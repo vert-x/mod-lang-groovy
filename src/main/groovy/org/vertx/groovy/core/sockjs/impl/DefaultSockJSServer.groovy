@@ -24,7 +24,6 @@ import org.vertx.java.core.Handler
 import org.vertx.java.core.Vertx
 import org.vertx.java.core.json.JsonArray
 import org.vertx.java.core.json.JsonObject
-import org.vertx.java.core.buffer.Buffer as JBuffer
 import org.vertx.java.core.sockjs.SockJSServer as JSockJSServer
 import org.vertx.java.core.sockjs.SockJSSocket as JSockJSSocket
 

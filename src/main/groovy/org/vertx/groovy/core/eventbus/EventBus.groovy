@@ -17,7 +17,7 @@
 package org.vertx.groovy.core.eventbus
 
 import org.vertx.groovy.core.buffer.Buffer
-import org.vertx.java.core.AsyncResultHandler
+import org.vertx.groovy.core.impl.ClosureUtil
 import org.vertx.java.core.Handler
 import org.vertx.java.core.eventbus.EventBus as JEventBus
 import org.vertx.java.core.json.JsonObject
@@ -122,7 +122,7 @@ class EventBus {
   EventBus registerHandler(String address, Closure handler, Closure resultHandler = null) {
     def wrapped = wrapHandler(handler)
     handlerMap.put(handler, wrapped)
-    jEventBus.registerHandler(address, wrapped, resultHandler as AsyncResultHandler)
+    jEventBus.registerHandler(address, wrapped, ClosureUtil.wrapAsyncResultHandler(resultHandler))
     return this
   }
 
@@ -151,7 +151,7 @@ class EventBus {
   EventBus unregisterHandler(String address, Closure handler, Closure resultHandler = null) {
     def wrapped = handlerMap.remove(handler)
     if (wrapped != null) {
-      jEventBus.unregisterHandler(address, wrapped as Handler, resultHandler as AsyncResultHandler)
+      jEventBus.unregisterHandler(address, wrapped as Handler, ClosureUtil.wrapAsyncResultHandler(resultHandler))
     }
     return this
   }

@@ -20,9 +20,9 @@ import groovy.transform.CompileStatic;
 import groovy.transform.TypeCheckingMode;
 
 import org.vertx.groovy.core.buffer.Buffer
+import org.vertx.groovy.core.impl.ClosureUtil
 import org.vertx.groovy.core.streams.ReadStream
 import org.vertx.groovy.core.streams.WriteStream
-import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.Handler
 import org.vertx.java.core.buffer.Buffer as JBuffer
 import org.vertx.java.core.file.AsyncFile as JAsyncFile
@@ -58,7 +58,7 @@ class AsyncFile implements ReadStream<AsyncFile>, WriteStream<AsyncFile> {
    * The handler will be called when the close is complete, or an error occurs.
    */
   void close(Closure handler) {
-    jFile.close(handler as AsyncResultHandler)
+    jFile.close(ClosureUtil.wrapAsyncResultHandler(handler))
   }
 
   /**
@@ -70,7 +70,7 @@ class AsyncFile implements ReadStream<AsyncFile>, WriteStream<AsyncFile> {
    * The handler will be called when the close is complete, or an error occurs.
    */
   AsyncFile write(Buffer buffer, int position, Closure handler) {
-    jFile.write(buffer, position, handler as AsyncResultHandler)
+    jFile.write(buffer, position, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -82,7 +82,7 @@ class AsyncFile implements ReadStream<AsyncFile>, WriteStream<AsyncFile> {
    * The handler will be called when the close is complete, or if an error occurs.
    */
   AsyncFile read(Buffer buffer, int offset, int position, int length, Closure handler) {
-    jFile.read(buffer, offset, position, length, handler as AsyncResultHandler)
+    jFile.read(buffer, offset, position, length, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -151,7 +151,7 @@ class AsyncFile implements ReadStream<AsyncFile>, WriteStream<AsyncFile> {
    * @param handler
    */
   AsyncFile flush(Closure handler) {
-    jFile.flush(handler as AsyncResultHandler)
+    jFile.flush(ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 }

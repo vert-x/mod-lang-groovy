@@ -16,15 +16,11 @@
 
 package org.vertx.groovy.core.net.impl
 
-import groovy.transform.CompileStatic;
-
+import groovy.transform.CompileStatic
+import org.vertx.groovy.core.impl.ClosureUtil;
 import org.vertx.groovy.core.net.NetServer
-import org.vertx.groovy.core.net.NetSocket
-import org.vertx.java.core.AsyncResult
-import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.Handler
 import org.vertx.java.core.Vertx
-import org.vertx.java.core.impl.DefaultFutureResult
 import org.vertx.java.core.net.NetSocket as JNetSocket
 import org.vertx.java.core.net.NetServer as JNetServer
 
@@ -65,13 +61,17 @@ class DefaultNetServer implements NetServer {
 
   @Override
   NetServer listen(int port, Closure bindHandler) {
-    jNetServer.listen(port, wrapBindHandler(bindHandler))
+    jNetServer.listen(port, ClosureUtil.wrapAsyncResultHandler(bindHandler, {
+      this
+    }))
     this
   }
 
   @Override
   NetServer listen(int port, String host, Closure bindHandler) {
-    jNetServer.listen(port, host, wrapBindHandler(bindHandler))
+    jNetServer.listen(port, host, ClosureUtil.wrapAsyncResultHandler(bindHandler, {
+      this
+    }))
     this
   }
 
@@ -82,7 +82,7 @@ class DefaultNetServer implements NetServer {
 
   @Override
   void close(Closure hndlr) {
-    jNetServer.close(hndlr as AsyncResultHandler)
+    jNetServer.close(ClosureUtil.wrapAsyncResultHandler(hndlr))
   }
 
   @Override
@@ -258,15 +258,5 @@ class DefaultNetServer implements NetServer {
   @Override
   boolean isUsePooledBuffers() {
     jNetServer.isUsePooledBuffers()
-  }
-
-  private AsyncResultHandler wrapBindHandler(Closure hndlr) {
-    { AsyncResult ar ->
-      if (ar.succeeded()) {
-        hndlr(new DefaultFutureResult<NetServer>(this))
-      } else {
-        hndlr(ar)
-      }
-    } as AsyncResultHandler
   }
 }

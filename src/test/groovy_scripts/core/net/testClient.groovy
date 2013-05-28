@@ -62,15 +62,15 @@ void echo(boolean ssl) {
     }
   }.listen(8080, { asyncResult0 ->
     tu.checkThread()
-    tu.azzert asyncResult0.succeeded()
-    tu.azzert asyncResult0.result() == server
+    tu.azzert asyncResult0.succeeded
+    tu.azzert asyncResult0.result == server
 
     client.connect(8080, "localhost", { asyncResult ->
       tu.checkThread()
 
-      tu.azzert asyncResult.succeeded()
+      tu.azzert asyncResult.succeeded
 
-      socket = asyncResult.result()
+      socket = asyncResult.result
 
       sends = 10
       size = 100
