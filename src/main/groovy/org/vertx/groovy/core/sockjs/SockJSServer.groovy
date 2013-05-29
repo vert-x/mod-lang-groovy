@@ -19,6 +19,7 @@ package org.vertx.groovy.core.sockjs
 import groovy.transform.CompileStatic;
 
 import org.vertx.java.core.json.JsonObject
+import org.vertx.java.core.sockjs.EventBusBridgeHook
 
 /**
  *
@@ -90,6 +91,5 @@ interface SockJSServer {
                       long authTimeout, String authAddress)
 
 
-
-
+  SockJSServer setHook(EventBusBridgeHook hook)
 }
