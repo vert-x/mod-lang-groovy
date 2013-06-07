@@ -24,6 +24,7 @@ import org.vertx.java.core.Handler
 import org.vertx.java.core.Vertx
 import org.vertx.java.core.json.JsonArray
 import org.vertx.java.core.json.JsonObject
+import org.vertx.java.core.sockjs.EventBusBridgeHook
 import org.vertx.java.core.sockjs.SockJSServer as JSockJSServer
 import org.vertx.java.core.sockjs.SockJSSocket as JSockJSSocket
 
@@ -68,4 +69,8 @@ class DefaultSockJSServer implements SockJSServer {
     this
   }
 
+  SockJSServer setHook(EventBusBridgeHook hook) {
+    jServer.setHook(hook)
+    this
+  }
 }
