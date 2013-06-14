@@ -132,113 +132,13 @@ class DefaultMultiMap implements MultiMap {
     return set(map)
   }
 
-  org.vertx.java.core.MultiMap toJavaMultiMap() {
-    return jmap
-  }
-
-  public static org.vertx.java.core.MultiMap toJavaMultiMap(MultiMap multiMap) {
+  static org.vertx.java.core.MultiMap toJavaMultiMap(MultiMap multiMap) {
      if (multiMap instanceof DefaultMultiMap) {
-       (multiMap as DefaultMultiMap).toJavaMultiMap()
+       (multiMap as DefaultMultiMap).jmap
      } else {
-       new JMultiMapWrapper(multiMap)
+       throw new IllegalStateException("Invalid multimap!")
      }
   }
 
-  @CompileStatic
-  private static class JMultiMapWrapper implements org.vertx.java.core.MultiMap {
-    private MultiMap map
-
-    JMultiMapWrapper(MultiMap map) {
-      this.map = map;
-    }
-
-    @Override
-    String get(String name) {
-      map.get(name)
-    }
-
-    @Override
-    List<String> getAll(String name) {
-      map.getAll(name)
-    }
-
-    @Override
-    List<Map.Entry<String, String>> entries() {
-      map.entries
-    }
-
-    @Override
-    boolean contains(String name) {
-      map.contains(name)
-    }
-
-    @Override
-    boolean isEmpty() {
-      map.empty
-    }
-
-    @Override
-    Set<String> names() {
-      map.names
-    }
-
-    @Override
-    org.vertx.java.core.MultiMap add(String name, String value) {
-      map.add(name, value)
-      this
-    }
-
-    @Override
-    org.vertx.java.core.MultiMap add(String name, Iterable<String> values) {
-      map.add(name, values)
-      this
-    }
-
-    @Override
-    org.vertx.java.core.MultiMap set(String name, String value) {
-      map.set(name, value)
-      this
-    }
-
-    @Override
-    org.vertx.java.core.MultiMap set(String name, Iterable<String> values) {
-      map.set(name, values)
-      this
-    }
-
-    @Override
-    org.vertx.java.core.MultiMap set(org.vertx.java.core.MultiMap headers) {
-      map.set(new DefaultMultiMap(headers))
-      this
-    }
-
-    @Override
-    org.vertx.java.core.MultiMap set(Map<String, String> headers) {
-      map.set(headers)
-      this
-    }
-
-    @Override
-    org.vertx.java.core.MultiMap remove(String name) {
-      map.remove(name)
-      this
-    }
-
-    @Override
-    org.vertx.java.core.MultiMap clear() {
-      map.clear()
-      this
-    }
-
-    @Override
-    int size() {
-      map.size
-    }
-
-    @Override
-    Iterator<Map.Entry<String, String>> iterator() {
-      map.iterator()
-    }
-  }
 }
 
