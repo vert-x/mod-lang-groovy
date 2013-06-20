@@ -37,21 +37,6 @@ import org.vertx.groovy.core.streams.WriteStream
  * It implements {@link WriteStream} so it can be used with
  * {@link org.vertx.java.core.streams.Pump} to pump data with flow control.<p>
  * Instances of this class are not thread-safe<p>
- * An example of using this class is as follows:
- * <p>
- * <pre>
- *
- * def req = httpClient.post("/some-url") { response ->
- *   println "Got response: ${response.statusCode}"
- * }
- *
- * req.putHeader("some-header", "hello")
- * req.putHeader("Content-Length", 5)
- * req.write << buffer
- * req.write << "some-string"
- * req.end()
- *
- * </pre>
  *
  * The headers are also accessible as a {@code Map} so you can use index notation to access them.
  *

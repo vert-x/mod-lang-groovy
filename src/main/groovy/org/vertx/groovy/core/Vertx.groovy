@@ -38,10 +38,10 @@ import org.vertx.java.core.shareddata.SharedData
 
 
 /**
- * The control centre of vert.x<p>
+ * The control centre of Vert.x<p>
  * You should normally only use a single instance of this class throughout your application. If you are running in the
- * vert.x scontainer an instance will be provided to you.<p>
- * If you are using vert.x embedded, you can create an instance using one of the static {@code newVertx} methods.<p>
+ * Vert.x container an instance will be provided to you.<p>
+ * If you are embedding Vert.x core, you can create an instance using one of the static {@code newVertx} methods.<p>
  * This class acts as a factory for TCP/SSL and HTTP/HTTPS servers and clients, SockJS servers, and provides an
  * instance of the event bus, file system and shared data classes, as well as methods for setting and cancelling
  * timers.
@@ -69,7 +69,7 @@ class Vertx {
   }
 
   /**
-   * Create a clustered Vertx instance listening for cluster connections on the default port 25500
+   * Create a clustered Vertx instance listening for cluster connections. A port will be randomly assigned.
    * @param hostname The hostname or ip address to listen for cluster connections
    */
   static Vertx newVertx(String hostname) {

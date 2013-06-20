@@ -21,24 +21,44 @@ import org.vertx.groovy.core.Vertx
 import org.vertx.java.core.Future
 
 /**
+ * Represents a Verticle that runs in the container.<p>
+ * If you are creating a Groovy compiled Verticle you should extend this class
+ * to create your verticle.
+ *
  * @author swilliams
  *
  */
 @CompileStatic
 abstract class Verticle {
 
+  /**
+   * The Vertx instance
+   */
   Vertx vertx
 
+  /**
+   * The Container instance
+   */
   Container container
 
+  /**
+   * Override this to implement a synchronous start
+   */
   def start() {
   }
 
+  /**
+   * Override this to implement an asynchronous start, and use the startedResult to signal when startup is complete
+   * @param startedResult
+   */
   def start(Future<Void> startedResult) {
     start()
     startedResult.setResult(null)
   }
 
+  /**
+   * This will be called when the verticle is stopped
+   */
   def stop() {
   }
 

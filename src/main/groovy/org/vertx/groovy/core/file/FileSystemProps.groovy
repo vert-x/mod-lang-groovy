@@ -2,7 +2,7 @@
  * Copyright 2013 Red Hat, Inc.
  *
  * Red Hat licenses this file to you under the Apache License, version 2.0
- * (the "License"); you may not use this file except in compliance with the
+ * (the "License") you may not use this file except in compliance with the
  * License.  You may obtain a copy of the License at:
  *
  *    http://www.apache.org/licenses/LICENSE-2.0
@@ -24,24 +24,24 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 class FileSystemProps {
-  private final JFileSystemProps props;
+  private final JFileSystemProps props
 
   FileSystemProps(JFileSystemProps props) {
-    this.props = props;
+    this.props = props
   }
 
   /**
    * The total space on the file system, in bytes
    */
   long getTotalSpace() {
-    props.totalSpace();
+    props.totalSpace()
   }
 
   /**
    * The total un-allocated space on the file syste, in bytes
    */
   long getUnallocatedSpace() {
-    props.unallocatedSpace();
+    props.unallocatedSpace()
   }
 
   /**

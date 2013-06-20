@@ -2,7 +2,7 @@
  * Copyright 2013 Red Hat, Inc.
  *
  * Red Hat licenses this file to you under the Apache License, version 2.0
- * (the "License"); you may not use this file except in compliance with the
+ * (the "License") you may not use this file except in compliance with the
  * License.  You may obtain a copy of the License at:
  *
  *    http://www.apache.org/licenses/LICENSE-2.0
@@ -20,9 +20,9 @@ import java.util.Map.Entry
 /**
  * @author <a href="mailto:nmaurer@redhat.com">Norman Maurer</a>
  */
-public interface MultiMap {
+interface MultiMap {
 
-  Iterator iterator();
+  Iterator iterator()
 
   /**
    * Returns the value of with the specified name.  If there are
@@ -31,7 +31,7 @@ public interface MultiMap {
    * @param name The name of the header to search
    * @return The first header value or {@code null} if there is no such entry
    */
-  String get(String name);
+  String get(String name)
 
   /**
    * Returns the values with the specified name
@@ -40,7 +40,7 @@ public interface MultiMap {
    * @return A immutable {@link List} of values which will be empty if no values
    *         are found
    */
-  List<String> getAll(String name);
+  List<String> getAll(String name)
 
   /**
    * Returns all entries it contains.
@@ -48,7 +48,7 @@ public interface MultiMap {
    * @return A immutable {@link List} of the name-value entries, which will be
    *         empty if no pairs are found
    */
-  List<Map.Entry<String, String>> getEntries();
+  List<Map.Entry<String, String>> getEntries()
 
   /**
    * Checks to see if there is a value with the specified name
@@ -56,19 +56,19 @@ public interface MultiMap {
    * @param name The name to search for
    * @return True if at least one entry is found
    */
-  boolean contains(String name);
+  boolean contains(String name)
 
   /**
    * Return true if emptry
    */
-  boolean isEmpty();
+  boolean isEmpty()
 
   /**
    * Gets a immutable {@link Set} of all names
    *
    * @return A {@link Set} of all names
    */
-  Set<String> getNames();
+  Set<String> getNames()
 
   /**
    * Adds a new value with the specified name and value.
@@ -81,7 +81,7 @@ public interface MultiMap {
    *
    * @return {@code this}
    */
-  MultiMap add(String name, String value);
+  MultiMap add(String name, String value)
 
   /**
    * Adds a new values under the specified name
@@ -91,7 +91,7 @@ public interface MultiMap {
    * @param values The values
    * @return {@code this}
    */
-  MultiMap add(String name, Iterable<String> values);
+  MultiMap add(String name, Iterable<String> values)
 
   /**
    * Sets a value under the specified name.
@@ -102,7 +102,7 @@ public interface MultiMap {
    * @param value The value
    * @return {@code this}
    */
-  MultiMap set(String name, String value);
+  MultiMap set(String name, String value)
 
   /**
    * Sets values for the specified name.
@@ -111,21 +111,21 @@ public interface MultiMap {
    * @param values The values of the headers being set
    * @return {@code this}
    */
-  MultiMap set(String name, Iterable<String> values);
+  MultiMap set(String name, Iterable<String> values)
 
   /**
    * Cleans this instance.
    *
    * @return {@code this}
    */
-  MultiMap set(MultiMap headers);
+  MultiMap set(MultiMap headers)
 
   /**
    * Cleans and set all values of the given instance
    *
    * @return {@code this}
    */
-  MultiMap set(Map<String, String> headers);
+  MultiMap set(Map<String, String> headers)
 
   /**
    * Removes the value with the given name
@@ -133,27 +133,27 @@ public interface MultiMap {
    * @param name The name  of the value to remove
    * @return {@code this}
    */
-  MultiMap remove(String name);
+  MultiMap remove(String name)
 
   /**
    * Removes all
    *
    * @return {@code this}
    */
-  MultiMap clear();
+  MultiMap clear()
 
   /**
    * Return the number of names.
    */
-  int getSize();
+  int getSize()
 
   /**
    * Same as {@link #set(java.lang.String, java.lang.String)}  or {@link #set(java.lang.String, java.lang.Iterable)}
    */
-  MultiMap leftShift(Entry<String, ?> entry);
+  MultiMap leftShift(Entry<String, ?> entry)
 
   /**
    * Same as {@link #set(org.vertx.groovy.core.MultiMap)}
    */
-  MultiMap leftShift(MultiMap map);
+  MultiMap leftShift(MultiMap map)
 }

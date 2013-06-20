@@ -38,8 +38,6 @@ import org.vertx.groovy.core.buffer.Buffer
 @CompileStatic
 class FileSystem {
 
-  // static FileSystem instance = new FileSystem() // Eh?
-
   private final JFileSystem jFS
 
   public FileSystem(JFileSystem jFS) {

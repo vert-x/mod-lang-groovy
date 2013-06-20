@@ -31,10 +31,6 @@ import java.util.concurrent.ConcurrentHashMap
  * A distributed lightweight event bus which can encompass multiple vert.x instances.
  * The event bus implements both publish / subscribe network and point to point messaging.<p>
  *
- * Messages sent over the event bus are represented by instances of the {@link Message} class.
- * Subclasses of Message exist for messages that represent all primitive types as well as {@code String},
- * {@link Buffer}, byte[] and {@link JsonObject}<p>
- *
  * For publish / subscribe, messages can be published to an address using one of the {@code publish} methods. An
  * address is a simple {@code String} instance.
  * Handlers are registered against an address. There can be multiple handlers registered against each address, and a particular handler can
@@ -58,6 +54,8 @@ import java.util.concurrent.ConcurrentHashMap
  * has been received. Reply messages can also be replied to, etc, ad infinitum<p>
  *
  * Different event bus instances can be clustered together over a network, to give a single logical event bus.<p>
+ *
+ * Instances of this class are thread-safe
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
@@ -88,7 +86,7 @@ class EventBus {
       // Just choose an overloaded method...
       jEventBus.send(address, (String)null, wrapHandler(replyHandler))
     }
-    return this
+    this
   }
 
   /**
@@ -107,7 +105,7 @@ class EventBus {
       // Just choose an overloaded method...
       jEventBus.publish(address, (String)null)
     }
-    return this
+    this
   }
 
   /**
@@ -123,7 +121,7 @@ class EventBus {
     def wrapped = wrapHandler(handler)
     handlerMap.put(handler, wrapped)
     jEventBus.registerHandler(address, wrapped, ClosureUtil.wrapAsyncResultHandler(resultHandler))
-    return this
+    this
   }
 
   /**
@@ -138,7 +136,7 @@ class EventBus {
     def wrapped = wrapHandler(handler)
     handlerMap.put(handler, wrapped)
     jEventBus.registerLocalHandler(address, wrapped)
-    return this
+    this
   }
 
   /**
@@ -153,7 +151,7 @@ class EventBus {
     if (wrapped != null) {
       jEventBus.unregisterHandler(address, wrapped as Handler, ClosureUtil.wrapAsyncResultHandler(resultHandler))
     }
-    return this
+    this
   }
 
   JEventBus javaEventBus() {

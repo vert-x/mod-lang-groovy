@@ -25,7 +25,7 @@ import org.vertx.java.core.AsyncResult as JAsyncResult
 class AsyncResult<T> {
   private final JAsyncResult<T> result;
 
-  public AsyncResult(JAsyncResult<T> result) {
+  AsyncResult(JAsyncResult<T> result) {
     this.result = result
   }
 
