@@ -77,7 +77,7 @@ public class GroovyVerticleFactory implements VerticleFactory {
 
       // Inject vertx into the script binding
 
-      Script script = (Script) clazz.newInstance()
+      def script = clazz.newInstance() // Casting to groovy.lang.Script fails because classloaders are different
       script.setBinding(createBinding())
 
       verticle = new JVerticle() {
