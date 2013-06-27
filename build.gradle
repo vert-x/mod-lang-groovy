@@ -141,6 +141,7 @@ test {
 
   // Some vert.x properties
   systemProperty 'vertx.test.timeout', 15
+  systemProperty 'vertx.lang.groovy.indy', true
   systemProperty 'vertx.mods', "$projectDir/src/test/mod-test"  // Set vertx.mods to the mod directory
   systemProperty 'vertx.version', "$project.version"
 

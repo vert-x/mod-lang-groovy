@@ -16,6 +16,7 @@
 
 package org.vertx.groovy.platform.impl
 
+import org.codehaus.groovy.control.CompilerConfiguration
 import org.vertx.java.core.Vertx as JVertx
 import org.vertx.java.core.logging.Logger
 import org.vertx.java.core.logging.impl.LoggerFactory;
@@ -45,6 +46,13 @@ public class GroovyVerticleFactory implements VerticleFactory {
   public void init(JVertx vertx, JContainer container, ClassLoader cl) {
     this.vertx = vertx
     this.container = container
+
+    CompilerConfiguration configuration = new CompilerConfiguration()
+    if (Boolean.getBoolean('vertx.lang.groovy.indy')) {
+      // enable InvokeDynamic mode
+      configuration.getOptimizationOptions().put("int", false);
+      configuration.getOptimizationOptions().put("indy", true);
+    }
     this.gcl = new GroovyClassLoader(cl)
   }
 
