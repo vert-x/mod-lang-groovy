@@ -189,16 +189,16 @@ def testFormFileUpload() {
   server.requestHandler { req ->
     if (req.uri.startsWith("/form")) {
       req.response.chunked = true;
-      req.uploadHandler { event ->
-        event.dataHandler { buffer ->
+      req.uploadHandler { upload ->
+        tu.azzert("tmp-0.txt" == upload.filename)
+        tu.azzert("image/gif" == upload.contentType)
+        upload.dataHandler { buffer ->
           tu.azzert(content == buffer.toString());
         }
       }
       req.endHandler {
         attrs = req.formAttributes;
-        tu.azzert(attrs.get("name") == "file");
-        tu.azzert(attrs.get("filename") == "tmp-0.txt");
-        tu.azzert(attrs.get("Content-Type") == "image/gif");
+        tu.azzert(attrs.isEmpty());
         req.response.end();
       }
     }
