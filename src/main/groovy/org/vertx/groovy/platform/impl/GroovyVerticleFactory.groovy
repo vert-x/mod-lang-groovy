@@ -16,6 +16,7 @@
 
 package org.vertx.groovy.platform.impl
 
+import org.codehaus.groovy.control.CompilerConfiguration
 import org.vertx.java.core.Vertx as JVertx
 import org.vertx.java.core.logging.Logger
 import org.vertx.java.core.logging.impl.LoggerFactory;
@@ -33,6 +34,7 @@ import java.lang.reflect.Method
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
+ * @author Alexander Klein
  */
 public class GroovyVerticleFactory implements VerticleFactory {
 
@@ -40,12 +42,54 @@ public class GroovyVerticleFactory implements VerticleFactory {
   private JVertx vertx
   private JContainer container
   private GroovyClassLoader gcl
+  private CompilerConfiguration compilerCfg
 
   @Override
   public void init(JVertx vertx, JContainer container, ClassLoader cl) {
     this.vertx = vertx
     this.container = container
-    this.gcl = new GroovyClassLoader(cl)
+    /* enable loading of properties of CompilationConfiguration from Classpath
+     * for setting ScriptBaseClass or other options.
+     * As adding CompilationCustomizers can only be done programmatically,
+     * you can use a ConfigSlurper-Script instead of a .properties file and add
+     * a closure with the key 'customizer' that gets the preconfigured
+     * CompilerConfiguration as argument and returns the modified instance to use.
+     */
+    Closure customizer
+    Properties properties = new Properties(System.getProperties())
+    String propertiesFile = container.env().VERTX_GROOVY_COMPILER_CONFIGURATION ?: 'compilerConfiguration.properties'
+    URL url = cl.getResource(propertiesFile)
+    if(url) {
+      try {
+        if(propertiesFile.toLowerCase().endsWith('.groovy')) {
+          ConfigSlurper slurper = new ConfigSlurper()
+          ConfigObject pObject = slurper.parse(properties)
+          ConfigObject cObject = new ConfigSlurper().parse(url)
+          customizer = cObject.remove('customizer')
+          properties = pObject.merge(cObject).toProperties()
+        } else {
+          InputStream inStream = url.openStream()
+          if(inStream) {
+            try {
+              properties.load(inStream)
+            } finally {
+              inStream.close()
+            }
+          }
+        }
+      } catch(e) {
+        log.error("Error loading Groovy CompilerConfiguration properties from $propertiesFile", e)
+      }
+    }
+    compilerCfg = new CompilerConfiguration(CompilerConfiguration.DEFAULT)
+    compilerCfg.configure(properties)
+    if(customizer) {
+      def result = customizer.call(compilerCfg)
+      // Expectation: If result isn't a CompilerConfiguration, the original one has been modified
+      if(result instanceof CompilerConfiguration)
+        compilerCfg = result
+    }
+    this.gcl = new GroovyClassLoader(cl, compilerCfg)
   }
 
   public JVerticle createVerticle(String main) throws Exception {
