@@ -235,8 +235,8 @@ def testFormFileUpload() {
 def testFormUploadAttributes() {
   server.requestHandler { req ->
     if (req.uri.startsWith("/form")) {
-      req.response.chunked = true;
-      req.expectMultiPart = true;
+      req.response.chunked = true
+      req.expectMultiPart = true
       req.uploadHandler { event ->
         event.dataHandler { buffer ->
           tu.azzert(false);
