@@ -149,6 +149,12 @@ class DefaultHttpServerRequest implements HttpServerRequest {
   }
 
   @Override
+  HttpServerRequest setExpectMultiPart(boolean expect) {
+    jRequest.expectMultiPart(expect);
+    this
+  }
+
+  @Override
   HttpServerRequest uploadHandler(Closure handler) {
     jRequest.uploadHandler(({handler(new DefaultHttpServerFileUpload((HttpServerFileUpload) it))} as Handler))
     this

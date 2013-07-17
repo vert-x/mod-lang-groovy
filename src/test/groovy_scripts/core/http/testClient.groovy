@@ -189,6 +189,7 @@ def testFormFileUpload() {
   server.requestHandler { req ->
     if (req.uri.startsWith("/form")) {
       req.response.chunked = true;
+      req.expectMultiPart = true;
       req.uploadHandler { upload ->
         tu.azzert("tmp-0.txt" == upload.filename)
         tu.azzert("image/gif" == upload.contentType)
@@ -235,6 +236,7 @@ def testFormUploadAttributes() {
   server.requestHandler { req ->
     if (req.uri.startsWith("/form")) {
       req.response.chunked = true;
+      req.expectMultiPart = true;
       req.uploadHandler { event ->
         event.dataHandler { buffer ->
           tu.azzert(false);

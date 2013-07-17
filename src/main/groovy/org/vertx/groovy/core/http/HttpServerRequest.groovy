@@ -87,6 +87,13 @@ interface HttpServerRequest extends ReadStream<HttpServerRequest> {
   MultiMap getParams()
 
   /**
+   * Call this with true if you are expecting a multi-part form to be submitted in the request
+   * This must be called before the body of the request has been received
+   * @param expect
+   */
+  HttpServerRequest setExpectMultiPart(boolean expect);
+
+  /**
    * Set the upload handler. The handler will get notified once a new file upload was received and so allow to
    * get notified by the upload in progress.
    */
