@@ -210,6 +210,7 @@ class DnsClient {
       for (int i = 0 ; i < records.size(); i++) {
         records.set(i, new SrvRecord((JSrvRecord) records.get(i)))
       }
+      records
     }))
     this
   }
@@ -226,7 +227,7 @@ class DnsClient {
    * @return          itself for method-chaining.
    */
   DnsClient reverseLookup(String name, Closure handler) {
-    client.resolveNS(name, ClosureUtil.wrapAsyncResultHandler(handler))
+    client.reverseLookup(name, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 }
