@@ -17,7 +17,7 @@
 package org.vertx.groovy.core
 
 import groovy.transform.CompileStatic
-
+import org.vertx.groovy.core.dns.DnsClient
 import org.vertx.groovy.core.eventbus.EventBus
 import org.vertx.groovy.core.file.FileSystem
 import org.vertx.groovy.core.http.HttpClient
@@ -196,6 +196,13 @@ class Vertx {
    */
   boolean isWorker() {
     jVertex.isWorker()
+  }
+
+  /**
+   * Return the {@link org.vertx.java.core.dns.DnsClient}
+   */
+  DnsClient createDnsClient(InetSocketAddress... dnsServers) {
+    new DnsClient(jVertex.createDnsClient(dnsServers))
   }
 
   JVertx toJavaVertx() {
