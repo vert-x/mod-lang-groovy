@@ -40,6 +40,7 @@ def testResolveA() {
   ip = "10.0.0.1";
   DnsClient client = prepareClient(TestDnsServer.testResolveA(ip));
   client.resolveA("vertx.io", { result ->
+    tu.checkThread()
     records = result.result
     tu.azzert(records.size() == 1)
     tu.azzert(ip.equals(records.get(0).hostAddress))
@@ -51,6 +52,7 @@ def testResolveAAAA() {
   ip = "::1"
   DnsClient client = prepareClient(TestDnsServer.testResolveAAAA(ip));
   client.resolveAAAA("vertx.io", { result ->
+    tu.checkThread()
     records = result.result
     tu.azzert(records.size() == 1)
     tu.azzert(Arrays.equals(ipv6_bytes, records.get(0).address));
@@ -63,6 +65,7 @@ def testResolveMX() {
   name = "mail.vertx.io"
   DnsClient client = prepareClient(TestDnsServer.testResolveMX(prio, name));
   client.resolveMX("vertx.io", { result ->
+    tu.checkThread()
     records = result.result
     tu.azzert(records.size() == 1)
     record = records.get(0);
@@ -76,6 +79,7 @@ def testResolveTXT() {
   txt = "Vert.x rocks"
   DnsClient client = prepareClient(TestDnsServer.testResolveTXT(txt));
   client.resolveTXT("vertx.io", { result ->
+    tu.checkThread()
     records = result.result
     tu.azzert(records.size() == 1)
     tu.azzert(txt.equals(records.get(0)))
@@ -87,6 +91,7 @@ public void testResolveNS() {
   ns = "ns.vertx.io"
   DnsClient client = prepareClient(TestDnsServer.testResolveNS(ns));
   client.resolveNS("::1", { result ->
+    tu.checkThread()
     records = result.result
     tu.azzert(records.size() == 1)
     tu.azzert(ns.equals(records.get(0)))
@@ -98,6 +103,7 @@ public void testResolveCNAME() {
   cname = "cname.vertx.io"
   DnsClient client = prepareClient(TestDnsServer.testResolveCNAME(cname));
   client.resolveCNAME("vertx.io", { result ->
+    tu.checkThread()
     records = result.result
     tu.azzert(records.size() == 1)
     tu.azzert(cname.equals(records.get(0)))
@@ -109,6 +115,7 @@ public void testResolvePTR() {
   ptr = "ptr.vertx.io"
   DnsClient client = prepareClient(TestDnsServer.testResolvePTR(ptr));
   client.resolvePTR("10.0.0.1.in-addr.arpa", { result ->
+    tu.checkThread()
     record = result.result
     tu.azzert(ptr.equals(record))
     tu.testComplete()
@@ -123,6 +130,7 @@ public void testResolveSRV() {
   target = "vertx.io";
   DnsClient client = prepareClient(TestDnsServer.testResolveSRV(priority, weight, port, target));
   client.resolveSRV("vertx.io", { result ->
+    tu.checkThread()
     records = result.result
     tu.azzert(records.size() == 1)
     record = records.get(0);
@@ -139,6 +147,7 @@ public void testLookup4() {
   ip = "10.0.0.1"
   DnsClient client = prepareClient(TestDnsServer.testLookup4(ip));
   client.lookup4("vertx.io", { result ->
+    tu.checkThread()
     record = result.result
     tu.azzert(ip.equals(record.hostAddress))
     tu.testComplete()
@@ -148,6 +157,7 @@ public void testLookup4() {
 public void testLookup6() {
   DnsClient client = prepareClient(TestDnsServer.testLookup6());
   client.lookup6("vertx.io", { result ->
+    tu.checkThread()
     record = result.result
     tu.azzert(Arrays.equals(ipv6_bytes, record.address))
     tu.testComplete()
@@ -158,6 +168,7 @@ public void testLookup() {
   ip = "10.0.0.1"
   DnsClient client = prepareClient(TestDnsServer.testLookup(ip));
   client.lookup("vertx.io", { result ->
+    tu.checkThread()
     record = result.result
     tu.azzert(ip.equals(record.hostAddress))
     tu.testComplete()
@@ -167,6 +178,7 @@ public void testLookup() {
 public void testLookupNonExisting() {
   DnsClient client = prepareClient(TestDnsServer.testLookupNonExisting());
   client.lookup("notexist.vertx.io", { result ->
+    tu.checkThread()
     cause = result.cause
     tu.azzert(cause.code() == DnsResponseCode.NXDOMAIN)
     tu.testComplete()
@@ -178,6 +190,7 @@ public void testReverseLookupIpv4() {
   ptr = "ptr.vertx.io";
   DnsClient client = prepareClient(TestDnsServer.testReverseLookup(ptr));
   client.reverseLookup("10.0.0.1", { result ->
+    tu.checkThread()
     record = result.result
     tu.azzert(record instanceof Inet4Address);
     tu.azzert(ptr.equals(record.hostName));
@@ -192,6 +205,7 @@ public void testReverseLookupIpv6() {
   ptr = "ptr.vertx.io";
   DnsClient client = prepareClient(TestDnsServer.testReverseLookup(ptr));
   client.reverseLookup("::1", { result ->
+    tu.checkThread()
     record = result.result
     tu.azzert(record instanceof Inet6Address);
     tu.azzert(ptr.equals(record.hostName));
