@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2012 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,24 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.vertx.groovy.core.streams
 
-import groovy.transform.CompileStatic;
+import groovy.transform.CompileStatic
 
-/**
- * Represents a stream of data that can be read from.<p>
- *
- * Any class that implements this interface can be used by a {@link Pump} to pump data from it
- * to a {@link WriteStream}.<p>
- *
- * @author <a href="http://tfox.org">Tim Fox</a>
- */
+
 @CompileStatic
-interface ReadStream<T> extends ReadSupport<T>, ExceptionSupport<T> {
+interface ReadSupport<T> {
 
   /**
-   * Set an end handler. Once the stream has ended, and there is no more data to be read, this handler will be called.
+   * Set a data handler. As data is read, the handler will be called with the data.
    */
-  T endHandler(Closure endHandler);
+  T dataHandler(Closure handler);
+
+  /**
+   * Pause the {@code ReadStream}. While the stream is paused, no data will be sent to the {@code dataHandler}
+   */
+  T pause();
+
+  /**
+   * Resume reading. If the {@code ReadStream} has been paused, reading will recommence on it.
+   */
+  T resume();
+
 }
