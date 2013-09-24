@@ -33,7 +33,6 @@ import org.vertx.groovy.core.sockjs.SockJSServer
 import org.vertx.groovy.core.sockjs.impl.DefaultSockJSServer
 import org.vertx.java.core.Vertx as JVertx
 import org.vertx.java.core.VertxFactory
-import org.vertx.java.core.Context
 import org.vertx.java.core.Handler
 import org.vertx.java.core.datagram.InternetProtocolFamily
 import org.vertx.java.core.shareddata.SharedData
@@ -207,6 +206,13 @@ class Vertx {
     new DnsClient(jVertex.createDnsClient(dnsServers))
   }
 
+  /**
+   * Create a new {@link DatagramSocket}.
+   *
+   * @param family  use {@link InternetProtocolFamily} to use for multicast. If {@code null} is used it's up to the
+   *                operation system to detect it's default.
+   * @return socket the created {@link DatagramSocket}.
+   */
   DatagramSocket createDatagramSocket(InternetProtocolFamily family) {
     new DatagramSocket(jVertex.createDatagramSocket(family))
   }
