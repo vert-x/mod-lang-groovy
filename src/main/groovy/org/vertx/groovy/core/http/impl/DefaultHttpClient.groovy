@@ -63,7 +63,7 @@ class DefaultHttpClient implements HttpClient {
 
   @Override
   HttpClient setKeepAlive(boolean keepAlive) {
-    jClient.setTCPKeepAlive(keepAlive)
+    jClient.setKeepAlive(keepAlive)
     this
   }
 
