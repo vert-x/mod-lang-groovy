@@ -29,7 +29,6 @@ import org.vertx.java.core.json.JsonObject
 class Message {
 
   private def body
-  private def address
   private JMessage jMessage
 
   /**
