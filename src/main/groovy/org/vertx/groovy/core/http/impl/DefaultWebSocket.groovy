@@ -9,6 +9,7 @@ import org.vertx.java.core.Handler
 import org.vertx.java.core.buffer.Buffer as JBuffer
 import org.vertx.java.core.http.WebSocket as JWebSocket
 
+import java.net.InetSocketAddress
 
 /*
  * Copyright 2013 Red Hat, Inc.
@@ -132,4 +133,14 @@ class DefaultWebSocket implements WebSocket {
     jWebSocket.exceptionHandler(handler as Handler)
     this
   }
+
+  @Override
+  InetSocketAddress localAddress() {
+    jWebSocket.localAddress()
+  }
+
+  @Override
+  InetSocketAddress remoteAddress() {
+    jWebSocket.remoteAddress()
+  } 
 }

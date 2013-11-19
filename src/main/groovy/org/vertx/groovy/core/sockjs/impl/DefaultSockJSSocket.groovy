@@ -108,4 +108,14 @@ class DefaultSockJSSocket implements SockJSSocket {
     this
   }
 
+  @Override
+  InetSocketAddress localAddress() {
+    jSocket.localAddress()
+  }
+
+  @Override
+  InetSocketAddress remoteAddress() {
+    jSocket.remoteAddress()
+  }
+
 }
