@@ -37,13 +37,6 @@ class Message {
   def body() {
     return body
   }
-  
-   /**
-   * The address of the message
-   */
-  def address() {
-    return jMessage.address()
-  }
 
   Message(JMessage jMessage) {
     if (jMessage.body() instanceof JsonObject) {
