@@ -89,16 +89,6 @@ interface HttpServer extends ServerSSLSupport<HttpServer>, ServerTCPSupport<Http
    * is complete.
    */
   void close(Closure doneHandler)
-  
-  /**
-   * Set if the {@link HttpServer} should compress the http response if the connected client supports it.
-   */
-  HttpServer setCompressionSupported(boolean compressionSupported)
-
-  /**
-   * Returns {@code true} if the {@link HttpServer} should compress the http response if the connected client supports it.
-   */
-  boolean isCompressionSupported()
 
   /**
    * Get the underlying Java server
