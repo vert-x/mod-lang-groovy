@@ -99,6 +99,7 @@ class EventBus {
    */
   EventBus publish(String address, message) {
     if (message != null) {
+      message = convertMessage(message)
       jEventBus.publish(address, convertMessage(message))
     } else {
       // Just choose an overloaded method...
