@@ -29,6 +29,7 @@ import org.vertx.java.core.json.JsonObject
 class Message {
 
   private def body
+  private def address
   private JMessage jMessage
 
   /**
@@ -36,6 +37,13 @@ class Message {
    */
   def body() {
     return body
+  }
+  
+   /**
+   * The address of the message
+   */
+  def address() {
+    return jMessage.address()
   }
 
   Message(JMessage jMessage) {
