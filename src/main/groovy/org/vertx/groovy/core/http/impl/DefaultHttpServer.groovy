@@ -217,6 +217,13 @@ class DefaultHttpServer implements HttpServer {
     jServer.setUsePooledBuffers(pooledBuffers)
     this
   }
+  
+  @Override
+  HttpServer setCompressionSupported(boolean compressionSupported) {
+    jServer.setCompressionSupported(compressionSupported)
+    this
+  }
+  
 
   @Override
   boolean isTCPNoDelay() {
@@ -256,6 +263,11 @@ class DefaultHttpServer implements HttpServer {
   @Override
   boolean isUsePooledBuffers() {
     jServer.isUsePooledBuffers()
+  }
+
+  @Override
+  boolean isCompressionSupported() {
+    jServer.isCompressionSupported()
   }
 
   org.vertx.java.core.http.HttpServer toJavaServer() {
