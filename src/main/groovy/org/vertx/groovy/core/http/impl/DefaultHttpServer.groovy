@@ -90,6 +90,17 @@ class DefaultHttpServer implements HttpServer {
   }
 
   @Override
+  HttpServer setMaxWebSocketFrameSize(int maxSize) {
+    jServer.setMaxWebSocketFrameSize( maxSize )
+    this
+  }
+ 
+  @Override
+  int getMaxWebSocketFrameSize() {
+    jServer.getMaxWebSocketFrameSize()
+  }
+
+  @Override
   void close(Closure doneHandler) {
     jServer.close(ClosureUtil.wrapAsyncResultHandler(doneHandler))
 }

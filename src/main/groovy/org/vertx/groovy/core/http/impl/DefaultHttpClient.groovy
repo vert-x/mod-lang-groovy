@@ -186,6 +186,17 @@ class DefaultHttpClient implements HttpClient {
   }
 
   @Override
+  HttpClient setMaxWebSocketFrameSize(int maxSize) {
+    jClient.setMaxWebSocketFrameSize( maxSize )
+    this
+  }
+ 
+  @Override
+  int getMaxWebSocketFrameSize() {
+    jClient.getMaxWebSocketFrameSize()
+  }
+
+  @Override
   HttpClient setTrustAll(boolean trustAll) {
     jClient.setTrustAll(trustAll)
     this
