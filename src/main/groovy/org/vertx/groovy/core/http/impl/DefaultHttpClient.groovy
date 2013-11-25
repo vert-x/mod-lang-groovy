@@ -114,7 +114,7 @@ class DefaultHttpClient implements HttpClient {
 
   @Override
   HttpClient getNow(String uri, MultiMap headers, Closure responseHandler) {
-    jClient.getNow(uri, DefaultMultiMap.toJavaMultiMap(headers), {responseHandler(new DefaultHttpClientResponse(it))} as Handler)
+    jClient.getNow(uri, DefaultMultiMap.toJavaMultiMap(headers), {responseHandler(new DefaultHttpClientResponse((JHttpClientResponse) it))} as Handler)
     this
   }
 
@@ -297,6 +297,12 @@ class DefaultHttpClient implements HttpClient {
     jClient.setUsePooledBuffers(pooledBuffers)
     this
   }
+  
+  @Override
+  HttpClient setTryUseCompression(boolean tryUseCompression) {
+    jClient.setTryUseCompression(tryUseCompression)
+    this
+  }
 
   @Override
   boolean isTCPNoDelay() {
@@ -337,4 +343,10 @@ class DefaultHttpClient implements HttpClient {
   boolean isUsePooledBuffers() {
     jClient.isUsePooledBuffers()
   }
+   
+  @Override
+  boolean getTryUseCompression() {
+    jClient.getTryUseCompression()
+  }
+  
 }
