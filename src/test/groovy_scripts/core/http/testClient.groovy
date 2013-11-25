@@ -39,149 +39,259 @@ server = vertx.createHttpServer()
 client = vertx.createHttpClient().setPort(8080)
 
 def testGET() {
-  httpMethod(false, "GET", false)
+  httpMethod([ssl:false, method: "GET", chunked:false])
 }
 
 def testGetSSL() {
-  httpMethod(true, "GET", false)
+  httpMethod([ssl:true, method: "GET", chunked:false])
 }
 
 def testPUT() {
-  httpMethod(false, "PUT", false)
+  httpMethod([ssl:false, method:"PUT", chunked:false])
 }
 
 def testPUTSSL() {
-  httpMethod(true, "PUT", false)
+  httpMethod([ssl:true, method:"PUT", chunked:false])
 }
 
 def testPOST() {
-  httpMethod(false, "POST", false)
+  httpMethod([ssl:false, method:"POST", chunked:false])
 }
 
 def testPOSTSSL() {
-  httpMethod(true, "POST", false)
+  httpMethod([ssl:true, method:"POST", chunked:false])
 }
 
 def testHEAD() {
-  httpMethod(false, "HEAD", false)
+  httpMethod([ssl:false, method:"HEAD", chunked:false])
 }
 
 def testHEADSSL() {
-  httpMethod(true, "HEAD", false)
+  httpMethod([ssl:true, method:"HEAD", chunked:false])
 }
 
 def testOPTIONS() {
-  httpMethod(false, "OPTIONS", false)
+  httpMethod([ssl:false, method:"OPTIONS", chunked:false])
 }
 
 def testOPTIONSSSL() {
-  httpMethod(true, "OPTIONS", false)
+  httpMethod([ssl:true, method:"OPTIONS", chunked:false])
 }
 def testDELETE() {
-  httpMethod(false, "DELETE", false)
+  httpMethod([ssl:false, method:"DELETE", chunked:false])
 }
 
 def testDELETESSL() {
-  httpMethod(true, "DELETE", false)
+  httpMethod([ssl:true, method:"DELETE", chunked:false])
 }
 
 def testTRACE() {
-  httpMethod(false, "TRACE", false)
+  httpMethod([ssl:false, method:"TRACE", chunked:false])
 }
 
 def testTRACESSL() {
-  httpMethod(true, "TRACE", false)
+  httpMethod([ssl:true, method:"TRACE", chunked:false])
 }
 
 def testCONNECT() {
-  httpMethod(false, "CONNECT", false)
+  httpMethod([ssl:false, method:"CONNECT", chunked:false])
 }
 
 def testCONNECTSSL() {
-  httpMethod(true, "CONNECT", false)
+  httpMethod([ssl:true, method:"CONNECT", chunked:false])
 }
 
 def testPATCH() {
-  httpMethod(false, "PATCH", false)
+  httpMethod([ssl:false, method:"PATCH", chunked:false])
 }
 
 def testPATCHSSL() {
-  httpMethod(true, "PATCH", false)
+  httpMethod([ssl:true, method:"PATCH", chunked:false])
 }
-
 
 
 
 def testGETChunked() {
-  httpMethod(false, "GET", true)
+  httpMethod([ssl:false, method: "GET", chunked:true])
 }
 
 def testGetSSLChunked() {
-  httpMethod(true, "GET", true)
+  httpMethod([ssl:true, method: "GET", chunked:true])
 }
 
 def testPUTChunked() {
-  httpMethod(false, "PUT", true)
+  httpMethod([ssl:false, method:"PUT", chunked:true])
 }
 
 def testPUTSSLChunked() {
-  httpMethod(true, "PUT", true)
+  httpMethod([ssl:true, method:"PUT", chunked:true])
 }
 
 def testPOSTChunked() {
-  httpMethod(false, "POST", true)
+  httpMethod([ssl:false, method:"POST", chunked:true])
 }
 
 def testPOSTSSLChunked() {
-  httpMethod(true, "POST", true)
+  httpMethod([ssl:true, method:"POST", chunked:true])
 }
 
 def testHEADChunked() {
-  httpMethod(false, "HEAD", true)
+  httpMethod([ssl:false, method:"HEAD", chunked:true])
 }
 
 def testHEADSSLChunked() {
-  httpMethod(true, "HEAD", true)
+  httpMethod([ssl:true, method:"HEAD", chunked:true])
 }
 
 def testOPTIONSChunked() {
-  httpMethod(false, "OPTIONS", true)
+  httpMethod([ssl:false, method:"OPTIONS", chunked:true])
 }
 
 def testOPTIONSSSLChunked() {
-  httpMethod(true, "OPTIONS", true)
+  httpMethod([ssl:true, method:"OPTIONS", chunked:true])
 }
 
 def testDELETEChunked() {
-  httpMethod(false, "DELETE", true)
+  httpMethod([ssl:false, method:"DELETE", chunked:true])
 }
 
 def testDELETESSLChunked() {
-  httpMethod(true, "DELETE", true)
+  httpMethod([ssl:true, method:"DELETE", chunked:true])
 }
 
 def testTRACEChunked() {
-  httpMethod(false, "TRACE", true)
+  httpMethod([ssl:false, method:"TRACE", chunked:true])
 }
 
 def testTRACESSLChunked() {
-  httpMethod(true, "TRACE", true)
+  httpMethod([ssl:true, method:"TRACE", chunked:true])
 }
 
 def testCONNECTChunked() {
-  httpMethod(false, "CONNECT", true)
+  httpMethod([ssl:false, method:"CONNECT", chunked:true])
 }
 
 def testCONNECTSSLChunked() {
-  httpMethod(true, "CONNECT", true)
+  httpMethod([ssl:true, method:"CONNECT", chunked:true])
 }
 
 def testPATCHChunked() {
-  httpMethod(false, "PATCH", true)
+  httpMethod([ssl:false, method:"PATCH", chunked:true])
 }
 
 def testPATCHSSLChunked() {
-  httpMethod(true, "PATCH", true)
+  httpMethod([ssl:true, method:"PATCH", chunked:true])
+}
+
+
+
+def testGETCompressed() {
+  httpMethod([ssl:false, method: "GET", chunked:false, compression:true])
+}
+def testGETChunkedCompressed() {
+  httpMethod([ssl:false, method: "GET", chunked:true, compression:true])
+}
+def testGETSSLCompressed() {
+  httpMethod([ssl:true, method: "GET", chunked:false, compression:true])
+}
+def testGETSSLChunkedCompressed() {
+  httpMethod([ssl:true, method: "GET", chunked:true, compression:true])
+}
+def testPUTCompressed() {
+  httpMethod([ssl:false, method: "PUT", chunked:false, compression:true])
+}
+def testPUTChunkedCompressed() {
+  httpMethod([ssl:false, method: "PUT", chunked:true, compression:true])
+}
+def testPUTSSLCompressed() {
+  httpMethod([ssl:true, method: "PUT", chunked:false, compression:true])
+}
+def testPUTSSLChunkedCompressed() {
+  httpMethod([ssl:true, method: "PUT", chunked:true, compression:true])
+}
+def testPOSTCompressed() {
+  httpMethod([ssl:false, method: "POST", chunked:false, compression:true])
+}
+def testPOSTChunkedCompressed() {
+  httpMethod([ssl:false, method: "POST", chunked:true, compression:true])
+}
+def testPOSTSSLCompressed() {
+  httpMethod([ssl:true, method: "POST", chunked:false, compression:true])
+}
+def testPOSTSSLChunkedCompressed() {
+  httpMethod([ssl:true, method: "POST", chunked:true, compression:true])
+}
+def testOPTIONSCompressed() {
+  httpMethod([ssl:false, method: "OPTIONS", chunked:false, compression:true])
+}
+def testOPTIONSChunkedCompressed() {
+  httpMethod([ssl:false, method: "OPTIONS", chunked:true, compression:true])
+}
+def testOPTIONSSSLCompressed() {
+  httpMethod([ssl:true, method: "OPTIONS", chunked:false, compression:true])
+}
+def testOPTIONSSSLChunkedCompressed() {
+  httpMethod([ssl:true, method: "OPTIONS", chunked:true, compression:true])
+}
+def testHEADCompressed() {
+  httpMethod([ssl:false, method: "HEAD", chunked:false, compression:true])
+}
+def testHEADChunkedCompressed() {
+  httpMethod([ssl:false, method: "HEAD", chunked:true, compression:true])
+}
+def testHEADSSLCompressed() {
+  httpMethod([ssl:true, method: "HEAD", chunked:false, compression:true])
+}
+def testHEADSSLChunkedCompressed() {
+  httpMethod([ssl:true, method: "HEAD", chunked:true, compression:true])
+}
+def testDELETECompressed() {
+  httpMethod([ssl:false, method: "DELETE", chunked:false, compression:true])
+}
+def testDELETEChunkedCompressed() {
+  httpMethod([ssl:false, method: "DELETE", chunked:true, compression:true])
+}
+def testDELETESSLCompressed() {
+  httpMethod([ssl:true, method: "DELETE", chunked:false, compression:true])
+}
+def testDELETESSLChunkedCompressed() {
+  httpMethod([ssl:true, method: "DELETE", chunked:true, compression:true])
+}
+def testTRACECompressed() {
+  httpMethod([ssl:false, method: "TRACE", chunked:false, compression:true])
+}
+def testTRACEChunkedCompressed() {
+  httpMethod([ssl:false, method: "TRACE", chunked:true, compression:true])
+}
+def testTRACESSLCompressed() {
+  httpMethod([ssl:true, method: "TRACE", chunked:false, compression:true])
+}
+def testTRACESSLChunkedCompressed() {
+  httpMethod([ssl:true, method: "TRACE", chunked:true, compression:true])
+}
+def testCONNECTCompressed() {
+  httpMethod([ssl:false, method: "CONNECT", chunked:false, compression:true])
+}
+def testCONNECTChunkedCompressed() {
+  httpMethod([ssl:false, method: "CONNECT", chunked:true, compression:true])
+}
+def testCONNECTSSLCompressed() {
+  httpMethod([ssl:true, method: "CONNECT", chunked:false, compression:true])
+}
+def testCONNECTSSLChunkedCompressed() {
+  httpMethod([ssl:true, method: "CONNECT", chunked:true, compression:true])
+}
+def testPATCHCompressed() {
+  httpMethod([ssl:false, method: "PATCH", chunked:false, compression:true])
+}
+def testPATCHChunkedCompressed() {
+  httpMethod([ssl:false, method: "PATCH", chunked:true, compression:true])
+}
+def testPATCHSSLCompressed() {
+  httpMethod([ssl:true, method: "PATCH", chunked:false, compression:true])
+}
+def testPATCHSSLChunkedCompressed() {
+  httpMethod([ssl:true, method: "PATCH", chunked:true, compression:true])
 }
 
 def testFormFileUpload() {
@@ -270,7 +380,12 @@ def testFormUploadAttributes() {
 }
 
 
-def httpMethod(ssl, method, chunked)  {
+def httpMethod(parameters)  {
+
+  def method = parameters.method
+  def ssl = parameters.ssl
+  def chunked = parameters.chunked
+  def compression = parameters.compression
 
   if (ssl) {
     server.SSL = true
@@ -279,6 +394,13 @@ def httpMethod(ssl, method, chunked)  {
     server.trustStorePath = "./src/test/keystores/server-truststore.jks"
     server.trustStorePassword = "wibble"
     server.clientAuthRequired = true
+  }
+
+  if (compression) {
+    server.setCompressionSupported(true)
+    client.setTryUseCompression(true)
+    tu.azzert(server.isCompressionSupported())
+    tu.azzert(client.getTryUseCompression())
   }
 
   path = "/someurl/blah.html"
