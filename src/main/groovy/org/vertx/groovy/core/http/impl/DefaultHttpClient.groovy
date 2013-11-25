@@ -114,7 +114,7 @@ class DefaultHttpClient implements HttpClient {
 
   @Override
   HttpClient getNow(String uri, MultiMap headers, Closure responseHandler) {
-    jClient.getNow(uri, DefaultMultiMap.toJavaMultiMap(headers), {responseHandler(new DefaultHttpClientResponse(it))} as Handler)
+    jClient.getNow(uri, DefaultMultiMap.toJavaMultiMap(headers), {responseHandler(new DefaultHttpClientResponse((JHttpClientResponse) it))} as Handler)
     this
   }
 

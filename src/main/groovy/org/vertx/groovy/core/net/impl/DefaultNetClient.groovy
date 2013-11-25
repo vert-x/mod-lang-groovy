@@ -248,7 +248,7 @@ class DefaultNetClient implements NetClient {
     jNetClient.isUsePooledBuffers()
   }
 
-  private wrapConnectHandler(Closure hndlr) {
+  private AsyncResultHandler wrapConnectHandler(Closure hndlr) {
     { AsyncResult ar ->
       if (ar.succeeded()) {
         hndlr(new DefaultFutureResult<NetSocket>(new DefaultNetSocket((JNetSocket) ar.result())))
