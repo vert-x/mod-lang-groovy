@@ -22,6 +22,8 @@ import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.streams.ReadStream
 import org.vertx.groovy.core.streams.WriteStream
 
+import java.net.InetSocketAddress
+
 /**
  * Represents an HTML 5 Websocket<p>
  * Instances of this class are created and provided to the handler of an
@@ -84,4 +86,13 @@ interface WebSocket extends ReadStream<WebSocket>, WriteStream<WebSocket> {
    */
   WebSocket leftShift(String str)
 
+  /**
+   * Return the remote address for this socket
+   */
+  InetSocketAddress remoteAddress()
+
+  /**
+   * Return the local address for this socket
+   */
+  InetSocketAddress localAddress()
 }

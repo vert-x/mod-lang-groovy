@@ -22,6 +22,8 @@ import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.streams.ReadStream
 import org.vertx.groovy.core.streams.WriteStream
 
+import java.net.InetSocketAddress
+
 /**
  *
  * You interact with SockJS clients through instances of SockJS socket.<p>
@@ -61,5 +63,14 @@ interface SockJSSocket extends ReadStream<SockJSSocket>, WriteStream<SockJSSocke
    */
   SockJSSocket leftShift(String str);
 
+  /**
+   * Return the remote address for this socket
+   */
+  InetSocketAddress remoteAddress()
+
+  /**
+   * Return the local address for this socket
+   */
+  InetSocketAddress localAddress()
 }
 

@@ -41,6 +41,11 @@ def echo(binary) {
 
     tu.checkThread()
 
+    tu.azzert(ws.remoteAddress() != null )
+    tu.azzert(ws.localAddress().getPort() == 8080)
+
+    println "websocket remote address: ${ws.remoteAddress()}, local address ${ws.localAddress()}"
+
     ws.dataHandler { buff ->
       tu.checkThread()
       ws << buff
@@ -58,12 +63,14 @@ def echo(binary) {
 
     client.connectWebsocket("/someurl", { ws ->
       tu.checkThread()
+      tu.azzert(ws.remoteAddress().getPort() == 8080 )
+      tu.azzert(ws.localAddress() != null)
 
       received = new Buffer()
 
-      ws.dataHandler { buff ->
+      ws.dataHandler { data ->
         tu.checkThread()
-        received << buff
+        received << data
         if (received.length == buff.length) {
           tu.azzert(TestUtils.buffersEqual(buff, received))
           tu.testComplete()
@@ -84,12 +91,18 @@ def testWriteFromConnectHandler() {
 
   server.websocketHandler { ws ->
     tu.checkThread()
+    tu.azzert(ws.remoteAddress() != null )
+    tu.azzert(ws.localAddress().getPort() == 8080)
+
     ws.writeTextFrame("foo")
   }
 
   server.listen(8080, {
     client.connectWebsocket("/someurl", { ws ->
       tu.checkThread()
+      tu.azzert(ws.remoteAddress().getPort() == 8080 )
+      tu.azzert(ws.localAddress() != null)
+
       ws.dataHandler { buff ->
         tu.checkThread()
         tu.azzert("foo".equals(buff.toString()))
@@ -103,6 +116,8 @@ def testClose() {
 
   server.websocketHandler { ws ->
     tu.checkThread()
+    tu.azzert(ws.remoteAddress() != null )
+    tu.azzert(ws.localAddress().getPort() == 8080)
     ws.dataHandler { buff ->
       ws.close()
     }
@@ -111,6 +126,9 @@ def testClose() {
   server.listen(8080, {
     client.connectWebsocket("/someurl", { ws ->
       tu.checkThread()
+      tu.azzert(ws.remoteAddress().getPort() == 8080 )
+      tu.azzert(ws.localAddress() != null)
+
       ws.closeHandler {
         tu.testComplete()
       }
@@ -124,12 +142,17 @@ def testCloseFromConnectHandler() {
 
   server.websocketHandler { ws ->
     tu.checkThread()
+    tu.azzert(ws.remoteAddress() != null )
+    tu.azzert(ws.localAddress().getPort() == 8080)
     ws.close()
   }
 
   server.listen(8080, {
     client.connectWebsocket("/someurl", { ws ->
       tu.checkThread()
+      tu.azzert(ws.remoteAddress().getPort() == 8080 )
+      tu.azzert(ws.localAddress() != null)
+      
       ws.closeHandler {
         tu.testComplete()
       }

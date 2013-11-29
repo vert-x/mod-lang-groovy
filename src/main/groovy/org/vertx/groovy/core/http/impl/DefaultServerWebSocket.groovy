@@ -10,6 +10,8 @@ import org.vertx.java.core.Handler
 import org.vertx.java.core.buffer.Buffer as JBuffer
 import org.vertx.java.core.http.ServerWebSocket as JServerWebSocket
 
+import java.net.InetSocketAddress
+
 /*
  * Copyright 2013 Red Hat, Inc.
  *
@@ -151,4 +153,14 @@ class DefaultServerWebSocket implements ServerWebSocket {
   void reject() {
     jServerWebSocket.reject()
   }
+
+  @Override
+  InetSocketAddress localAddress() {
+    jServerWebSocket.localAddress()
+  }
+
+  @Override
+  InetSocketAddress remoteAddress() {
+    jServerWebSocket.remoteAddress()
+  } 
 }

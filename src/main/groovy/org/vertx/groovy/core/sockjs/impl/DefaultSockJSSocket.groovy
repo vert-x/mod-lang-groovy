@@ -8,6 +8,8 @@ import org.vertx.groovy.core.sockjs.SockJSSocket
 import org.vertx.java.core.Handler
 import org.vertx.java.core.buffer.Buffer as JBuffer
 
+import java.net.InetSocketAddress
+
 /*
  * Copyright 2013 Red Hat, Inc.
  *
@@ -106,6 +108,16 @@ class DefaultSockJSSocket implements SockJSSocket {
   SockJSSocket exceptionHandler(Closure handler) {
     jSocket.exceptionHandler(handler as Handler)
     this
+  }
+
+  @Override
+  InetSocketAddress localAddress() {
+    jSocket.localAddress()
+  }
+
+  @Override
+  InetSocketAddress remoteAddress() {
+    jSocket.remoteAddress()
   }
 
 }
