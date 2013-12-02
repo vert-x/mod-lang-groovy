@@ -32,17 +32,18 @@ class Message {
   private JMessage jMessage
 
   /**
-   * The address of the message, as a Groovy property initialized on constructor
-   */
-  String address
-
-  /**
    * The body of the message
    */
   def body() {
     return body
   }
    
+  /**
+   * The address of the message, as a Groovy property initialized on constructor
+   */
+  String getAddress() {
+    return jMessage.address()  
+  }
 
   Message(JMessage jMessage) {
     if (jMessage.body() instanceof JsonObject) {
@@ -51,7 +52,6 @@ class Message {
       this.body = jMessage.body()
     }
     this.jMessage = jMessage
-    this.address = jMessage.address()
   }
 
   /**
