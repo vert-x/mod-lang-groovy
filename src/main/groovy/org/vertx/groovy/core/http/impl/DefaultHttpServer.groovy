@@ -32,8 +32,8 @@ import org.vertx.java.core.http.ServerWebSocket as JServerWebSocket
 @CompileStatic
 class DefaultHttpServer implements HttpServer {
 
-  // Putting it as a public groovy property to be able to use `HttpServer.jServer` notation
-  JHttpServer jServer
+  // Putting it as a final public groovy property to be able to use `HttpServer.jServer` notation
+  final JHttpServer jServer
 
   DefaultHttpServer(Vertx vertx, Map props = null) {
     jServer = vertx.createHttpServer()
@@ -271,6 +271,12 @@ class DefaultHttpServer implements HttpServer {
     jServer.isCompressionSupported()
   }
 
+  /**
+   * Get the Java instance
+   *
+   * @deprecated use  `HttpServer.jServer` notation instead.  
+   */
+  @Deprecated 
   JHttpServer toJavaServer() {
     jServer
   }

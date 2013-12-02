@@ -7,6 +7,8 @@ import org.vertx.groovy.core.http.HttpServerResponse
 import org.vertx.groovy.core.impl.DefaultMultiMap
 import org.vertx.java.core.Handler
 
+import org.vertx.java.core.http.HttpServerResponse as JHttpServerResponse
+
 /*
  * Copyright 2013 Red Hat, Inc.
  *
@@ -27,7 +29,7 @@ import org.vertx.java.core.Handler
 @CompileStatic
 class DefaultHttpServerResponse implements HttpServerResponse {
 
-  private org.vertx.java.core.http.HttpServerResponse jResponse
+  private JHttpServerResponse jResponse
   private MultiMap headers
   private MultiMap trailers
 

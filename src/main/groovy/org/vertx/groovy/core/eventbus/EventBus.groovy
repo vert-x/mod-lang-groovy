@@ -62,7 +62,8 @@ import java.util.concurrent.ConcurrentHashMap
 @CompileStatic
 class EventBus {
 
-  private final JEventBus jEventBus
+  // Putting it as a public final groovy property to be able to use `EventBus.jEventBus` notation
+  final JEventBus jEventBus
   
   public EventBus(JEventBus jEventBus) {
     this.jEventBus = jEventBus
@@ -153,6 +154,12 @@ class EventBus {
     this
   }
 
+  /**
+   * Get the Java instance
+   *
+   * @deprecated use  `EventBus.jEventBus` notation instead.  
+   */
+  @Deprecated 
   JEventBus javaEventBus() {
     jEventBus
   }
