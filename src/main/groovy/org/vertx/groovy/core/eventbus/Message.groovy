@@ -37,6 +37,13 @@ class Message {
   def body() {
     return body
   }
+   
+  /**
+   * The address of the message, as a Groovy property initialized on constructor
+   */
+  String getAddress() {
+    return jMessage.address()  
+  }
 
   Message(JMessage jMessage) {
     if (jMessage.body() instanceof JsonObject) {
@@ -52,7 +59,7 @@ class Message {
  * called when it has received a reply. If the message wasn't sent specifying a receipt handler
  * this method does nothing.
  * @param message The reply message
-   @param replyHandler Optional reply handler, so you can get a reply to your reply
+ *  @param replyHandler Optional reply handler, so you can get a reply to your reply
  */
   void reply(message, Closure replyHandler = null) {
     message = EventBus.convertMessage(message)
