@@ -23,6 +23,7 @@ import org.vertx.groovy.core.http.HttpClientRequest
 import org.vertx.groovy.core.impl.DefaultMultiMap
 import org.vertx.java.core.Handler
 import org.vertx.java.core.Vertx
+import org.vertx.java.core.http.HttpClient as JClient
 import org.vertx.java.core.http.HttpClientResponse as JHttpClientResponse
 import org.vertx.java.core.http.WebSocket as JWebSocket
 import org.vertx.java.core.http.WebSocketVersion
@@ -33,7 +34,7 @@ import org.vertx.java.core.http.WebSocketVersion
 @CompileStatic
 class DefaultHttpClient implements HttpClient {
 
-  private org.vertx.java.core.http.HttpClient jClient
+  private JClient jClient
 
   DefaultHttpClient(Vertx vertx, Map props = null) {
     jClient = vertx.createHttpClient()

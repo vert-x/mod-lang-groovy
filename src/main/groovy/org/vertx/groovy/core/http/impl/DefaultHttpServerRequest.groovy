@@ -40,7 +40,9 @@ import javax.security.cert.X509Certificate
 @CompileStatic
 class DefaultHttpServerRequest implements HttpServerRequest {
 
-  private org.vertx.java.core.http.HttpServerRequest jRequest
+  // Putting it as a public final groovy property to be able to use `DefaultHttpServerRequest.jRequest` notation
+  final JHttpServerRequest jRequest
+
   private MultiMap headers;
   private MultiMap params;
   private MultiMap attrs;
@@ -168,6 +170,12 @@ class DefaultHttpServerRequest implements HttpServerRequest {
     attrs
   }
 
+  /**
+   * Get the Java instance
+   *
+   * @deprecated use  `DefaultHttpServerRequest.jRequest` notation instead.  
+   */
+  @Deprecated 
   JHttpServerRequest toJavaRequest() {
     jRequest
   }
