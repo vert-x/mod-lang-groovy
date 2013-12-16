@@ -233,14 +233,6 @@ def testConfigure() {
   peer1.multicastNetworkInterface = iface.name
   tu.azzert(peer1.multicastNetworkInterface.equals(iface.name))
 
-  tu.azzert(peer1.receiveBufferSize != 1024)
-  peer1.receiveBufferSize = 1024
-  tu.azzert(peer1.receiveBufferSize == 1024)
-
-  tu.azzert(peer1.sendBufferSize != 1024)
-  peer1.sendBufferSize = 1024
-  tu.azzert(peer1.sendBufferSize == 1024)
-
   tu.azzert(!peer1.reuseAddress)
   peer1.reuseAddress = true
   tu.azzert(peer1.reuseAddress)
