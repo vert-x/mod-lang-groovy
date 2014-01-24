@@ -25,15 +25,28 @@ tu = new TestUtils(vertx)
 def testDefaultCompilerConfigurationInitialization() {
     GroovyVerticleFactory factory = new GroovyVerticleFactory();
 
-    JContainer jContainer = [ env: {
-        return System.getenv()
-    } ] as JContainer
+    factory.init(null, null, Thread.currentThread().getContextClassLoader());
 
-    factory.init(null, jContainer, Thread.currentThread().getContextClassLoader());
+    tu.azzert factory.compilerCfg.asBoolean()
+    tu.azzert factory.compilerCfg.scriptBaseClass == 'groovy.lang.Script'
+    tu.azzert factory.compilerCfg.sourceEncoding == 'ISO1252'
+    tu.azzert factory.compilerCfg.compilationCustomizers.size() == 1
+    tu.azzert factory.compilerCfg.compilationCustomizers[0].imports.size() == 1
+    tu.azzert factory.compilerCfg.compilationCustomizers[0].imports[0].classNode.name == 'org.codehaus.groovy.control.CompilerConfiguration'
+
+    tu.testComplete()
+}
+
+def testSystemPropertyCompilerConfigurationInitialization() {
+    GroovyVerticleFactory factory = new GroovyVerticleFactory();
+
+    System.setProperty("vertx.groovy.compilerConfiguration", 'no.properties')
+    System.setProperty("groovy.source.encoding", 'UTF-8')
+    factory.init(null, null, Thread.currentThread().getContextClassLoader());
 
     tu.azzert factory.compilerCfg.asBoolean()
     tu.azzert factory.compilerCfg.scriptBaseClass == null
-    tu.azzert factory.compilerCfg.sourceEncoding == 'ISO1252'
+    tu.azzert factory.compilerCfg.sourceEncoding == 'UTF-8'
 
     tu.testComplete()
 }
@@ -41,17 +54,12 @@ def testDefaultCompilerConfigurationInitialization() {
 def testUnknownCompilerConfigurationInitialization() {
     GroovyVerticleFactory factory = new GroovyVerticleFactory();
 
-    JContainer jContainer = [ env: {
-        def env = new HashMap(System.getenv())
-        env.VERTX_GROOVY_COMPILER_CONFIGURATION = 'no.properties'
-        return env
-    } ] as JContainer
-
-    factory.init(null, jContainer, Thread.currentThread().getContextClassLoader());
+    System.setProperty("vertx.groovy.compilerConfiguration", 'no.properties')
+    factory.init(null, null, Thread.currentThread().getContextClassLoader());
 
     tu.azzert factory.compilerCfg.asBoolean()
     tu.azzert factory.compilerCfg.scriptBaseClass == null
-    tu.azzert factory.compilerCfg.sourceEncoding == 'UTF-8'
+    tu.azzert factory.compilerCfg.sourceEncoding == 'US-ASCII'
 
     tu.testComplete()
 }
@@ -59,17 +67,12 @@ def testUnknownCompilerConfigurationInitialization() {
 def testCustomCompilerConfigurationInitialization() {
     GroovyVerticleFactory factory = new GroovyVerticleFactory();
 
-    JContainer jContainer = [ env: {
-        def env = new HashMap(System.getenv())
-        env.VERTX_GROOVY_COMPILER_CONFIGURATION = 'compilerConfiguration2.properties'
-        return env
-    } ] as JContainer
-
-    factory.init(null, jContainer, Thread.currentThread().getContextClassLoader());
+    System.setProperty("vertx.groovy.compilerConfiguration", 'compilerConfiguration2.properties')
+    factory.init(null, null, Thread.currentThread().getContextClassLoader());
 
     tu.azzert factory.compilerCfg.asBoolean()
     tu.azzert factory.compilerCfg.scriptBaseClass == 'groovy.lang.Script'
-    tu.azzert factory.compilerCfg.sourceEncoding == 'UTF-8'
+    tu.azzert factory.compilerCfg.sourceEncoding == 'US-ASCII'
 
     tu.testComplete()
 }
@@ -77,13 +80,8 @@ def testCustomCompilerConfigurationInitialization() {
 def testCustomCompilerConfigurationInitializationWithCustomizer() {
     GroovyVerticleFactory factory = new GroovyVerticleFactory();
 
-    JContainer jContainer = [ env: {
-        def env = new HashMap(System.getenv())
-        env.VERTX_GROOVY_COMPILER_CONFIGURATION = 'compilerConfiguration.groovy'
-        return env
-    } ] as JContainer
-
-    factory.init(null, jContainer, Thread.currentThread().getContextClassLoader());
+  System.setProperty("vertx.groovy.compilerConfiguration", 'compilerConfiguration.groovy')
+    factory.init(null, null, Thread.currentThread().getContextClassLoader());
 
     tu.azzert factory.compilerCfg.asBoolean()
     tu.azzert factory.compilerCfg.scriptBaseClass == 'groovy.lang.Script'

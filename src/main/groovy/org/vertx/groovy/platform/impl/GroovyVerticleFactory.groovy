@@ -33,12 +33,35 @@ import groovy.transform.TypeCheckingMode
 import java.lang.reflect.Method
 
 /**
+ * <p>
+ *   Factory for verticles in groovy.
+ * </p><h2>
+ *   Compiler Configuration
+ * </h2><p>
+ *   The groovy {@link CompilerConfiguration} may be configured through a
+ *   script or properties file. If the {@code vertx.groovy.compilerConfiguration}
+ *   system property is set, it searches for the provided resource. If unset,
+ *   then it looks first for {@code compilerConfiguration.groovy}, then
+ *   {@code compilerConfiguration.properties} on the classpath.
+ * </p><p>
+ *   The resource may be a groovy ConfigSlurper script, which may set
+ *   properties and tweak the configurer programmatically. The key
+ *   {@code customizer} should be a closure accepting the
+ *   {@link CompilerConfiguration}. It may return a different
+ *   CompilerConfiguration instance to replace it.
+ * </p><p>
+ *   Alternatively, the resource may be a simple java properties file.
+ * </p>
+ *
  * @author <a href="http://tfox.org">Tim Fox</a>
  * @author Alexander Klein
+ * @author Danny Kirchmeier
  */
 public class GroovyVerticleFactory implements VerticleFactory {
 
+  private static final String CONFIGURATION_PROPERTY = "vertx.groovy.compilerConfiguration"
   private static Logger log = LoggerFactory.getLogger(GroovyVerticleFactory.class)
+
   private JVertx vertx
   private JContainer container
   private GroovyClassLoader gcl
@@ -48,26 +71,18 @@ public class GroovyVerticleFactory implements VerticleFactory {
   public void init(JVertx vertx, JContainer container, ClassLoader cl) {
     this.vertx = vertx
     this.container = container
-    compilerCfg = createCompilerConfiguration(container, cl)
+    compilerCfg = createCompilerConfiguration(cl)
     this.gcl = new GroovyClassLoader(cl, compilerCfg)
   }
 
-  /**
-   * enable loading of properties of CompilationConfiguration from Classpath
-   * for setting ScriptBaseClass or other options.
-   * As adding CompilationCustomizers can only be done programmatically,
-   * you can use a ConfigSlurper-Script instead of a .properties file and add
-   * a closure with the key 'customizer' that gets the preconfigured
-   * CompilerConfiguration as argument and returns the modified instance to use.
-   */
-  private CompilerConfiguration createCompilerConfiguration(JContainer container, ClassLoader cl) {
+  private CompilerConfiguration createCompilerConfiguration(ClassLoader cl) {
     Closure customizer
-    Properties properties = new Properties(System.getProperties())
-    String propertiesFile = container.env().VERTX_GROOVY_COMPILER_CONFIGURATION ?: 'compilerConfiguration.properties'
-    URL url = cl.getResource(propertiesFile)
+    Properties properties = new Properties()
+    URL url = findConfigurationResource(cl)
     if(url) {
+      log.trace("Configuring groovy compiler with ${url}")
       try {
-        if(propertiesFile.toLowerCase().endsWith('.groovy')) {
+        if(url.file.toLowerCase().endsWith('.groovy')) {
           ConfigSlurper slurper = new ConfigSlurper(classLoader: new GroovyClassLoader(cl))
           ConfigObject cObject = slurper.parse(url)
           customizer = cObject.remove('customizer') as Closure
@@ -78,8 +93,10 @@ public class GroovyVerticleFactory implements VerticleFactory {
           }
         }
       } catch(e) {
-        log.error("Error loading Groovy CompilerConfiguration properties from $propertiesFile", e)
+        log.error("Error loading Groovy CompilerConfiguration properties from $url", e)
       }
+    } else {
+      log.trace("No groovy configuration file found.")
     }
 
     CompilerConfiguration compilerCfg = new CompilerConfiguration(CompilerConfiguration.DEFAULT)
@@ -91,6 +108,24 @@ public class GroovyVerticleFactory implements VerticleFactory {
         compilerCfg = result
     }
     return compilerCfg
+  }
+
+  private URL findConfigurationResource(ClassLoader cl) {
+    try{
+      String prop = System.getProperty(CONFIGURATION_PROPERTY)
+      if(prop){
+        return cl.getResource(prop);
+      }
+    } catch(SecurityException ignored){
+    }
+
+    URL url = cl.getResource('compilerConfiguration.groovy')
+    if(url) return url
+
+    url = cl.getResource('compilerConfiguration.properties')
+    if(url) return url
+
+    return null;
   }
 
   public JVerticle createVerticle(String main) throws Exception {
