@@ -65,4 +65,28 @@ class Message {
     message = EventBus.convertMessage(message)
     jMessage.reply(message, EventBus.wrapHandler(replyHandler))
   }
+
+
+  /**
+ * Reply to this message. If the message was sent specifying a reply handler, that handler will be
+ * called when it has received a reply. If the message wasn't sent specifying a receipt handler
+ * this method does nothing.
+ * @param message The reply message
+ *  @param replyHandler Optional reply handler, so you can get a reply to your reply
+ */
+  void replyWithTimeout(message, long timeout, Closure replyHandler = null) {
+    message = EventBus.convertMessage(message)
+    jMessage.replyWithTimeout(message, timeout, EventBus.wrapHandler(replyHandler))
+  }
+
+
+  /**
+   * Signal that processing of this message failed. If the message was sent specifying a result handler
+   * the handler will be called with a failure corresponding to the failure code and message specified here
+   * @param failureCode A failure code to pass back to the sender
+   * @param message A message to pass back to the sender
+   */
+  void fail(int failureCode, String message) {
+    jMessage.fail(failureCode,message)
+  }
 }

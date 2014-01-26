@@ -91,6 +91,26 @@ class EventBus {
   }
 
   /**
+   * Send a message on the event bus.
+   * Message can be a java.util.Map (Representing a JSON message), a String, boolean,
+   * byte, short, int, long, float, double or {@link org.vertx.java.core.buffer.Buffer}
+   * @param address The address to send it to
+   * @param message The message
+   * @param timeout The timeout
+   * @param replyHandler Reply handler will be called when any reply from the recipient is received
+   * @return self which allow method chaining
+   */
+  EventBus sendWithTimeout(String address, message, long timeout, Closure replyHandler = null) {
+    if (message != null) {
+      jEventBus.sendWithTimeout(address, convertMessage(message), timeout, wrapHandler(replyHandler))
+    } else {
+      // Just choose an overloaded method...
+      jEventBus.sendWithTimeout(address, (String)null, timeout, wrapHandler(replyHandler))
+    }
+    this
+  }  
+
+  /**
    * Publish a message on the event bus.
    * Message can be a java.util.Map (Representing a JSON message), a String, boolean,
    * byte, short, int, long, float, double or {@link org.vertx.java.core.buffer.Buffer}

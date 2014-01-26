@@ -38,6 +38,11 @@ public class GroovyEventBusTest extends TestBase {
     startTest(getMethodName());
   }
 
+  public void testSimpleWithTimeout() {
+    startTest(getMethodName());
+  }
+
+
   public void testUnregister() {
     startTest(getMethodName());
   }
