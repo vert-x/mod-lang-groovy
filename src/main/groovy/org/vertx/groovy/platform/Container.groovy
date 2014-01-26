@@ -70,12 +70,22 @@ class Container {
   /**
    * Deploy a verticle programmatically
    * @param main The main of the verticle
+   * @param instances The number of instances to deploy (defaults to 1)
+   */
+  void deployVerticle(String main, int instances) {
+    jContainer.deployVerticle(main, new JsonObject( new HashMap<String, Object>()), instances, null)
+  }
+
+    /**
+   * Deploy a verticle programmatically
+   * @param main The main of the verticle
    * @param config JSON config to provide to the verticle
    * @param instances The number of instances to deploy (defaults to 1)
    */
   void deployVerticle(String main, Map<String, Object> config = [:], int instances = 1) {
     jContainer.deployVerticle(main, new JsonObject(config), instances, null)
   }
+
 
   /**
    * Deploy a verticle programmatically
@@ -87,6 +97,15 @@ class Container {
    */
   void deployVerticle(String main, Map<String, Object> config = [:], int instances = 1, Closure doneHandler) {
     jContainer.deployVerticle(main, new JsonObject(config), instances, doneHandler as Handler)
+  }
+
+  /**
+   * Deploy a module programmatically
+   * @param moduleName The main of the module
+   * @param instances The number of instances to deploy (defaults to 1)
+   */
+  void deployModule(String moduleName,  int instances) {
+    jContainer.deployModule(moduleName, new JsonObject(new HashMap<String, Object>()), instances, null)
   }
 
   /**
