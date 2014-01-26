@@ -40,6 +40,9 @@ reply = [
   status: 123
 ]
 
+shortTimeout = 1
+longTimeout = 5000
+
 def assertSent(msg) {
   tu.azzert(sent['price'] == msg['price'])
   tu.azzert(sent['name'] == msg['name'])
@@ -66,6 +69,23 @@ def testSimple() {
   tu.azzert(ebus == eb)
 
   tu.azzert(eb.send(address, sent) == eb)
+}
+
+def testSimpleWithTimeout() {
+
+  def handled = false
+  def ebus = eb.registerHandler(address, myHandler = { msg ->
+    tu.checkThread()
+    tu.azzert(msg.address == address)
+    tu.azzert(!handled)
+    assertSent(msg.body())
+    tu.azzert(eb.unregisterHandler(address, myHandler) == eb)
+    handled = true
+    tu.testComplete()
+  })
+  tu.azzert(ebus == eb)
+
+  tu.azzert(eb.sendWithTimeout(address, sent, longTimeout) == eb)
 }
 
 def testEmptyMessage() {
