@@ -40,8 +40,8 @@ reply = [
   status: 123
 ]
 
-shortTimeout = 1
-longTimeout = 5000
+shortTimeout = 1L
+longTimeout = 5000L
 
 def assertSent(msg) {
   tu.azzert(sent['price'] == msg['price'])
