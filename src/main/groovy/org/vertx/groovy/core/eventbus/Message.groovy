@@ -59,7 +59,7 @@ class Message {
  * called when it has received a reply. If the message wasn't sent specifying a receipt handler
  * this method does nothing.
  * @param message The reply message
- *  @param replyHandler Optional reply handler, so you can get a reply to your reply
+ * @param replyHandler Optional reply handler, so you can get a reply to your reply
  */
   void reply(message, Closure replyHandler = null) {
     message = EventBus.convertMessage(message)
@@ -72,7 +72,8 @@ class Message {
  * called when it has received a reply. If the message wasn't sent specifying a receipt handler
  * this method does nothing.
  * @param message The reply message
- *  @param replyHandler Optional reply handler, so you can get a reply to your reply
+ * @param timeout The timeout
+ * @param replyHandler Optional reply handler, so you can get a reply to your reply
  */
   void replyWithTimeout(message, long timeout, Closure replyHandler = null) {
     message = EventBus.convertMessage(message)
