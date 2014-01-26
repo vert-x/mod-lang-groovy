@@ -117,6 +117,26 @@ class FileSystem {
     this
   }
 
+
+  /**
+   * Change the ownership on the file represented by {@code path} to {@code user} and {code group}, asynchronously.
+   *
+   */
+  FileSystem chown(String path, String user, String group, Closure handler) {
+    jFS.chown(path, user, group, ClosureUtil.wrapAsyncResultHandler(handler))
+    this
+  }
+
+  /**
+   * Synchronous version of {@link #chown(String, String, String, Handler)}
+   *
+   */
+  FileSystem chownSync(String path, String user, String group) {
+    jFS.chownSync(path, user, group);  
+    this
+  }
+
+
   /**
    * Obtain properties for the file represented by {@code path}, asynchronously.
    * If the file is a link, the link will be followed.
