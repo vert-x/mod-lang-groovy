@@ -47,4 +47,9 @@ interface ServerWebSocket extends WebSocket {
    * with a particular path.
    */
   void reject();
+
+  /**
+  * The uri the websocket handshake occurred at
+  */
+  String uri()
 }

@@ -144,8 +144,4 @@ class DefaultWebSocket implements WebSocket {
     jWebSocket.remoteAddress()
   }
 
-  @Override
-  String uri() {
-    jWebSocket.uri()
-  } 
 }

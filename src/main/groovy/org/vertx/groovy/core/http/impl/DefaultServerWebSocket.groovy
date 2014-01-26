@@ -162,5 +162,10 @@ class DefaultServerWebSocket implements ServerWebSocket {
   @Override
   InetSocketAddress remoteAddress() {
     jServerWebSocket.remoteAddress()
+  }
+   
+  @Override
+  String uri() {
+    jServerWebSocket.uri()
   } 
 }
