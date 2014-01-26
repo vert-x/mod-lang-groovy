@@ -91,5 +91,17 @@ interface SockJSServer {
                       long authTimeout, String authAddress)
 
 
+
+  /**
+   * Install an app which bridges the SockJS server to the event bus.
+   * @param sjsConfig The config for the app
+   * @param inboundPermitted A list of JSON objects which define inboundPermitted matches
+   * @param outboundPermitted A list of JSON objects which define outboundPermitted matches
+   * @param bridgeConfig The config of the bridge
+   */
+  SockJSServer bridge(Map sjsConfig, List<Map<String, Object>> inboundPermitted, 
+                      List<Map<String, Object>> outboundPermitted, Map bridgeConfig)
+
+
   SockJSServer setHook(EventBusBridgeHook hook)
 }
