@@ -95,4 +95,9 @@ interface WebSocket extends ReadStream<WebSocket>, WriteStream<WebSocket> {
    * Return the local address for this socket
    */
   InetSocketAddress localAddress()
+
+  /**
+  * The uri the websocket handshake occurred at
+  */
+  String uri()
 }
