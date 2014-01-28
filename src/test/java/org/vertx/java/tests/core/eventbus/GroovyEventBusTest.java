@@ -42,6 +42,29 @@ public class GroovyEventBusTest extends TestBase {
     startTest(getMethodName());
   }
 
+  public void testMissingHandler() {
+    startTest(getMethodName());
+  }
+
+  public void testDoesTimeout() {
+    startTest(getMethodName());
+  }
+
+  public void testDoesNotTimeout() {
+    startTest(getMethodName());
+  }
+
+  public void testHasReplyAddress() {
+    startTest(getMethodName());
+  }
+
+  public void testNoReplyAddress() {
+    startTest(getMethodName());
+  }
+
+  public void testSetDefaultBusTimeout() {
+    startTest(getMethodName());
+  }
 
   public void testUnregister() {
     startTest(getMethodName());

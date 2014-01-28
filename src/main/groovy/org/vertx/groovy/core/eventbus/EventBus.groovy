@@ -16,6 +16,8 @@
 
 package org.vertx.groovy.core.eventbus
 
+import org.vertx.groovy.core.AsyncResult
+import org.vertx.java.core.AsyncResult as JAsyncResult
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.impl.ClosureUtil
 import org.vertx.java.core.Handler
@@ -64,7 +66,7 @@ class EventBus {
 
   // Putting it as a public final groovy property to be able to use `EventBus.jEventBus` notation
   final JEventBus jEventBus
-  
+
   public EventBus(JEventBus jEventBus) {
     this.jEventBus = jEventBus
   }
@@ -102,13 +104,13 @@ class EventBus {
    */
   EventBus sendWithTimeout(String address, message, long timeout, Closure replyHandler = null) {
     if (message != null) {
-      jEventBus.sendWithTimeout(address, convertMessage(message), timeout, wrapHandler(replyHandler))
+      jEventBus.sendWithTimeout(address, convertMessage(message), timeout, wrapAsyncHandler(replyHandler))
     } else {
       // Just choose an overloaded method...
-      jEventBus.sendWithTimeout(address, (String)null, timeout, wrapHandler(replyHandler))
+      jEventBus.sendWithTimeout(address, (String)null, timeout, wrapAsyncHandler(replyHandler))
     }
     this
-  }  
+  }
 
   /**
    * Publish a message on the event bus.
@@ -175,11 +177,30 @@ class EventBus {
   }
 
   /**
+   * Sets a default timeout, in ms, for replies. If a messages is sent specify a reply handler
+   * but without specifying a timeout, then the reply handler is timed out, i.e. it is automatically unregistered
+   * if a message hasn't been received before timeout.
+   * The default value for default send timeout is -1, which means "never timeout".
+   * @param timeoutMs
+   */
+  EventBus setDefaultReplyTimeout (long timeoutMs) {
+    jEventBus.setDefaultReplyTimeout(timeoutMs)
+    this
+  }
+
+  /**
+   * Return the value for default send timeout
+   */
+  long getDefaultReplyTimeout() {
+    return jEventBus.getDefaultReplyTimeout()
+  }
+
+  /**
    * Get the Java instance
    *
-   * @deprecated use  `EventBus.jEventBus` notation instead.  
+   * @deprecated use  `EventBus.jEventBus` notation instead.
    */
-  @Deprecated 
+  @Deprecated
   JEventBus javaEventBus() {
     jEventBus
   }
@@ -200,4 +221,24 @@ class EventBus {
       return null
     }
   }
+
+  protected static Handler wrapAsyncHandler(Closure handler) {
+    if (handler != null) {
+      return new Handler<JAsyncResult<JMessage>>() {
+        void handle (JAsyncResult<JMessage> jresult) {
+          JMessage jmsg = jresult?.result()
+          Message msg = jmsg ? new Message(jmsg) : null
+          AsyncResult<Message> ar = new AsyncResult(jresult) {
+            Message getResult () {
+              return msg
+            }
+          }
+          handler(ar)
+        }
+      }
+    } else {
+      return null
+    }
+  }
+
 }
