@@ -37,12 +37,12 @@ class Message {
   def body() {
     return body
   }
-   
+
   /**
    * The address of the message, as a Groovy property initialized on constructor
    */
   String getAddress() {
-    return jMessage.address()  
+    return jMessage.address()
   }
 
   Message(JMessage jMessage) {
@@ -52,6 +52,13 @@ class Message {
       this.body = jMessage.body()
     }
     this.jMessage = jMessage
+  }
+
+  /**
+   * The reply address (if any)
+   */
+  String replyAddress() {
+    return jMessage.replyAddress()
   }
 
   /**
@@ -77,7 +84,7 @@ class Message {
  */
   void replyWithTimeout(message, long timeout, Closure replyHandler = null) {
     message = EventBus.convertMessage(message)
-    jMessage.replyWithTimeout(message, timeout, EventBus.wrapHandler(replyHandler))
+    jMessage.replyWithTimeout(message, timeout, EventBus.wrapAsyncHandler(replyHandler))
   }
 
 
