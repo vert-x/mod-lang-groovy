@@ -15,11 +15,12 @@
  */
 
 apply from: "gradle/setup.gradle"
-apply from: "gradle/maven.gradle"
 
 apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'idea'
+
+apply from: "gradle/maven.gradle"
 
 group = modowner
 archivesBaseName = modname
