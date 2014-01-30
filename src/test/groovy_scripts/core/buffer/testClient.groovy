@@ -18,6 +18,7 @@ package core.buffer
 
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.testframework.TestUtils
+import org.vertx.java.testframework.TestUtils as JTestUtils
 
 tu = new TestUtils(vertx)
 
@@ -74,6 +75,82 @@ def testPutAtBuffer() {
   def b = TestUtils.generateRandomBuffer(10)
   buff[10] = b
   tu.azzert(TestUtils.buffersEqual(buff.getBuffer(10, 20), b))
+  tu.testComplete()
+}
+
+def testAppendBuffer(){
+  def startPart = TestUtils.generateRandomBuffer(20)
+  def endPart = TestUtils.generateRandomBuffer(10)
+
+  Buffer b = new Buffer()
+  b.appendBuffer(startPart)
+  tu.azzert(TestUtils.buffersEqual(b, startPart))
+
+  b.appendBuffer(endPart)
+  tu.azzert(b.length == startPart.length + endPart.length)
+  tu.azzert(TestUtils.buffersEqual(b.getBuffer(0, 20), startPart))
+  tu.azzert(TestUtils.buffersEqual(b.getBuffer(20, 30), endPart))
+  tu.testComplete()
+}
+
+def testAppendBufferWithOffesetAndLength(){
+  def startPart = TestUtils.generateRandomBuffer(20)
+  def endPart = TestUtils.generateRandomBuffer(10)
+
+  Buffer b = new Buffer()
+  b.appendBuffer(startPart, 5, 10)
+  tu.azzert(TestUtils.buffersEqual(b, startPart.getBuffer(5, 15)))
+
+  b.appendBuffer(endPart, 1, 1)
+  tu.azzert(b.length == 11)
+  tu.azzert(TestUtils.buffersEqual(b.getBuffer(0, 10), startPart.getBuffer(5, 15)))
+  tu.azzert(TestUtils.buffersEqual(b.getBuffer(10, 11), endPart.getBuffer(1, 2)))
+  tu.testComplete()
+}
+
+def testAppendBytes(){
+  def startPart = JTestUtils.generateRandomByteArray(20)
+  def endPart = JTestUtils.generateRandomByteArray(10)
+
+  Buffer b = new Buffer()
+  b.appendBytes(startPart)
+  tu.azzert(JTestUtils.byteArraysEqual(b.bytes, startPart))
+
+  b.appendBytes(endPart)
+  tu.azzert(b.length == startPart.length + endPart.length)
+  tu.azzert(JTestUtils.byteArraysEqual(b.getBytes(0, 20), startPart))
+  tu.azzert(JTestUtils.byteArraysEqual(b.getBytes(20, 30), endPart))
+  tu.testComplete()
+}
+
+def testAppendBytesWithOffesetAndLength(){
+  def startPart = JTestUtils.generateRandomByteArray(20)
+  def endPart = JTestUtils.generateRandomByteArray(10)
+
+  Buffer b = new Buffer()
+  b.appendBytes(startPart, 5, 10)
+  tu.azzert(JTestUtils.byteArraysEqual(b.bytes, Arrays.copyOfRange(startPart, 5, 15)))
+
+  b.appendBytes(endPart, 1, 1)
+  tu.azzert(b.length == 11)
+  tu.azzert(JTestUtils.byteArraysEqual(b.getBytes(0, 10), Arrays.copyOfRange(startPart, 5, 15)))
+  tu.azzert(JTestUtils.byteArraysEqual(b.getBytes(10, 11), Arrays.copyOfRange(endPart, 1, 2)))
+  tu.testComplete()
+}
+
+def testSetBufferWithOffsetAndLength() {
+  def buff = new Buffer()
+  def b = TestUtils.generateRandomBuffer(10)
+  buff.setBuffer(10, b, 5, 2)
+  tu.azzert(TestUtils.buffersEqual(buff.getBuffer(10, 12), b.getBuffer(5, 7)))
+  tu.testComplete()
+}
+
+def testSetBytesWithOffsetAndLength() {
+  def buff = new Buffer()
+  def b = JTestUtils.generateRandomByteArray(10)
+  buff.setBytes(10, b, 5, 2)
+  tu.azzert(JTestUtils.byteArraysEqual(buff.getBytes(10, 12), Arrays.copyOfRange(b, 5, 7)))
   tu.testComplete()
 }
 
