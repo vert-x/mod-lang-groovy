@@ -220,7 +220,7 @@ class Buffer extends JBuffer {
    * Returns a reference to {@code this} so multiple operations can be appended together.
    */
   Buffer appendBuffer(Buffer buff, int offset,int len) {
-    jBuffer.appendBuffer(buff, offset, len)
+    jBuffer.appendBuffer(buff.jBuffer, offset, len)
     this
   }
 
@@ -592,5 +592,4 @@ class Buffer extends JBuffer {
   JBuffer toJavaBuffer() {
     jBuffer
   }
-
 }
