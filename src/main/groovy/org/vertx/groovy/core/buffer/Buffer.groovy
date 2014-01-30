@@ -215,6 +215,16 @@ class Buffer extends JBuffer {
   }
 
   /**
+   * Appends the specified {@code Buffer} starting at the {@code offset} using {@code len} to the end of this Buffer. The buffer will expand as necessary to accommodate
+   * any bytes written.<p>
+   * Returns a reference to {@code this} so multiple operations can be appended together.
+   */
+  Buffer appendBuffer(Buffer buff, int offset,int len) {
+    jBuffer.appendBuffer(buff.jBuffer, offset, len)
+    this
+  }
+
+  /**
    * Same as {@link #appendBytes(byte[])}
    */
   Buffer leftShift(byte[] bytes) {
@@ -227,6 +237,16 @@ class Buffer extends JBuffer {
    */
   Buffer appendBytes(byte[] bytes) {
     jBuffer.appendBytes(bytes)
+    this
+  }
+
+  /**
+   * Appends the specified number of bytes from {@code byte[]} to the end of the Buffer, starting at the given offset.
+   * The buffer will expand as necessary to accommodate any bytes written.<p>
+   * Returns a reference to {@code this} so multiple operations can be appended together.
+   */
+  Buffer appendBytes(byte[] bytes, int offset, int len){
+    jBuffer.appendBytes(bytes, offset, len)
     this
   }
 
@@ -459,6 +479,15 @@ class Buffer extends JBuffer {
   }
 
   /**
+   * Sets the bytes at position {@code pos} in the Buffer to the bytes represented by the {@code Buffer b} on the given {@code offset} and {@code len}.<p>
+   * The buffer will expand as necessary to accommodate any value written.
+   */
+  public Buffer setBuffer(int pos, Buffer b, int offset, int len) {
+    jBuffer.setBuffer(pos, b.toJavaBuffer(), offset, len);
+    return this;
+  }
+
+  /**
    * Same as {@link #setBuffer(int, Buffer)}
    */
   void putAt(int pos, Buffer b) {
@@ -487,6 +516,15 @@ class Buffer extends JBuffer {
    */
   Buffer setBytes(int pos, byte[] b) {
     jBuffer.setBytes(pos, b)
+    this
+  }
+
+  /**
+   * Sets the given number of bytes at position {@code pos} in the Buffer to the bytes represented by the {@code byte[] b}.<p></p>
+   * The buffer will expand as necessary to accommodate any value written.
+   */
+  public Buffer setBytes(int pos, byte[] b, int offset, int len) {
+    jBuffer.setBytes(pos, b, offset, len)
     this
   }
 
@@ -554,5 +592,4 @@ class Buffer extends JBuffer {
   JBuffer toJavaBuffer() {
     jBuffer
   }
-
 }

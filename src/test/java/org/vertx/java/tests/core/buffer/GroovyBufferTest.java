@@ -61,4 +61,28 @@ public class GroovyBufferTest extends TestBase {
   public void testPutAtBuffer() {
     startTest(getMethodName());
   }
+
+  public void testAppendBuffer() {
+    startTest(getMethodName());
+  }
+
+  public void testAppendBufferWithOffesetAndLength(){
+    startTest(getMethodName());
+  }
+
+  public void testAppendBytes(){
+    startTest(getMethodName());
+  }
+
+  public void testAppendBytesWithOffesetAndLength(){
+    startTest(getMethodName());
+  }
+
+  public void testSetBufferWithOffsetAndLength() {
+    startTest(getMethodName());
+  }
+
+  public void testSetBytesWithOffsetAndLength() {
+    startTest(getMethodName());
+  }
 }
