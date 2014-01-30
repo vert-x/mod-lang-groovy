@@ -16,12 +16,10 @@
 package org.vertx.groovy.core.impl
 
 import groovy.transform.CompileStatic
-import groovy.transform.TypeCheckingMode
 import org.vertx.groovy.core.AsyncResult
 import org.vertx.java.core.AsyncResult as JAsyncResult
 import org.vertx.java.core.AsyncResultHandler
 import org.vertx.java.core.impl.DefaultFutureResult
-
 
 /**
  * @author <a href="mailto:nmaurer@redhat.com">Norman Maurer</a>
@@ -39,13 +37,12 @@ class ClosureUtil {
     }
   }
 
-  @CompileStatic(TypeCheckingMode.SKIP)
   static AsyncResultHandler wrapAsyncResultHandler(Closure hndlr, Closure converter) {
     { JAsyncResult ar ->
       if (ar.failed()) {
         hndlr(new AsyncResult(ar))
       } else {
-        hndlr(new AsyncResult(new DefaultFutureResult(converter(ar.result()))))
+        hndlr(new AsyncResult(new DefaultFutureResult(converter(ar.result()) as Object)))
       }
     } as AsyncResultHandler
   }

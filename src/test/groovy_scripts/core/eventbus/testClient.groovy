@@ -17,6 +17,8 @@
 package core.eventbus
 
 import org.vertx.groovy.testframework.TestUtils
+import org.vertx.java.core.eventbus.ReplyException
+import org.vertx.java.core.eventbus.ReplyFailure
 
 tu = new TestUtils(vertx)
 tu.checkThread()
@@ -86,6 +88,74 @@ def testSimpleWithTimeout() {
   tu.azzert(ebus == eb)
 
   tu.azzert(eb.sendWithTimeout(address, sent, longTimeout) == eb)
+}
+
+def testMissingHandler() {
+  eb.sendWithTimeout('bogus-address', sent, longTimeout) { asyncResult ->
+    tu.azzert(!asyncResult.succeeded)
+    tu.azzert(asyncResult.cause instanceof ReplyException)
+    tu.azzert(asyncResult.cause.failureType() == ReplyFailure.NO_HANDLERS)
+    tu.testComplete()
+  }
+}
+
+def testDoesTimeout() {
+  eb.registerHandler(address, myHandler = { msg ->
+    tu.checkThread()
+    eb.unregisterHandler(address, myHandler)
+  })
+
+  eb.sendWithTimeout(address, sent, longTimeout) { asyncResult ->
+    tu.azzert(!asyncResult.succeeded)
+    tu.azzert(asyncResult.cause instanceof ReplyException)
+    tu.azzert(asyncResult.cause.failureType() == ReplyFailure.TIMEOUT)
+    tu.testComplete()
+  }
+}
+
+def testDoesNotTimeout() {
+  eb.registerHandler(address, myHandler = { msg ->
+    tu.checkThread()
+    msg.reply('ok')
+    eb.unregisterHandler(address, myHandler)
+  })
+
+  eb.sendWithTimeout(address, sent, longTimeout) { asyncResult ->
+    tu.azzert(asyncResult.succeeded)
+    tu.azzert(asyncResult.result.body() == 'ok')
+    tu.testComplete()
+  }
+}
+
+def testHasReplyAddress() {
+  eb.registerHandler(address, myHandler = { msg ->
+    tu.checkThread()
+    tu.azzert(msg.replyAddress() != null)
+    msg.reply('ok')
+    eb.unregisterHandler(address, myHandler)
+  })
+
+  eb.sendWithTimeout(address, sent, longTimeout) { asyncResult ->
+    tu.testComplete()
+  }
+}
+
+def testNoReplyAddress() {
+  eb.registerHandler(address, myHandler = { msg ->
+    tu.checkThread()
+    tu.azzert(msg.replyAddress() == null)
+    eb.unregisterHandler(address, myHandler)
+    tu.testComplete()
+  })
+
+  eb.send(address, sent)
+}
+
+def testSetDefaultBusTimeout() {
+  long defaultTimeout = 10000l
+  eb.setDefaultReplyTimeout(defaultTimeout)
+  tu.azzert(eb.getDefaultReplyTimeout() == defaultTimeout)
+  tu.testComplete()
 }
 
 def testEmptyMessage() {
