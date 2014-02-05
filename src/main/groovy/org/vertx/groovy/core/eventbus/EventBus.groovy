@@ -208,9 +208,9 @@ class EventBus {
 
   protected static convertMessage(message) {
     if (message instanceof Map) {
-      message = new JsonObject(message)
+      message = new JsonObject(normalizeMap(message))
     } else if (message instanceof List) {
-        message = new JsonArray(message)
+        message = new JsonArray(normalizeList(message))
     } else if (message instanceof GString) {
         message = message.toString()
     } else if (message instanceof Buffer) {
@@ -218,6 +218,25 @@ class EventBus {
     }
     message
   }
+
+  private static Map normalizeMap(Map map) {
+      map.collectEntries{k, v -> [normalize(k), normalize(v)]};
+  }
+  private static List normalizeList(List list) {
+      list.collect{v -> normalize(v)};
+  }
+  private static Object normalize(Object o) {
+    if (o instanceof Map) {
+        normalizeMap(o);
+    } else if (o instanceof List) {
+        normalizeList(o);
+    } else if (o instanceof GString) {
+        o.toString();
+    } else {
+        o;
+    }
+  }
+
 
   protected static Handler wrapHandler(Closure handler) {
     if (handler != null) {

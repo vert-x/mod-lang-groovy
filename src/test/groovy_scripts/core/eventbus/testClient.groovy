@@ -28,9 +28,11 @@ tu.checkThread()
 eb = vertx.eventBus
 address = 'foo-address'
 
+tim = "tim"
+
 sent = [
   price : 23.45,
-  name : 'tim'
+  name : '${tim}'
 ]
 
 emptySent = [
