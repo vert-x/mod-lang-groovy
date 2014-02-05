@@ -37,6 +37,8 @@ emptySent = [
   address : address
 ]
 
+sentList = ['a', 'b', 'c']
+
 reply = [
   desc: "approved",
   status: 123
@@ -50,6 +52,11 @@ def assertSent(msg) {
   tu.azzert(sent['name'] == msg['name'])
 }
 
+def assertSentList(msg) {
+    sentList.eachWithIndex { def entry, int i ->
+        tu.azzert(entry == msg[i])
+    }
+}
 
 def assertReply(rep) {
   tu.azzert(reply['desc'] == rep['desc'])
@@ -71,6 +78,23 @@ def testSimple() {
   tu.azzert(ebus == eb)
 
   tu.azzert(eb.send(address, sent) == eb)
+}
+
+def testSimpleList() {
+
+    def handled = false
+    def ebus = eb.registerHandler(address, myHandler = { msg ->
+        tu.checkThread()
+        tu.azzert(msg.address == address)
+        tu.azzert(!handled)
+        assertSentList(msg.body())
+        tu.azzert(eb.unregisterHandler(address, myHandler) == eb)
+        handled = true
+        tu.testComplete()
+    })
+    tu.azzert(ebus == eb)
+
+    tu.azzert(eb.send(address, sentList) == eb)
 }
 
 def testSimpleWithTimeout() {

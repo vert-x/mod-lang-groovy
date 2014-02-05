@@ -22,6 +22,7 @@ import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.impl.ClosureUtil
 import org.vertx.java.core.Handler
 import org.vertx.java.core.eventbus.EventBus as JEventBus
+import org.vertx.java.core.json.JsonArray
 import org.vertx.java.core.json.JsonObject
 import org.vertx.java.core.eventbus.Message as JMessage
 
@@ -208,6 +209,8 @@ class EventBus {
   protected static convertMessage(message) {
     if (message instanceof Map) {
       message = new JsonObject(message)
+    } else if (message instanceof List) {
+        message = new JsonArray(message)
     } else if (message instanceof Buffer) {
       message = ((Buffer)message).toJavaBuffer()
     }
