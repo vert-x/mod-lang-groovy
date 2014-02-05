@@ -72,7 +72,10 @@ interface NetSocket extends ReadStream<NetSocket>, WriteStream<NetSocket> {
    */
   NetSocket sendFile(String filename)
 
-  /**
+  NetSocket sendFile(String filename, Closure handler)
+
+
+    /**
    * Return the remote address for this socket
    */
   InetSocketAddress getRemoteAddress()

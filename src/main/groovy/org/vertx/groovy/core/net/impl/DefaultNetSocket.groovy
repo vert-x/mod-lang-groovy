@@ -82,6 +82,12 @@ class DefaultNetSocket implements NetSocket {
   }
 
   @Override
+  NetSocket sendFile(String filename, Closure handler) {
+    jNetSocket.sendFile(filename, handler as Handler)
+    this
+  }
+
+  @Override
   InetSocketAddress getRemoteAddress() {
     jNetSocket.remoteAddress()
   }
