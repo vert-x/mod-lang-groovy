@@ -39,6 +39,9 @@ emptySent = [
 
 sentList = ['a', 'b', 'c']
 
+gstring = 'GString'
+sentGString = "I'm a ${gstring}"
+
 reply = [
   desc: "approved",
   status: 123
@@ -56,6 +59,9 @@ def assertSentList(msg) {
     sentList.eachWithIndex { def entry, int i ->
         tu.azzert(entry == msg[i])
     }
+}
+def assertSentGString(msg) {
+    tu.azzert(sentGString.toString() == msg)
 }
 
 def assertReply(rep) {
@@ -80,7 +86,7 @@ def testSimple() {
   tu.azzert(eb.send(address, sent) == eb)
 }
 
-def testSimpleList() {
+def testSendList() {
 
     def handled = false
     def ebus = eb.registerHandler(address, myHandler = { msg ->
@@ -95,6 +101,22 @@ def testSimpleList() {
     tu.azzert(ebus == eb)
 
     tu.azzert(eb.send(address, sentList) == eb)
+}
+def  testSendGString() {
+
+    def handled = false
+    def ebus = eb.registerHandler(address, myHandler = { msg ->
+        tu.checkThread()
+        tu.azzert(msg.address == address)
+        tu.azzert(!handled)
+        assertSentGString(msg.body())
+        tu.azzert(eb.unregisterHandler(address, myHandler) == eb)
+        handled = true
+        tu.testComplete()
+    })
+    tu.azzert(ebus == eb)
+
+    tu.azzert(eb.send(address, sentGString) == eb)
 }
 
 def testSimpleWithTimeout() {

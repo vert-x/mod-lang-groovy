@@ -211,6 +211,8 @@ class EventBus {
       message = new JsonObject(message)
     } else if (message instanceof List) {
         message = new JsonArray(message)
+    } else if (message instanceof GString) {
+        message = message.toString()
     } else if (message instanceof Buffer) {
       message = ((Buffer)message).toJavaBuffer()
     }
