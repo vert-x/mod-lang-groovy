@@ -32,14 +32,14 @@ tim = "tim"
 
 sent = [
   price : 23.45,
-  name : '${tim}'
+  name : "${tim}"
 ]
 
 emptySent = [
   address : address
 ]
 
-sentList = ['a', 'b', 'c']
+sentList = ['a', 'b', 'c', "${tim}"]
 
 gstring = 'GString'
 sentGString = "I'm a ${gstring}"
