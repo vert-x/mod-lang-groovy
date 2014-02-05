@@ -38,8 +38,12 @@ public class GroovyEventBusTest extends TestBase {
     startTest(getMethodName());
   }
 
-  public void testSimpleList() {
+  public void testSendList() {
     startTest(getMethodName());
+  }
+
+  public void testSendGString() {
+      startTest(getMethodName());
   }
 
   public void testSimpleWithTimeout() {
