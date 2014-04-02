@@ -221,7 +221,7 @@ class Vertx {
     return jVertex
   }
 
-  private class Context {
+  class Context {
     org.vertx.java.core.Context jContext;
     Context(org.vertx.java.core.Context jContext) {
       this.jContext = jContext
