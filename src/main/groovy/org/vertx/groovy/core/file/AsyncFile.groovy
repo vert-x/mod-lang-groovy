@@ -70,7 +70,7 @@ class AsyncFile implements ReadStream<AsyncFile>, WriteStream<AsyncFile> {
    * The handler will be called when the close is complete, or an error occurs.
    */
   AsyncFile write(Buffer buffer, int position, Closure handler) {
-    jFile.write(buffer, position, ClosureUtil.wrapAsyncResultHandler(handler))
+    jFile.write(buffer.toJavaBuffer(), position, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
@@ -82,7 +82,7 @@ class AsyncFile implements ReadStream<AsyncFile>, WriteStream<AsyncFile> {
    * The handler will be called when the close is complete, or if an error occurs.
    */
   AsyncFile read(Buffer buffer, int offset, int position, int length, Closure handler) {
-    jFile.read(buffer, offset, position, length, ClosureUtil.wrapAsyncResultHandler(handler))
+    jFile.read(buffer.toJavaBuffer(), offset, position, length, ClosureUtil.wrapAsyncResultHandler(handler))
     this
   }
 
