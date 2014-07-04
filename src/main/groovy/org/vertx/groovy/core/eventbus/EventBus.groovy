@@ -211,6 +211,8 @@ class EventBus {
       message = new JsonObject(normalizeMap(message))
     } else if (message instanceof List) {
         message = new JsonArray(normalizeList(message))
+    } else if (message instanceof Set) {
+        message = new JsonArray(normalizeSet(message))
     } else if (message instanceof GString) {
         message = message.toString()
     } else if (message instanceof Buffer) {
@@ -225,11 +227,16 @@ class EventBus {
   private static List normalizeList(List list) {
       list.collect{v -> normalize(v)};
   }
+  private static List normalizeSet(Set set) {
+      set.collect{v -> normalize(v)};
+  }
   private static Object normalize(Object o) {
     if (o instanceof Map) {
         normalizeMap(o);
     } else if (o instanceof List) {
         normalizeList(o);
+    } else if (o instanceof Set) {
+        normalizeSet(o);
     } else if (o instanceof GString) {
         o.toString();
     } else {
