@@ -32,7 +32,7 @@ class DefaultNetServer implements NetServer {
 
   private JNetServer jNetServer
 
-  DefaultNetServer(Vertx vertx, Map props = null) {
+  DefaultNetServer(Vertx vertx, Map<String,String> props = null) {
     jNetServer = vertx.createNetServer()
     if (props != null) {
       props.each { String k, v ->

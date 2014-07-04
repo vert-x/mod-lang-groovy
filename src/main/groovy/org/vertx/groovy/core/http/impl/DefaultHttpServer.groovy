@@ -35,7 +35,7 @@ class DefaultHttpServer implements HttpServer {
   // Putting it as a final public groovy property to be able to use `HttpServer.jServer` notation
   final JHttpServer jServer
 
-  DefaultHttpServer(Vertx vertx, Map props = null) {
+  DefaultHttpServer(Vertx vertx, Map<String, String> props = null) {
     jServer = vertx.createHttpServer()
     if (props != null) {
       props.each { String k, v ->

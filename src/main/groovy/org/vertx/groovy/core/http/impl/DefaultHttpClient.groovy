@@ -36,7 +36,7 @@ class DefaultHttpClient implements HttpClient {
 
   private JClient jClient
 
-  DefaultHttpClient(Vertx vertx, Map props = null) {
+  DefaultHttpClient(Vertx vertx, Map<String, String> props = null) {
     jClient = vertx.createHttpClient()
     if (props != null) {
       props.each { String k, v ->
