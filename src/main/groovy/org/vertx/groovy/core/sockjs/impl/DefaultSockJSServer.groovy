@@ -49,7 +49,7 @@ class DefaultSockJSServer implements SockJSServer {
   }
 
   SockJSServer bridge(Map sjsConfig) {
-    jServer.bridge(new JsonObject(sjsConfig), new JsonArray([[:]]), new JsonArray([[:]]),
+    jServer.bridge(new JsonObject(sjsConfig), new JsonArray([]), new JsonArray([]),
         5 * 60 * 1000, null)
     this
   }

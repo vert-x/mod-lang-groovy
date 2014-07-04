@@ -35,7 +35,7 @@ class DefaultNetClient implements NetClient {
 
   private JNetClient jNetClient
 
-  DefaultNetClient(Vertx vertx, Map props = null) {
+  DefaultNetClient(Vertx vertx, Map<String,String> props = null) {
     jNetClient = vertx.createNetClient()
     if (props != null) {
       props.each { String k, v ->
