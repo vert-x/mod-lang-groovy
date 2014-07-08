@@ -1,7 +1,7 @@
 import org.codehaus.groovy.control.customizers.ImportCustomizer
 
 groovy {
-    source.encoding = 'ISO1252'
+    source.encoding = 'UTF-8'
     script.base = 'groovy.lang.Script'
 }
 customizer = { cConf ->
