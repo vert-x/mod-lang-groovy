@@ -28,6 +28,8 @@ import org.vertx.java.core.http.HttpClientResponse as JHttpClientResponse
 import org.vertx.java.core.http.WebSocket as JWebSocket
 import org.vertx.java.core.http.WebSocketVersion
 
+import javax.net.ssl.SSLContext;
+
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
@@ -361,4 +363,10 @@ class DefaultHttpClient implements HttpClient {
     jClient.getTryUseCompression()
   }
   
+  @Override
+  HttpClient setSSLContext(SSLContext sslContext) {
+    jClient.setSSLContext(sslContext)
+    this
+  }
+
 }

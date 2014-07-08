@@ -27,6 +27,8 @@ import org.vertx.java.core.impl.DefaultFutureResult
 import org.vertx.java.core.net.NetClient as JNetClient
 import org.vertx.java.core.net.NetSocket as JNetSocket
 
+import javax.net.ssl.SSLContext;
+
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
@@ -246,6 +248,12 @@ class DefaultNetClient implements NetClient {
   @Override
   boolean isUsePooledBuffers() {
     jNetClient.isUsePooledBuffers()
+  }
+
+  @Override
+  NetClient setSSLContext(SSLContext sslContext) {
+    jNetClient.setSSLContext(sslContext)
+    this
   }
 
   private AsyncResultHandler wrapConnectHandler(Closure hndlr) {

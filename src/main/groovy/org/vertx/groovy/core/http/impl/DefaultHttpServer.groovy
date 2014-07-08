@@ -26,6 +26,8 @@ import org.vertx.java.core.http.HttpServer as JHttpServer
 import org.vertx.java.core.http.HttpServerRequest as JHttpServerRequest
 import org.vertx.java.core.http.ServerWebSocket as JServerWebSocket
 
+import javax.net.ssl.SSLContext;
+
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
@@ -280,6 +282,12 @@ class DefaultHttpServer implements HttpServer {
   @Override
   boolean isCompressionSupported() {
     jServer.isCompressionSupported()
+  }
+
+  @Override
+  HttpServer setSSLContext(SSLContext sslContext) {
+    jServer.setSSLContext(sslContext)
+    this
   }
 
   /**

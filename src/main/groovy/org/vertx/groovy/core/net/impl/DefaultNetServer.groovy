@@ -24,6 +24,8 @@ import org.vertx.java.core.Vertx
 import org.vertx.java.core.net.NetSocket as JNetSocket
 import org.vertx.java.core.net.NetServer as JNetServer
 
+import javax.net.ssl.SSLContext;
+
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
@@ -259,4 +261,11 @@ class DefaultNetServer implements NetServer {
   boolean isUsePooledBuffers() {
     jNetServer.isUsePooledBuffers()
   }
+
+  @Override
+  NetServer setSSLContext(SSLContext sslContext) {
+    jNetServer.setSSLContext(sslContext)
+    this
+  }
+
 }
