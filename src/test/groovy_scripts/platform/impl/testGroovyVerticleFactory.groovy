@@ -29,7 +29,7 @@ def testDefaultCompilerConfigurationInitialization() {
 
     tu.azzert factory.compilerCfg.asBoolean()
     tu.azzert factory.compilerCfg.scriptBaseClass == 'groovy.lang.Script'
-    tu.azzert factory.compilerCfg.sourceEncoding == 'ISO1252'
+    tu.azzert factory.compilerCfg.sourceEncoding == 'UTF-8'
     tu.azzert factory.compilerCfg.compilationCustomizers.size() == 1
     tu.azzert factory.compilerCfg.compilationCustomizers[0].imports.size() == 1
     tu.azzert factory.compilerCfg.compilationCustomizers[0].imports[0].classNode.name == 'org.codehaus.groovy.control.CompilerConfiguration'
@@ -41,12 +41,12 @@ def testSystemPropertyCompilerConfigurationInitialization() {
     GroovyVerticleFactory factory = new GroovyVerticleFactory();
 
     System.setProperty("vertx.groovy.compilerConfiguration", 'no.properties')
-    System.setProperty("groovy.source.encoding", 'UTF-8')
+    System.setProperty("groovy.source.encoding", 'ISO1252')
     factory.init(null, null, Thread.currentThread().getContextClassLoader());
 
     tu.azzert factory.compilerCfg.asBoolean()
     tu.azzert factory.compilerCfg.scriptBaseClass == null
-    tu.azzert factory.compilerCfg.sourceEncoding == 'UTF-8'
+    tu.azzert factory.compilerCfg.sourceEncoding == 'ISO1252'
 
     tu.testComplete()
 }
@@ -85,7 +85,7 @@ def testCustomCompilerConfigurationInitializationWithCustomizer() {
 
     tu.azzert factory.compilerCfg.asBoolean()
     tu.azzert factory.compilerCfg.scriptBaseClass == 'groovy.lang.Script'
-    tu.azzert factory.compilerCfg.sourceEncoding == 'ISO1252'
+    tu.azzert factory.compilerCfg.sourceEncoding == 'UTF-8'
     tu.azzert factory.compilerCfg.compilationCustomizers.size() == 1
     tu.azzert factory.compilerCfg.compilationCustomizers[0].imports.size() == 1
     tu.azzert factory.compilerCfg.compilationCustomizers[0].imports[0].classNode.name == 'org.codehaus.groovy.control.CompilerConfiguration'
