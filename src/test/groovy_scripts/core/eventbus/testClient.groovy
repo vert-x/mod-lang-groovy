@@ -121,23 +121,6 @@ def  testSendGString() {
     tu.azzert(eb.send(address, sentGString) == eb)
 }
 
-def testSimpleWithTimeout() {
-
-  def handled = false
-  def ebus = eb.registerHandler(address, myHandler = { msg ->
-    tu.checkThread()
-    tu.azzert(msg.address == address)
-    tu.azzert(!handled)
-    assertSent(msg.body())
-    tu.azzert(eb.unregisterHandler(address, myHandler) == eb)
-    handled = true
-    tu.testComplete()
-  })
-  tu.azzert(ebus == eb)
-
-  tu.azzert(eb.sendWithTimeout(address, sent, longTimeout) == eb)
-}
-
 def testMissingHandler() {
   eb.sendWithTimeout('bogus-address', sent, longTimeout) { asyncResult ->
     tu.azzert(!asyncResult.succeeded)
