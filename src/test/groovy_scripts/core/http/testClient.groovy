@@ -15,22 +15,11 @@
  */
 
 package core.http
-
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.testframework.TestUtils
-import org.vertx.java.core.AsyncResult
-import org.vertx.java.core.AsyncResultHandler
-import org.vertx.java.core.Handler
-import org.vertx.java.core.VoidHandler
-import org.vertx.java.core.http.HttpClientRequest
-import org.vertx.java.core.http.HttpClientResponse
-import org.vertx.java.core.http.HttpServer
-import org.vertx.java.core.http.HttpServerFileUpload
-import org.vertx.java.core.http.HttpServerRequest
 import org.vertx.java.core.http.HttpVersion
 
 import java.util.Map.Entry
-import java.util.concurrent.atomic.AtomicInteger
 
 tu = new TestUtils(vertx)
 tu.checkThread()
@@ -379,6 +368,31 @@ def testFormUploadAttributes() {
   });
 }
 
+def testAccessNetSocket() {
+    def toSend = TestUtils.generateRandomBuffer(1000)
+
+    server.requestHandler {req ->
+        req.response.headers.set("HTTP/1.1", "101 Upgrade");
+        req.bodyHandler{data ->
+            tu.azzert(TestUtils.buffersEqual(toSend, data));
+            req.response.end();
+        }
+    }
+
+    server.listen(8080, "0.0.0.0", { ar ->
+        tu.azzert(ar.succeeded);
+        client.port = 8080;
+        def req = client.get("some-uri", { resp ->
+            resp.endHandler{v ->
+                tu.azzert(resp.netSocket != null);
+                tu.testComplete();
+            }
+        })
+        req.headers.set("content-length", String.valueOf(toSend.length()));
+        req.write(toSend).end()
+    })
+
+}
 
 def httpMethod(parameters)  {
 

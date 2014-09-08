@@ -5,6 +5,8 @@ import org.vertx.groovy.core.MultiMap
 import org.vertx.groovy.core.buffer.Buffer
 import org.vertx.groovy.core.http.HttpClientResponse
 import org.vertx.groovy.core.impl.DefaultMultiMap
+import org.vertx.groovy.core.net.NetSocket
+import org.vertx.groovy.core.net.impl.DefaultNetSocket
 import org.vertx.java.core.Handler
 import org.vertx.java.core.buffer.Buffer as JBuffer
 
@@ -31,6 +33,9 @@ class DefaultHttpClientResponse implements HttpClientResponse {
   private org.vertx.java.core.http.HttpClientResponse jResponse
   private MultiMap headers
   private MultiMap trailers
+  private NetSocket netSocket
+
+
   DefaultHttpClientResponse(org.vertx.java.core.http.HttpClientResponse jResponse) {
     this.jResponse = jResponse
   }
@@ -62,6 +67,14 @@ class DefaultHttpClientResponse implements HttpClientResponse {
   }
 
   @Override
+  NetSocket getNetSocket() {
+    if (netSocket == null) {
+      netSocket = new DefaultNetSocket(jResponse.netSocket())
+    }
+    netSocket
+  }
+
+    @Override
   List<String> getCookies() {
     jResponse.cookies()
   }
@@ -72,7 +85,7 @@ class DefaultHttpClientResponse implements HttpClientResponse {
     this
   }
 
-  @Override
+    @Override
   HttpClientResponse dataHandler(Closure handler) {
     jResponse.dataHandler(({handler(new Buffer((JBuffer) it))} as Handler))
     this

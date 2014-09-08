@@ -328,4 +328,10 @@ public class GroovyHttpTest extends TestBase {
   public void testFormFileUpload() {
     startTest(getMethodName());
   }
+
+  public void testFormUploadAttributes()  {
+      startTest(getMethodName());
+  }
+
+  public void testAccessNetSocket() {startTest(getMethodName()); }
 }
