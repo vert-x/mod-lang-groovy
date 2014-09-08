@@ -17,7 +17,8 @@
 package org.vertx.groovy.core.http
 
 import groovy.transform.CompileStatic
-import org.vertx.groovy.core.MultiMap;
+import org.vertx.groovy.core.MultiMap
+import org.vertx.groovy.core.net.NetSocket;
 import org.vertx.groovy.core.streams.ReadStream
 
 /**
@@ -68,5 +69,16 @@ interface HttpClientResponse extends ReadStream<HttpClientResponse> {
    * @param bodyHandler This handler will be called after all the body has been received
    */
   HttpClientResponse bodyHandler(Closure bodyHandler)
+
+  /**
+   * Get a net socket for the underlying connection of this request. USE THIS WITH CAUTION!
+   * Writing to the socket directly if you don't know what you're doing can easily break the HTTP protocol
+   *
+   * One valid use-case for calling this is to receive the {@link io.vertx.core.net.NetSocket} after a HTTP CONNECT was issued to the
+   * remote peer and it responded with a status code of 200.
+   *
+   * @return the net socket
+   */
+  NetSocket getNetSocket()
 
 }
