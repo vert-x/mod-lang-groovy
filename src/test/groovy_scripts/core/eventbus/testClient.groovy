@@ -53,14 +53,13 @@ shortTimeout = 1L
 longTimeout = 5000L
 
 def assertSent(msg) {
-  tu.azzert(sent['price'] == msg['price'])
-  tu.azzert(sent['name'] == msg['name'])
+  tu.azzert(msg instanceof Map)
+  tu.azzert(msg.equals(sent));
 }
 
 def assertSentList(msg) {
-    sentList.eachWithIndex { def entry, int i ->
-        tu.azzert(entry == msg[i])
-    }
+    tu.azzert(msg instanceof List)
+    tu.azzert(msg.equals(sentList));
 }
 def assertSentGString(msg) {
     tu.azzert(sentGString.toString() == msg)

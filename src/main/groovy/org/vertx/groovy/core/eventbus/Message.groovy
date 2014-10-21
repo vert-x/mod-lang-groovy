@@ -19,6 +19,7 @@ package org.vertx.groovy.core.eventbus
 import groovy.transform.CompileStatic;
 
 import org.vertx.java.core.eventbus.Message as JMessage
+import org.vertx.java.core.json.JsonArray
 import org.vertx.java.core.json.JsonObject
 
 /**
@@ -47,7 +48,9 @@ class Message {
 
   Message(JMessage jMessage) {
     if (jMessage.body() instanceof JsonObject) {
-      this.body = jMessage.body().toMap()
+      this.body = ((JsonObject) jMessage.body()).toMap()
+    } else if (jMessage.body() instanceof JsonArray) {
+      this.body = ((JsonArray) jMessage.body()).toList()
     } else {
       this.body = jMessage.body()
     }
